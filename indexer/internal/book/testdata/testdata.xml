@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package xmlns="http://www.idpf.org/2007/opf" unique-identifier="bookid" version="3.0">
+  <metadata xmlns:dc="http://purl.org/dc/elements/1.1/">
+    <dc:title>Title of the Book</dc:title>
+    <dc:creator>Author Name</dc:creator>
+    <dc:language>en</dc:language>
+    <dc:identifier id="bookid">urn:uuid:12345678-1234-5678-1234-567812345678</dc:identifier>
+  </metadata>
+  <manifest>
+    <item id="cover" href="cover.jpg" media-type="image/jpeg" properties="cover-image" />
+    <item id="chapter1" href="chapter1.html" media-type="application/xhtml+xml" />
+    <!-- Add more items here -->
+  </manifest>
+  <spine>
+    <itemref idref="chapter1" />
+    <!-- Add more itemrefs here -->
+  </spine>
+</package>
