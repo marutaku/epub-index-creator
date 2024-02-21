@@ -1,8 +1,10 @@
 package book
 
 import (
+	"errors"
 	"os"
-	"path"
+	"regexp"
+	"strings"
 )
 
 type Page struct {
@@ -17,10 +19,15 @@ func NewPage(id, path string) *Page {
 	}
 }
 
-func (p *Page) Content(baseDir string) (string, error) {
-	contentsBytes, err := os.ReadFile(path.Join(baseDir, p.Path))
+func (p *Page) Content() (string, error) {
+	contentsBytes, err := os.ReadFile(p.Path)
 	if err != nil {
 		return "", err
 	}
-	return string(contentsBytes), nil
+	re := regexp.MustCompile(`(?s)<body.*?>(.*)</body>`)
+	res := re.FindAllStringSubmatch(string(contentsBytes), 1)
+	if len(res) == 0 {
+		return "", errors.New("body tag not found")
+	}
+	return strings.TrimSpace(res[0][1]), nil
 }
