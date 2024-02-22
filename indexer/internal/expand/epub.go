@@ -1,4 +1,4 @@
-package reader
+package expand
 
 import (
 	"io"
@@ -7,6 +7,8 @@ import (
 	"path/filepath"
 
 	"archive/zip"
+
+	"github.com/antchfx/xmlquery"
 )
 
 func getFileNameWithoutExt(path string) string {
@@ -50,4 +52,19 @@ func UnzipEPub(filepath string) (string, error) {
 		}
 	}
 	return tempDir, nil
+}
+
+func FindOPFFilePath(tempDir string) (string, error) {
+	containerFilePath := path.Join(tempDir, "META-INF/container.xml")
+	containerFile, err := os.Open(containerFilePath)
+	if err != nil {
+		return "", err
+	}
+	defer containerFile.Close()
+	doc, err := xmlquery.Parse(containerFile)
+	if err != nil {
+		return "", err
+	}
+	opfPath := xmlquery.FindOne(doc, "//rootfiles/rootfile").SelectAttr("full-path")
+	return path.Join(tempDir, opfPath), nil
 }

@@ -4,8 +4,8 @@ import (
 	"testing"
 )
 
-func TestNewDataFromOPF(t *testing.T) {
-	metadata, err := NewMetaDataFromOPF("testdata/testdata.opf")
+func TestNewBookFromOPF(t *testing.T) {
+	metadata, err := NewBookFromOPF("testdata/testdata.opf")
 	if err != nil {
 		t.Errorf("Error parsing testdata.xml: %v", err)
 	}

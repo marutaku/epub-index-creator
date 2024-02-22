@@ -6,7 +6,7 @@ import (
 	"github.com/antchfx/xmlquery"
 )
 
-type MetaData struct {
+type Book struct {
 	ISBN      string
 	Title     string
 	Language  string
@@ -15,7 +15,7 @@ type MetaData struct {
 	Pages     []*Page
 }
 
-func NewMetaDataFromOPF(filepath string) (*MetaData, error) {
+func NewBookFromOPF(filepath string) (*Book, error) {
 	file, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
@@ -37,22 +37,16 @@ func NewMetaDataFromOPF(filepath string) (*MetaData, error) {
 		path := item.SelectAttr("href")
 		pages = append(pages, NewPage(id, path))
 	}
-	return &MetaData{
+	return NewBook(isbn, title, language, author, publisher, pages), nil
+}
+
+func NewBook(isbn, title, language, author, publisher string, pages []*Page) *Book {
+	return &Book{
 		ISBN:      isbn,
 		Title:     title,
 		Language:  language,
 		Author:    author,
 		Publisher: publisher,
 		Pages:     pages,
-	}, nil
-}
-
-func NewMetaData(isbn, title, language, author, publisher string, pages []*Page) *MetaData {
-	return &MetaData{
-		ISBN:      isbn,
-		Title:     title,
-		Language:  language,
-		Author:    author,
-		Publisher: publisher,
 	}
 }
