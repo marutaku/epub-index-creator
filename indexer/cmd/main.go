@@ -31,7 +31,11 @@ func createIndexFromEPub(epubFilePath string) error {
 		if err != nil {
 			return err
 		}
-		fmt.Printf("page: %s, keywords: %v\n", page.Path, keywords)
+		title, err := page.Title()
+		if err != nil {
+			return err
+		}
+		fmt.Printf("title: %s, keywords: %v\n", title, keywords)
 	}
 	return nil
 }

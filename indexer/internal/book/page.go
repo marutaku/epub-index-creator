@@ -32,6 +32,19 @@ func (p *Page) Content() (string, error) {
 	return strings.TrimSpace(res[0][1]), nil
 }
 
+func (p *Page) Title() (string, error) {
+	contentsBytes, err := os.ReadFile(p.Path)
+	if err != nil {
+		return "", err
+	}
+	re := regexp.MustCompile(`(?i)<title>(.*?)</title>`)
+	res := re.FindAllStringSubmatch(string(contentsBytes), 1)
+	if len(res) == 0 {
+		return "", errors.New("title tag not found")
+	}
+	return res[0][1], nil
+}
+
 func (p *Page) ExtractKeywords() ([]string, error) {
 	contents, err := p.Content()
 	if err != nil {
