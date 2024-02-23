@@ -1,14 +1,15 @@
 package expand
 
 import (
+	"encoding/xml"
+	"errors"
+	"fmt"
 	"io"
 	"os"
 	"path"
 	"path/filepath"
 
 	"archive/zip"
-
-	"github.com/antchfx/xmlquery"
 )
 
 func getFileNameWithoutExt(path string) string {
@@ -45,6 +46,13 @@ func UnzipEPub(filepath string) (string, error) {
 		if err != nil {
 			return "", err
 		}
+		contents := make([]byte, file.FileInfo().Size())
+		if _, err := io.ReadFull(fileReader, contents); err != nil {
+			return "", err
+		}
+		if _, err = targetFile.Write(contents); err != nil {
+			return "", err
+		}
 		defer targetFile.Close()
 
 		if _, err := io.Copy(targetFile, targetFile); err != nil {
@@ -56,15 +64,17 @@ func UnzipEPub(filepath string) (string, error) {
 
 func FindOPFFilePath(tempDir string) (string, error) {
 	containerFilePath := path.Join(tempDir, "META-INF/container.xml")
-	containerFile, err := os.Open(containerFilePath)
+	fileContents, err := os.ReadFile(containerFilePath)
 	if err != nil {
 		return "", err
 	}
-	defer containerFile.Close()
-	doc, err := xmlquery.Parse(containerFile)
-	if err != nil {
-		return "", err
+	container := &Container{}
+	if err := xml.Unmarshal(fileContents, container); err != nil {
+		return "", fmt.Errorf("error unmarshalling container.xml: %v", err)
 	}
-	opfPath := xmlquery.FindOne(doc, "//rootfiles/rootfile").SelectAttr("full-path")
-	return path.Join(tempDir, opfPath), nil
+	if len(container.RootFiles) == 0 {
+		return "", errors.New("rootfiles not found")
+	}
+	rootfile := container.RootFiles[0]
+	return path.Join(tempDir, rootfile.FullPath), nil
 }

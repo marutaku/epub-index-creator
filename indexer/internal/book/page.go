@@ -31,3 +31,20 @@ func (p *Page) Content() (string, error) {
 	}
 	return strings.TrimSpace(res[0][1]), nil
 }
+
+func (p *Page) ExtractKeywords() ([]string, error) {
+	contents, err := p.Content()
+	if err != nil {
+		return nil, err
+	}
+	// Extract words that inside <b> or <strong> tag
+	re := regexp.MustCompile(`(?i)<(b|strong)>(.*?)</(b|strong)>`)
+	keywordsWithTag := re.FindAllString(contents, -1)
+	keywords := make([]string, 0, len(keywordsWithTag))
+	for _, keywordWithTag := range keywordsWithTag {
+		re = regexp.MustCompile(`(?i)<(b|strong)>(.*?)</(b|strong)>`)
+		res := re.FindAllStringSubmatch(keywordWithTag, 1)
+		keywords = append(keywords, res[0][2])
+	}
+	return keywords, nil
+}

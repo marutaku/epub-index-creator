@@ -2,6 +2,7 @@ package book
 
 import (
 	"os"
+	"path"
 
 	"github.com/antchfx/xmlquery"
 )
@@ -16,6 +17,7 @@ type Book struct {
 }
 
 func NewBookFromOPF(filepath string) (*Book, error) {
+	baseDir := path.Dir(filepath)
 	file, err := os.Open(filepath)
 	if err != nil {
 		return nil, err
@@ -34,8 +36,8 @@ func NewBookFromOPF(filepath string) (*Book, error) {
 	pages := make([]*Page, 0, len(items))
 	for _, item := range items {
 		id := item.SelectAttr("id")
-		path := item.SelectAttr("href")
-		pages = append(pages, NewPage(id, path))
+		pagePath := item.SelectAttr("href")
+		pages = append(pages, NewPage(id, path.Join(baseDir, pagePath)))
 	}
 	return NewBook(isbn, title, language, author, publisher, pages), nil
 }

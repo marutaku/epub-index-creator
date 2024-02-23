@@ -21,11 +21,18 @@ func createIndexFromEPub(epubFilePath string) error {
 	if err != nil {
 		return err
 	}
+	fmt.Printf("opfFilePath: %s\n", opfFilePath)
 	book, err := book.NewBookFromOPF(opfFilePath)
 	if err != nil {
 		return err
 	}
-	fmt.Println(book)
+	for _, page := range book.Pages {
+		keywords, err := page.ExtractKeywords()
+		if err != nil {
+			return err
+		}
+		fmt.Printf("page: %s, keywords: %v\n", page.Path, keywords)
+	}
 	return nil
 }
 
