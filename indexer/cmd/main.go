@@ -5,7 +5,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/marutaku/epub-index-creator/indexer/internal/book"
+	"github.com/marutaku/epub-index-creator/indexer/internal/domain"
 	"github.com/marutaku/epub-index-creator/indexer/internal/expand"
 	"github.com/urfave/cli/v2"
 )
@@ -22,7 +22,7 @@ func createIndexFromEPub(epubFilePath string) error {
 		return err
 	}
 	fmt.Printf("opfFilePath: %s\n", opfFilePath)
-	book, err := book.NewBookFromOPF(opfFilePath)
+	book, err := domain.NewBookFromOPF(opfFilePath)
 	if err != nil {
 		return err
 	}
