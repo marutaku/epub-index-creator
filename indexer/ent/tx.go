@@ -16,6 +16,8 @@ type Tx struct {
 	Book *BookClient
 	// Keyword is the client for interacting with the Keyword builders.
 	Keyword *KeywordClient
+	// Page is the client for interacting with the Page builders.
+	Page *PageClient
 
 	// lazily loaded.
 	client     *Client
@@ -149,6 +151,7 @@ func (tx *Tx) Client() *Client {
 func (tx *Tx) init() {
 	tx.Book = NewBookClient(tx.config)
 	tx.Keyword = NewKeywordClient(tx.config)
+	tx.Page = NewPageClient(tx.config)
 }
 
 // txDriver wraps the given dialect.Tx with a nop dialect.Driver implementation.

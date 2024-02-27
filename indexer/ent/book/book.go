@@ -22,17 +22,17 @@ const (
 	FieldAuthor = "author"
 	// FieldPublisher holds the string denoting the publisher field in the database.
 	FieldPublisher = "publisher"
-	// EdgeCars holds the string denoting the cars edge name in mutations.
-	EdgeCars = "cars"
+	// EdgePages holds the string denoting the pages edge name in mutations.
+	EdgePages = "pages"
 	// Table holds the table name of the book in the database.
 	Table = "books"
-	// CarsTable is the table that holds the cars relation/edge.
-	CarsTable = "keywords"
-	// CarsInverseTable is the table name for the Keyword entity.
-	// It exists in this package in order to avoid circular dependency with the "keyword" package.
-	CarsInverseTable = "keywords"
-	// CarsColumn is the table column denoting the cars relation/edge.
-	CarsColumn = "book_cars"
+	// PagesTable is the table that holds the pages relation/edge.
+	PagesTable = "pages"
+	// PagesInverseTable is the table name for the Page entity.
+	// It exists in this package in order to avoid circular dependency with the "page" package.
+	PagesInverseTable = "pages"
+	// PagesColumn is the table column denoting the pages relation/edge.
+	PagesColumn = "book_pages"
 )
 
 // Columns holds all SQL columns for book fields.
@@ -101,23 +101,23 @@ func ByPublisher(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldPublisher, opts...).ToFunc()
 }
 
-// ByCarsCount orders the results by cars count.
-func ByCarsCount(opts ...sql.OrderTermOption) OrderOption {
+// ByPagesCount orders the results by pages count.
+func ByPagesCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborsCount(s, newCarsStep(), opts...)
+		sqlgraph.OrderByNeighborsCount(s, newPagesStep(), opts...)
 	}
 }
 
-// ByCars orders the results by cars terms.
-func ByCars(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
+// ByPages orders the results by pages terms.
+func ByPages(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
-		sqlgraph.OrderByNeighborTerms(s, newCarsStep(), append([]sql.OrderTerm{term}, terms...)...)
+		sqlgraph.OrderByNeighborTerms(s, newPagesStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
 }
-func newCarsStep() *sqlgraph.Step {
+func newPagesStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(
 		sqlgraph.From(Table, FieldID),
-		sqlgraph.To(CarsInverseTable, FieldID),
-		sqlgraph.Edge(sqlgraph.O2M, false, CarsTable, CarsColumn),
+		sqlgraph.To(PagesInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.O2M, false, PagesTable, PagesColumn),
 	)
 }

@@ -403,21 +403,21 @@ func PublisherContainsFold(v string) predicate.Book {
 	return predicate.Book(sql.FieldContainsFold(FieldPublisher, v))
 }
 
-// HasCars applies the HasEdge predicate on the "cars" edge.
-func HasCars() predicate.Book {
+// HasPages applies the HasEdge predicate on the "pages" edge.
+func HasPages() predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
 		step := sqlgraph.NewStep(
 			sqlgraph.From(Table, FieldID),
-			sqlgraph.Edge(sqlgraph.O2M, false, CarsTable, CarsColumn),
+			sqlgraph.Edge(sqlgraph.O2M, false, PagesTable, PagesColumn),
 		)
 		sqlgraph.HasNeighbors(s, step)
 	})
 }
 
-// HasCarsWith applies the HasEdge predicate on the "cars" edge with a given conditions (other predicates).
-func HasCarsWith(preds ...predicate.Keyword) predicate.Book {
+// HasPagesWith applies the HasEdge predicate on the "pages" edge with a given conditions (other predicates).
+func HasPagesWith(preds ...predicate.Page) predicate.Book {
 	return predicate.Book(func(s *sql.Selector) {
-		step := newCarsStep()
+		step := newPagesStep()
 		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
 			for _, p := range preds {
 				p(s)

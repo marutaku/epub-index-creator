@@ -24,15 +24,15 @@ func main() {
 	}
 	// Migrate diff options.
 	opts := []schema.MigrateOption{
-		schema.WithDir(dir),                         // provide migration directory
-		schema.WithMigrationMode(schema.ModeReplay), // provide migration mode
-		schema.WithDialect(dialect.MySQL),           // Ent dialect to use
+		schema.WithDir(dir),                          // provide migration directory
+		schema.WithMigrationMode(schema.ModeInspect), // provide migration mode
+		schema.WithDialect(dialect.SQLite),           // Ent dialect to use
 		schema.WithFormatter(atlas.DefaultFormatter),
 	}
 	if len(os.Args) != 2 {
 		log.Fatalln("migration name is required. Use: 'go run -mod=mod ent/migrate/main.go <name>'")
 	}
-	err = migrate.NamedDiff(ctx, "sqlite://ent.db", os.Args[1], opts...)
+	err = migrate.NamedDiff(ctx, "sqlite://ent.db?_fk=1", os.Args[1], opts...)
 	if err != nil {
 		log.Fatalf("failed generating migration file: %v", err)
 	}

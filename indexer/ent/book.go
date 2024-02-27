@@ -34,20 +34,20 @@ type Book struct {
 
 // BookEdges holds the relations/edges for other nodes in the graph.
 type BookEdges struct {
-	// Cars holds the value of the cars edge.
-	Cars []*Keyword `json:"cars,omitempty"`
+	// Pages holds the value of the pages edge.
+	Pages []*Page `json:"pages,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
 	loadedTypes [1]bool
 }
 
-// CarsOrErr returns the Cars value or an error if the edge
+// PagesOrErr returns the Pages value or an error if the edge
 // was not loaded in eager-loading.
-func (e BookEdges) CarsOrErr() ([]*Keyword, error) {
+func (e BookEdges) PagesOrErr() ([]*Page, error) {
 	if e.loadedTypes[0] {
-		return e.Cars, nil
+		return e.Pages, nil
 	}
-	return nil, &NotLoadedError{edge: "cars"}
+	return nil, &NotLoadedError{edge: "pages"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -123,9 +123,9 @@ func (b *Book) Value(name string) (ent.Value, error) {
 	return b.selectValues.Get(name)
 }
 
-// QueryCars queries the "cars" edge of the Book entity.
-func (b *Book) QueryCars() *KeywordQuery {
-	return NewBookClient(b.config).QueryCars(b)
+// QueryPages queries the "pages" edge of the Book entity.
+func (b *Book) QueryPages() *PageQuery {
+	return NewBookClient(b.config).QueryPages(b)
 }
 
 // Update returns a builder for updating this Book.

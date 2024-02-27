@@ -11,3 +11,6 @@ type Book func(*sql.Selector)
 
 // Keyword is the predicate function for keyword builders.
 type Keyword func(*sql.Selector)
+
+// Page is the predicate function for page builders.
+type Page func(*sql.Selector)

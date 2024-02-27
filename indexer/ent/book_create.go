@@ -10,7 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 )
 
 // BookCreate is the builder for creating a Book entity.
@@ -50,19 +50,19 @@ func (bc *BookCreate) SetPublisher(s string) *BookCreate {
 	return bc
 }
 
-// AddCarIDs adds the "cars" edge to the Keyword entity by IDs.
-func (bc *BookCreate) AddCarIDs(ids ...int) *BookCreate {
-	bc.mutation.AddCarIDs(ids...)
+// AddPageIDs adds the "pages" edge to the Page entity by IDs.
+func (bc *BookCreate) AddPageIDs(ids ...int) *BookCreate {
+	bc.mutation.AddPageIDs(ids...)
 	return bc
 }
 
-// AddCars adds the "cars" edges to the Keyword entity.
-func (bc *BookCreate) AddCars(k ...*Keyword) *BookCreate {
-	ids := make([]int, len(k))
-	for i := range k {
-		ids[i] = k[i].ID
+// AddPages adds the "pages" edges to the Page entity.
+func (bc *BookCreate) AddPages(p ...*Page) *BookCreate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return bc.AddCarIDs(ids...)
+	return bc.AddPageIDs(ids...)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -185,15 +185,15 @@ func (bc *BookCreate) createSpec() (*Book, *sqlgraph.CreateSpec) {
 		_spec.SetField(book.FieldPublisher, field.TypeString, value)
 		_node.Publisher = value
 	}
-	if nodes := bc.mutation.CarsIDs(); len(nodes) > 0 {
+	if nodes := bc.mutation.PagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

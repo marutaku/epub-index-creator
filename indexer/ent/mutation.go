@@ -12,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -26,6 +27,7 @@ const (
 	// Node types.
 	TypeBook    = "Book"
 	TypeKeyword = "Keyword"
+	TypePage    = "Page"
 )
 
 // BookMutation represents an operation that mutates the Book nodes in the graph.
@@ -40,9 +42,9 @@ type BookMutation struct {
 	author        *string
 	publisher     *string
 	clearedFields map[string]struct{}
-	cars          map[int]struct{}
-	removedcars   map[int]struct{}
-	clearedcars   bool
+	pages         map[int]struct{}
+	removedpages  map[int]struct{}
+	clearedpages  bool
 	done          bool
 	oldValue      func(context.Context) (*Book, error)
 	predicates    []predicate.Book
@@ -326,58 +328,58 @@ func (m *BookMutation) ResetPublisher() {
 	m.publisher = nil
 }
 
-// AddCarIDs adds the "cars" edge to the Keyword entity by ids.
-func (m *BookMutation) AddCarIDs(ids ...int) {
-	if m.cars == nil {
-		m.cars = make(map[int]struct{})
+// AddPageIDs adds the "pages" edge to the Page entity by ids.
+func (m *BookMutation) AddPageIDs(ids ...int) {
+	if m.pages == nil {
+		m.pages = make(map[int]struct{})
 	}
 	for i := range ids {
-		m.cars[ids[i]] = struct{}{}
+		m.pages[ids[i]] = struct{}{}
 	}
 }
 
-// ClearCars clears the "cars" edge to the Keyword entity.
-func (m *BookMutation) ClearCars() {
-	m.clearedcars = true
+// ClearPages clears the "pages" edge to the Page entity.
+func (m *BookMutation) ClearPages() {
+	m.clearedpages = true
 }
 
-// CarsCleared reports if the "cars" edge to the Keyword entity was cleared.
-func (m *BookMutation) CarsCleared() bool {
-	return m.clearedcars
+// PagesCleared reports if the "pages" edge to the Page entity was cleared.
+func (m *BookMutation) PagesCleared() bool {
+	return m.clearedpages
 }
 
-// RemoveCarIDs removes the "cars" edge to the Keyword entity by IDs.
-func (m *BookMutation) RemoveCarIDs(ids ...int) {
-	if m.removedcars == nil {
-		m.removedcars = make(map[int]struct{})
+// RemovePageIDs removes the "pages" edge to the Page entity by IDs.
+func (m *BookMutation) RemovePageIDs(ids ...int) {
+	if m.removedpages == nil {
+		m.removedpages = make(map[int]struct{})
 	}
 	for i := range ids {
-		delete(m.cars, ids[i])
-		m.removedcars[ids[i]] = struct{}{}
+		delete(m.pages, ids[i])
+		m.removedpages[ids[i]] = struct{}{}
 	}
 }
 
-// RemovedCars returns the removed IDs of the "cars" edge to the Keyword entity.
-func (m *BookMutation) RemovedCarsIDs() (ids []int) {
-	for id := range m.removedcars {
+// RemovedPages returns the removed IDs of the "pages" edge to the Page entity.
+func (m *BookMutation) RemovedPagesIDs() (ids []int) {
+	for id := range m.removedpages {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// CarsIDs returns the "cars" edge IDs in the mutation.
-func (m *BookMutation) CarsIDs() (ids []int) {
-	for id := range m.cars {
+// PagesIDs returns the "pages" edge IDs in the mutation.
+func (m *BookMutation) PagesIDs() (ids []int) {
+	for id := range m.pages {
 		ids = append(ids, id)
 	}
 	return
 }
 
-// ResetCars resets all changes to the "cars" edge.
-func (m *BookMutation) ResetCars() {
-	m.cars = nil
-	m.clearedcars = false
-	m.removedcars = nil
+// ResetPages resets all changes to the "pages" edge.
+func (m *BookMutation) ResetPages() {
+	m.pages = nil
+	m.clearedpages = false
+	m.removedpages = nil
 }
 
 // Where appends a list predicates to the BookMutation builder.
@@ -582,8 +584,8 @@ func (m *BookMutation) ResetField(name string) error {
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *BookMutation) AddedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.cars != nil {
-		edges = append(edges, book.EdgeCars)
+	if m.pages != nil {
+		edges = append(edges, book.EdgePages)
 	}
 	return edges
 }
@@ -592,9 +594,9 @@ func (m *BookMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *BookMutation) AddedIDs(name string) []ent.Value {
 	switch name {
-	case book.EdgeCars:
-		ids := make([]ent.Value, 0, len(m.cars))
-		for id := range m.cars {
+	case book.EdgePages:
+		ids := make([]ent.Value, 0, len(m.pages))
+		for id := range m.pages {
 			ids = append(ids, id)
 		}
 		return ids
@@ -605,8 +607,8 @@ func (m *BookMutation) AddedIDs(name string) []ent.Value {
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *BookMutation) RemovedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.removedcars != nil {
-		edges = append(edges, book.EdgeCars)
+	if m.removedpages != nil {
+		edges = append(edges, book.EdgePages)
 	}
 	return edges
 }
@@ -615,9 +617,9 @@ func (m *BookMutation) RemovedEdges() []string {
 // the given name in this mutation.
 func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 	switch name {
-	case book.EdgeCars:
-		ids := make([]ent.Value, 0, len(m.removedcars))
-		for id := range m.removedcars {
+	case book.EdgePages:
+		ids := make([]ent.Value, 0, len(m.removedpages))
+		for id := range m.removedpages {
 			ids = append(ids, id)
 		}
 		return ids
@@ -628,8 +630,8 @@ func (m *BookMutation) RemovedIDs(name string) []ent.Value {
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *BookMutation) ClearedEdges() []string {
 	edges := make([]string, 0, 1)
-	if m.clearedcars {
-		edges = append(edges, book.EdgeCars)
+	if m.clearedpages {
+		edges = append(edges, book.EdgePages)
 	}
 	return edges
 }
@@ -638,8 +640,8 @@ func (m *BookMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *BookMutation) EdgeCleared(name string) bool {
 	switch name {
-	case book.EdgeCars:
-		return m.clearedcars
+	case book.EdgePages:
+		return m.clearedpages
 	}
 	return false
 }
@@ -656,8 +658,8 @@ func (m *BookMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *BookMutation) ResetEdge(name string) error {
 	switch name {
-	case book.EdgeCars:
-		m.ResetCars()
+	case book.EdgePages:
+		m.ResetPages()
 		return nil
 	}
 	return fmt.Errorf("unknown Book edge %s", name)
@@ -987,4 +989,423 @@ func (m *KeywordMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *KeywordMutation) ResetEdge(name string) error {
 	return fmt.Errorf("unknown Keyword edge %s", name)
+}
+
+// PageMutation represents an operation that mutates the Page nodes in the graph.
+type PageMutation struct {
+	config
+	op              Op
+	typ             string
+	id              *int
+	title           *string
+	clearedFields   map[string]struct{}
+	keywords        map[int]struct{}
+	removedkeywords map[int]struct{}
+	clearedkeywords bool
+	done            bool
+	oldValue        func(context.Context) (*Page, error)
+	predicates      []predicate.Page
+}
+
+var _ ent.Mutation = (*PageMutation)(nil)
+
+// pageOption allows management of the mutation configuration using functional options.
+type pageOption func(*PageMutation)
+
+// newPageMutation creates new mutation for the Page entity.
+func newPageMutation(c config, op Op, opts ...pageOption) *PageMutation {
+	m := &PageMutation{
+		config:        c,
+		op:            op,
+		typ:           TypePage,
+		clearedFields: make(map[string]struct{}),
+	}
+	for _, opt := range opts {
+		opt(m)
+	}
+	return m
+}
+
+// withPageID sets the ID field of the mutation.
+func withPageID(id int) pageOption {
+	return func(m *PageMutation) {
+		var (
+			err   error
+			once  sync.Once
+			value *Page
+		)
+		m.oldValue = func(ctx context.Context) (*Page, error) {
+			once.Do(func() {
+				if m.done {
+					err = errors.New("querying old values post mutation is not allowed")
+				} else {
+					value, err = m.Client().Page.Get(ctx, id)
+				}
+			})
+			return value, err
+		}
+		m.id = &id
+	}
+}
+
+// withPage sets the old Page of the mutation.
+func withPage(node *Page) pageOption {
+	return func(m *PageMutation) {
+		m.oldValue = func(context.Context) (*Page, error) {
+			return node, nil
+		}
+		m.id = &node.ID
+	}
+}
+
+// Client returns a new `ent.Client` from the mutation. If the mutation was
+// executed in a transaction (ent.Tx), a transactional client is returned.
+func (m PageMutation) Client() *Client {
+	client := &Client{config: m.config}
+	client.init()
+	return client
+}
+
+// Tx returns an `ent.Tx` for mutations that were executed in transactions;
+// it returns an error otherwise.
+func (m PageMutation) Tx() (*Tx, error) {
+	if _, ok := m.driver.(*txDriver); !ok {
+		return nil, errors.New("ent: mutation is not running in a transaction")
+	}
+	tx := &Tx{config: m.config}
+	tx.init()
+	return tx, nil
+}
+
+// ID returns the ID value in the mutation. Note that the ID is only available
+// if it was provided to the builder or after it was returned from the database.
+func (m *PageMutation) ID() (id int, exists bool) {
+	if m.id == nil {
+		return
+	}
+	return *m.id, true
+}
+
+// IDs queries the database and returns the entity ids that match the mutation's predicate.
+// That means, if the mutation is applied within a transaction with an isolation level such
+// as sql.LevelSerializable, the returned ids match the ids of the rows that will be updated
+// or updated by the mutation.
+func (m *PageMutation) IDs(ctx context.Context) ([]int, error) {
+	switch {
+	case m.op.Is(OpUpdateOne | OpDeleteOne):
+		id, exists := m.ID()
+		if exists {
+			return []int{id}, nil
+		}
+		fallthrough
+	case m.op.Is(OpUpdate | OpDelete):
+		return m.Client().Page.Query().Where(m.predicates...).IDs(ctx)
+	default:
+		return nil, fmt.Errorf("IDs is not allowed on %s operations", m.op)
+	}
+}
+
+// SetTitle sets the "title" field.
+func (m *PageMutation) SetTitle(s string) {
+	m.title = &s
+}
+
+// Title returns the value of the "title" field in the mutation.
+func (m *PageMutation) Title() (r string, exists bool) {
+	v := m.title
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldTitle returns the old "title" field's value of the Page entity.
+// If the Page object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PageMutation) OldTitle(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldTitle is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldTitle requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldTitle: %w", err)
+	}
+	return oldValue.Title, nil
+}
+
+// ResetTitle resets all changes to the "title" field.
+func (m *PageMutation) ResetTitle() {
+	m.title = nil
+}
+
+// AddKeywordIDs adds the "keywords" edge to the Keyword entity by ids.
+func (m *PageMutation) AddKeywordIDs(ids ...int) {
+	if m.keywords == nil {
+		m.keywords = make(map[int]struct{})
+	}
+	for i := range ids {
+		m.keywords[ids[i]] = struct{}{}
+	}
+}
+
+// ClearKeywords clears the "keywords" edge to the Keyword entity.
+func (m *PageMutation) ClearKeywords() {
+	m.clearedkeywords = true
+}
+
+// KeywordsCleared reports if the "keywords" edge to the Keyword entity was cleared.
+func (m *PageMutation) KeywordsCleared() bool {
+	return m.clearedkeywords
+}
+
+// RemoveKeywordIDs removes the "keywords" edge to the Keyword entity by IDs.
+func (m *PageMutation) RemoveKeywordIDs(ids ...int) {
+	if m.removedkeywords == nil {
+		m.removedkeywords = make(map[int]struct{})
+	}
+	for i := range ids {
+		delete(m.keywords, ids[i])
+		m.removedkeywords[ids[i]] = struct{}{}
+	}
+}
+
+// RemovedKeywords returns the removed IDs of the "keywords" edge to the Keyword entity.
+func (m *PageMutation) RemovedKeywordsIDs() (ids []int) {
+	for id := range m.removedkeywords {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// KeywordsIDs returns the "keywords" edge IDs in the mutation.
+func (m *PageMutation) KeywordsIDs() (ids []int) {
+	for id := range m.keywords {
+		ids = append(ids, id)
+	}
+	return
+}
+
+// ResetKeywords resets all changes to the "keywords" edge.
+func (m *PageMutation) ResetKeywords() {
+	m.keywords = nil
+	m.clearedkeywords = false
+	m.removedkeywords = nil
+}
+
+// Where appends a list predicates to the PageMutation builder.
+func (m *PageMutation) Where(ps ...predicate.Page) {
+	m.predicates = append(m.predicates, ps...)
+}
+
+// WhereP appends storage-level predicates to the PageMutation builder. Using this method,
+// users can use type-assertion to append predicates that do not depend on any generated package.
+func (m *PageMutation) WhereP(ps ...func(*sql.Selector)) {
+	p := make([]predicate.Page, len(ps))
+	for i := range ps {
+		p[i] = ps[i]
+	}
+	m.Where(p...)
+}
+
+// Op returns the operation name.
+func (m *PageMutation) Op() Op {
+	return m.op
+}
+
+// SetOp allows setting the mutation operation.
+func (m *PageMutation) SetOp(op Op) {
+	m.op = op
+}
+
+// Type returns the node type of this mutation (Page).
+func (m *PageMutation) Type() string {
+	return m.typ
+}
+
+// Fields returns all fields that were changed during this mutation. Note that in
+// order to get all numeric fields that were incremented/decremented, call
+// AddedFields().
+func (m *PageMutation) Fields() []string {
+	fields := make([]string, 0, 1)
+	if m.title != nil {
+		fields = append(fields, page.FieldTitle)
+	}
+	return fields
+}
+
+// Field returns the value of a field with the given name. The second boolean
+// return value indicates that this field was not set, or was not defined in the
+// schema.
+func (m *PageMutation) Field(name string) (ent.Value, bool) {
+	switch name {
+	case page.FieldTitle:
+		return m.Title()
+	}
+	return nil, false
+}
+
+// OldField returns the old value of the field from the database. An error is
+// returned if the mutation operation is not UpdateOne, or the query to the
+// database failed.
+func (m *PageMutation) OldField(ctx context.Context, name string) (ent.Value, error) {
+	switch name {
+	case page.FieldTitle:
+		return m.OldTitle(ctx)
+	}
+	return nil, fmt.Errorf("unknown Page field %s", name)
+}
+
+// SetField sets the value of a field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PageMutation) SetField(name string, value ent.Value) error {
+	switch name {
+	case page.FieldTitle:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetTitle(v)
+		return nil
+	}
+	return fmt.Errorf("unknown Page field %s", name)
+}
+
+// AddedFields returns all numeric fields that were incremented/decremented during
+// this mutation.
+func (m *PageMutation) AddedFields() []string {
+	return nil
+}
+
+// AddedField returns the numeric value that was incremented/decremented on a field
+// with the given name. The second boolean return value indicates that this field
+// was not set, or was not defined in the schema.
+func (m *PageMutation) AddedField(name string) (ent.Value, bool) {
+	return nil, false
+}
+
+// AddField adds the value to the field with the given name. It returns an error if
+// the field is not defined in the schema, or if the type mismatched the field
+// type.
+func (m *PageMutation) AddField(name string, value ent.Value) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Page numeric field %s", name)
+}
+
+// ClearedFields returns all nullable fields that were cleared during this
+// mutation.
+func (m *PageMutation) ClearedFields() []string {
+	return nil
+}
+
+// FieldCleared returns a boolean indicating if a field with the given name was
+// cleared in this mutation.
+func (m *PageMutation) FieldCleared(name string) bool {
+	_, ok := m.clearedFields[name]
+	return ok
+}
+
+// ClearField clears the value of the field with the given name. It returns an
+// error if the field is not defined in the schema.
+func (m *PageMutation) ClearField(name string) error {
+	return fmt.Errorf("unknown Page nullable field %s", name)
+}
+
+// ResetField resets all changes in the mutation for the field with the given name.
+// It returns an error if the field is not defined in the schema.
+func (m *PageMutation) ResetField(name string) error {
+	switch name {
+	case page.FieldTitle:
+		m.ResetTitle()
+		return nil
+	}
+	return fmt.Errorf("unknown Page field %s", name)
+}
+
+// AddedEdges returns all edge names that were set/added in this mutation.
+func (m *PageMutation) AddedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.keywords != nil {
+		edges = append(edges, page.EdgeKeywords)
+	}
+	return edges
+}
+
+// AddedIDs returns all IDs (to other nodes) that were added for the given edge
+// name in this mutation.
+func (m *PageMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case page.EdgeKeywords:
+		ids := make([]ent.Value, 0, len(m.keywords))
+		for id := range m.keywords {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// RemovedEdges returns all edge names that were removed in this mutation.
+func (m *PageMutation) RemovedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.removedkeywords != nil {
+		edges = append(edges, page.EdgeKeywords)
+	}
+	return edges
+}
+
+// RemovedIDs returns all IDs (to other nodes) that were removed for the edge with
+// the given name in this mutation.
+func (m *PageMutation) RemovedIDs(name string) []ent.Value {
+	switch name {
+	case page.EdgeKeywords:
+		ids := make([]ent.Value, 0, len(m.removedkeywords))
+		for id := range m.removedkeywords {
+			ids = append(ids, id)
+		}
+		return ids
+	}
+	return nil
+}
+
+// ClearedEdges returns all edge names that were cleared in this mutation.
+func (m *PageMutation) ClearedEdges() []string {
+	edges := make([]string, 0, 1)
+	if m.clearedkeywords {
+		edges = append(edges, page.EdgeKeywords)
+	}
+	return edges
+}
+
+// EdgeCleared returns a boolean which indicates if the edge with the given name
+// was cleared in this mutation.
+func (m *PageMutation) EdgeCleared(name string) bool {
+	switch name {
+	case page.EdgeKeywords:
+		return m.clearedkeywords
+	}
+	return false
+}
+
+// ClearEdge clears the value of the edge with the given name. It returns an error
+// if that edge is not defined in the schema.
+func (m *PageMutation) ClearEdge(name string) error {
+	switch name {
+	}
+	return fmt.Errorf("unknown Page unique edge %s", name)
+}
+
+// ResetEdge resets all changes to the edge with the given name in this mutation.
+// It returns an error if the edge is not defined in the schema.
+func (m *PageMutation) ResetEdge(name string) error {
+	switch name {
+	case page.EdgeKeywords:
+		m.ResetKeywords()
+		return nil
+	}
+	return fmt.Errorf("unknown Page edge %s", name)
 }

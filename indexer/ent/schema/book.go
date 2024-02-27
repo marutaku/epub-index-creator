@@ -24,7 +24,5 @@ func (Book) Fields() []ent.Field {
 
 // Edges of the Book.
 func (Book) Edges() []ent.Edge {
-	return []ent.Edge{
-		edge.To("cars", Keyword.Type),
-	}
+	return []ent.Edge{edge.To("pages", Page.Type)}
 }

@@ -26,7 +26,7 @@ var Columns = []string{
 // ForeignKeys holds the SQL foreign-keys that are owned by the "keywords"
 // table and are not defined as standalone fields in the schema.
 var ForeignKeys = []string{
-	"book_cars",
+	"page_keywords",
 }
 
 // ValidColumn reports if the column name is valid (part of the table columns).

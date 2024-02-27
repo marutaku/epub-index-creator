@@ -17,9 +17,9 @@ type Keyword struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// Keyword holds the value of the "keyword" field.
-	Keyword      string `json:"keyword,omitempty"`
-	book_cars    *int
-	selectValues sql.SelectValues
+	Keyword       string `json:"keyword,omitempty"`
+	page_keywords *int
+	selectValues  sql.SelectValues
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -31,7 +31,7 @@ func (*Keyword) scanValues(columns []string) ([]any, error) {
 			values[i] = new(sql.NullInt64)
 		case keyword.FieldKeyword:
 			values[i] = new(sql.NullString)
-		case keyword.ForeignKeys[0]: // book_cars
+		case keyword.ForeignKeys[0]: // page_keywords
 			values[i] = new(sql.NullInt64)
 		default:
 			values[i] = new(sql.UnknownType)
@@ -62,10 +62,10 @@ func (k *Keyword) assignValues(columns []string, values []any) error {
 			}
 		case keyword.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
-				return fmt.Errorf("unexpected type %T for edge-field book_cars", value)
+				return fmt.Errorf("unexpected type %T for edge-field page_keywords", value)
 			} else if value.Valid {
-				k.book_cars = new(int)
-				*k.book_cars = int(value.Int64)
+				k.page_keywords = new(int)
+				*k.page_keywords = int(value.Int64)
 			}
 		default:
 			k.selectValues.Set(columns[i], values[i])

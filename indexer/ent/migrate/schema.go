@@ -27,7 +27,7 @@ var (
 	KeywordsColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "keyword", Type: field.TypeString},
-		{Name: "book_cars", Type: field.TypeInt, Nullable: true},
+		{Name: "page_keywords", Type: field.TypeInt, Nullable: true},
 	}
 	// KeywordsTable holds the schema information for the "keywords" table.
 	KeywordsTable = &schema.Table{
@@ -36,8 +36,28 @@ var (
 		PrimaryKey: []*schema.Column{KeywordsColumns[0]},
 		ForeignKeys: []*schema.ForeignKey{
 			{
-				Symbol:     "keywords_books_cars",
+				Symbol:     "keywords_pages_keywords",
 				Columns:    []*schema.Column{KeywordsColumns[2]},
+				RefColumns: []*schema.Column{PagesColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
+	// PagesColumns holds the columns for the "pages" table.
+	PagesColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "title", Type: field.TypeString},
+		{Name: "book_pages", Type: field.TypeInt, Nullable: true},
+	}
+	// PagesTable holds the schema information for the "pages" table.
+	PagesTable = &schema.Table{
+		Name:       "pages",
+		Columns:    PagesColumns,
+		PrimaryKey: []*schema.Column{PagesColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "pages_books_pages",
+				Columns:    []*schema.Column{PagesColumns[2]},
 				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},
@@ -47,9 +67,11 @@ var (
 	Tables = []*schema.Table{
 		BooksTable,
 		KeywordsTable,
+		PagesTable,
 	}
 )
 
 func init() {
-	KeywordsTable.ForeignKeys[0].RefTable = BooksTable
+	KeywordsTable.ForeignKeys[0].RefTable = PagesTable
+	PagesTable.ForeignKeys[0].RefTable = BooksTable
 }

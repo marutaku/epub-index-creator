@@ -11,7 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -98,19 +98,19 @@ func (bu *BookUpdate) SetNillablePublisher(s *string) *BookUpdate {
 	return bu
 }
 
-// AddCarIDs adds the "cars" edge to the Keyword entity by IDs.
-func (bu *BookUpdate) AddCarIDs(ids ...int) *BookUpdate {
-	bu.mutation.AddCarIDs(ids...)
+// AddPageIDs adds the "pages" edge to the Page entity by IDs.
+func (bu *BookUpdate) AddPageIDs(ids ...int) *BookUpdate {
+	bu.mutation.AddPageIDs(ids...)
 	return bu
 }
 
-// AddCars adds the "cars" edges to the Keyword entity.
-func (bu *BookUpdate) AddCars(k ...*Keyword) *BookUpdate {
-	ids := make([]int, len(k))
-	for i := range k {
-		ids[i] = k[i].ID
+// AddPages adds the "pages" edges to the Page entity.
+func (bu *BookUpdate) AddPages(p ...*Page) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return bu.AddCarIDs(ids...)
+	return bu.AddPageIDs(ids...)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -118,25 +118,25 @@ func (bu *BookUpdate) Mutation() *BookMutation {
 	return bu.mutation
 }
 
-// ClearCars clears all "cars" edges to the Keyword entity.
-func (bu *BookUpdate) ClearCars() *BookUpdate {
-	bu.mutation.ClearCars()
+// ClearPages clears all "pages" edges to the Page entity.
+func (bu *BookUpdate) ClearPages() *BookUpdate {
+	bu.mutation.ClearPages()
 	return bu
 }
 
-// RemoveCarIDs removes the "cars" edge to Keyword entities by IDs.
-func (bu *BookUpdate) RemoveCarIDs(ids ...int) *BookUpdate {
-	bu.mutation.RemoveCarIDs(ids...)
+// RemovePageIDs removes the "pages" edge to Page entities by IDs.
+func (bu *BookUpdate) RemovePageIDs(ids ...int) *BookUpdate {
+	bu.mutation.RemovePageIDs(ids...)
 	return bu
 }
 
-// RemoveCars removes "cars" edges to Keyword entities.
-func (bu *BookUpdate) RemoveCars(k ...*Keyword) *BookUpdate {
-	ids := make([]int, len(k))
-	for i := range k {
-		ids[i] = k[i].ID
+// RemovePages removes "pages" edges to Page entities.
+func (bu *BookUpdate) RemovePages(p ...*Page) *BookUpdate {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return bu.RemoveCarIDs(ids...)
+	return bu.RemovePageIDs(ids...)
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -223,28 +223,28 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := bu.mutation.Publisher(); ok {
 		_spec.SetField(book.FieldPublisher, field.TypeString, value)
 	}
-	if bu.mutation.CarsCleared() {
+	if bu.mutation.PagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bu.mutation.RemovedCarsIDs(); len(nodes) > 0 && !bu.mutation.CarsCleared() {
+	if nodes := bu.mutation.RemovedPagesIDs(); len(nodes) > 0 && !bu.mutation.PagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -252,15 +252,15 @@ func (bu *BookUpdate) sqlSave(ctx context.Context) (n int, err error) {
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := bu.mutation.CarsIDs(); len(nodes) > 0 {
+	if nodes := bu.mutation.PagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -358,19 +358,19 @@ func (buo *BookUpdateOne) SetNillablePublisher(s *string) *BookUpdateOne {
 	return buo
 }
 
-// AddCarIDs adds the "cars" edge to the Keyword entity by IDs.
-func (buo *BookUpdateOne) AddCarIDs(ids ...int) *BookUpdateOne {
-	buo.mutation.AddCarIDs(ids...)
+// AddPageIDs adds the "pages" edge to the Page entity by IDs.
+func (buo *BookUpdateOne) AddPageIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.AddPageIDs(ids...)
 	return buo
 }
 
-// AddCars adds the "cars" edges to the Keyword entity.
-func (buo *BookUpdateOne) AddCars(k ...*Keyword) *BookUpdateOne {
-	ids := make([]int, len(k))
-	for i := range k {
-		ids[i] = k[i].ID
+// AddPages adds the "pages" edges to the Page entity.
+func (buo *BookUpdateOne) AddPages(p ...*Page) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return buo.AddCarIDs(ids...)
+	return buo.AddPageIDs(ids...)
 }
 
 // Mutation returns the BookMutation object of the builder.
@@ -378,25 +378,25 @@ func (buo *BookUpdateOne) Mutation() *BookMutation {
 	return buo.mutation
 }
 
-// ClearCars clears all "cars" edges to the Keyword entity.
-func (buo *BookUpdateOne) ClearCars() *BookUpdateOne {
-	buo.mutation.ClearCars()
+// ClearPages clears all "pages" edges to the Page entity.
+func (buo *BookUpdateOne) ClearPages() *BookUpdateOne {
+	buo.mutation.ClearPages()
 	return buo
 }
 
-// RemoveCarIDs removes the "cars" edge to Keyword entities by IDs.
-func (buo *BookUpdateOne) RemoveCarIDs(ids ...int) *BookUpdateOne {
-	buo.mutation.RemoveCarIDs(ids...)
+// RemovePageIDs removes the "pages" edge to Page entities by IDs.
+func (buo *BookUpdateOne) RemovePageIDs(ids ...int) *BookUpdateOne {
+	buo.mutation.RemovePageIDs(ids...)
 	return buo
 }
 
-// RemoveCars removes "cars" edges to Keyword entities.
-func (buo *BookUpdateOne) RemoveCars(k ...*Keyword) *BookUpdateOne {
-	ids := make([]int, len(k))
-	for i := range k {
-		ids[i] = k[i].ID
+// RemovePages removes "pages" edges to Page entities.
+func (buo *BookUpdateOne) RemovePages(p ...*Page) *BookUpdateOne {
+	ids := make([]int, len(p))
+	for i := range p {
+		ids[i] = p[i].ID
 	}
-	return buo.RemoveCarIDs(ids...)
+	return buo.RemovePageIDs(ids...)
 }
 
 // Where appends a list predicates to the BookUpdate builder.
@@ -513,28 +513,28 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 	if value, ok := buo.mutation.Publisher(); ok {
 		_spec.SetField(book.FieldPublisher, field.TypeString, value)
 	}
-	if buo.mutation.CarsCleared() {
+	if buo.mutation.PagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := buo.mutation.RemovedCarsIDs(); len(nodes) > 0 && !buo.mutation.CarsCleared() {
+	if nodes := buo.mutation.RemovedPagesIDs(); len(nodes) > 0 && !buo.mutation.PagesCleared() {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {
@@ -542,15 +542,15 @@ func (buo *BookUpdateOne) sqlSave(ctx context.Context) (_node *Book, err error) 
 		}
 		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
 	}
-	if nodes := buo.mutation.CarsIDs(); len(nodes) > 0 {
+	if nodes := buo.mutation.PagesIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{
 			Rel:     sqlgraph.O2M,
 			Inverse: false,
-			Table:   book.CarsTable,
-			Columns: []string{book.CarsColumn},
+			Table:   book.PagesTable,
+			Columns: []string{book.PagesColumn},
 			Bidi:    false,
 			Target: &sqlgraph.EdgeTarget{
-				IDSpec: sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt),
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
 			},
 		}
 		for _, k := range nodes {

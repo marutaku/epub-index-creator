@@ -5,6 +5,7 @@ package ent
 import (
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/schema"
 )
 
@@ -40,4 +41,10 @@ func init() {
 	keywordDescKeyword := keywordFields[0].Descriptor()
 	// keyword.KeywordValidator is a validator for the "keyword" field. It is called by the builders before save.
 	keyword.KeywordValidator = keywordDescKeyword.Validators[0].(func(string) error)
+	pageFields := schema.Page{}.Fields()
+	_ = pageFields
+	// pageDescTitle is the schema descriptor for title field.
+	pageDescTitle := pageFields[0].Descriptor()
+	// page.TitleValidator is a validator for the "title" field. It is called by the builders before save.
+	page.TitleValidator = pageDescTitle.Validators[0].(func(string) error)
 }
