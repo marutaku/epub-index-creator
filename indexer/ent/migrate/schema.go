@@ -23,11 +23,33 @@ var (
 		Columns:    BooksColumns,
 		PrimaryKey: []*schema.Column{BooksColumns[0]},
 	}
+	// KeywordsColumns holds the columns for the "keywords" table.
+	KeywordsColumns = []*schema.Column{
+		{Name: "id", Type: field.TypeInt, Increment: true},
+		{Name: "keyword", Type: field.TypeString},
+		{Name: "book_cars", Type: field.TypeInt, Nullable: true},
+	}
+	// KeywordsTable holds the schema information for the "keywords" table.
+	KeywordsTable = &schema.Table{
+		Name:       "keywords",
+		Columns:    KeywordsColumns,
+		PrimaryKey: []*schema.Column{KeywordsColumns[0]},
+		ForeignKeys: []*schema.ForeignKey{
+			{
+				Symbol:     "keywords_books_cars",
+				Columns:    []*schema.Column{KeywordsColumns[2]},
+				RefColumns: []*schema.Column{BooksColumns[0]},
+				OnDelete:   schema.SetNull,
+			},
+		},
+	}
 	// Tables holds all the tables in the schema.
 	Tables = []*schema.Table{
 		BooksTable,
+		KeywordsTable,
 	}
 )
 
 func init() {
+	KeywordsTable.ForeignKeys[0].RefTable = BooksTable
 }

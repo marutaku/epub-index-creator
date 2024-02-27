@@ -8,3 +8,6 @@ import (
 
 // Book is the predicate function for book builders.
 type Book func(*sql.Selector)
+
+// Keyword is the predicate function for keyword builders.
+type Keyword func(*sql.Selector)

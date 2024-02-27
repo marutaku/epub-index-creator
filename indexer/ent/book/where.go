@@ -4,6 +4,7 @@ package book
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -400,6 +401,29 @@ func PublisherEqualFold(v string) predicate.Book {
 // PublisherContainsFold applies the ContainsFold predicate on the "publisher" field.
 func PublisherContainsFold(v string) predicate.Book {
 	return predicate.Book(sql.FieldContainsFold(FieldPublisher, v))
+}
+
+// HasCars applies the HasEdge predicate on the "cars" edge.
+func HasCars() predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, CarsTable, CarsColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasCarsWith applies the HasEdge predicate on the "cars" edge with a given conditions (other predicates).
+func HasCarsWith(preds ...predicate.Keyword) predicate.Book {
+	return predicate.Book(func(s *sql.Selector) {
+		step := newCarsStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.

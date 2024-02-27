@@ -13,6 +13,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
+	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
 )
 
 // ent aliases to avoid import conflicts in user's code.
@@ -73,7 +74,8 @@ var (
 func checkColumn(table, column string) error {
 	initCheck.Do(func() {
 		columnCheck = sql.NewColumnCheck(map[string]func(string) bool{
-			book.Table: book.ValidColumn,
+			book.Table:    book.ValidColumn,
+			keyword.Table: keyword.ValidColumn,
 		})
 	})
 	return columnCheck(table, column)

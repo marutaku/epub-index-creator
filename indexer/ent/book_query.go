@@ -4,6 +4,7 @@ package ent
 
 import (
 	"context"
+	"database/sql/driver"
 	"fmt"
 	"math"
 
@@ -11,6 +12,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
+	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -21,6 +23,7 @@ type BookQuery struct {
 	order      []book.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Book
+	withCars   *KeywordQuery
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
 	path func(context.Context) (*sql.Selector, error)
@@ -55,6 +58,28 @@ func (bq *BookQuery) Unique(unique bool) *BookQuery {
 func (bq *BookQuery) Order(o ...book.OrderOption) *BookQuery {
 	bq.order = append(bq.order, o...)
 	return bq
+}
+
+// QueryCars chains the current query on the "cars" edge.
+func (bq *BookQuery) QueryCars() *KeywordQuery {
+	query := (&KeywordClient{config: bq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := bq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := bq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(book.Table, book.FieldID, selector),
+			sqlgraph.To(keyword.Table, keyword.FieldID),
+			sqlgraph.Edge(sqlgraph.O2M, false, book.CarsTable, book.CarsColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(bq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Book entity from the query.
@@ -249,10 +274,22 @@ func (bq *BookQuery) Clone() *BookQuery {
 		order:      append([]book.OrderOption{}, bq.order...),
 		inters:     append([]Interceptor{}, bq.inters...),
 		predicates: append([]predicate.Book{}, bq.predicates...),
+		withCars:   bq.withCars.Clone(),
 		// clone intermediate query.
 		sql:  bq.sql.Clone(),
 		path: bq.path,
 	}
+}
+
+// WithCars tells the query-builder to eager-load the nodes that are connected to
+// the "cars" edge. The optional arguments are used to configure the query builder of the edge.
+func (bq *BookQuery) WithCars(opts ...func(*KeywordQuery)) *BookQuery {
+	query := (&KeywordClient{config: bq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	bq.withCars = query
+	return bq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -331,8 +368,11 @@ func (bq *BookQuery) prepareQuery(ctx context.Context) error {
 
 func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, error) {
 	var (
-		nodes = []*Book{}
-		_spec = bq.querySpec()
+		nodes       = []*Book{}
+		_spec       = bq.querySpec()
+		loadedTypes = [1]bool{
+			bq.withCars != nil,
+		}
 	)
 	_spec.ScanValues = func(columns []string) ([]any, error) {
 		return (*Book).scanValues(nil, columns)
@@ -340,6 +380,7 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Book{config: bq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -351,7 +392,46 @@ func (bq *BookQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Book, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := bq.withCars; query != nil {
+		if err := bq.loadCars(ctx, query, nodes,
+			func(n *Book) { n.Edges.Cars = []*Keyword{} },
+			func(n *Book, e *Keyword) { n.Edges.Cars = append(n.Edges.Cars, e) }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (bq *BookQuery) loadCars(ctx context.Context, query *KeywordQuery, nodes []*Book, init func(*Book), assign func(*Book, *Keyword)) error {
+	fks := make([]driver.Value, 0, len(nodes))
+	nodeids := make(map[int]*Book)
+	for i := range nodes {
+		fks = append(fks, nodes[i].ID)
+		nodeids[nodes[i].ID] = nodes[i]
+		if init != nil {
+			init(nodes[i])
+		}
+	}
+	query.withFKs = true
+	query.Where(predicate.Keyword(func(s *sql.Selector) {
+		s.Where(sql.InValues(s.C(book.CarsColumn), fks...))
+	}))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		fk := n.book_cars
+		if fk == nil {
+			return fmt.Errorf(`foreign-key "book_cars" is nil for node %v`, n.ID)
+		}
+		node, ok := nodeids[*fk]
+		if !ok {
+			return fmt.Errorf(`unexpected referenced foreign-key "book_cars" returned %v for node %v`, *fk, n.ID)
+		}
+		assign(node, n)
+	}
+	return nil
 }
 
 func (bq *BookQuery) sqlCount(ctx context.Context) (int, error) {
