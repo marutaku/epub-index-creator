@@ -5,9 +5,9 @@ import (
 	"log"
 	"os"
 
-	"github.com/marutaku/epub-index-creator/indexer/internal/database"
-	"github.com/marutaku/epub-index-creator/indexer/internal/domain"
-	"github.com/marutaku/epub-index-creator/indexer/internal/expand"
+	"github.com/marutaku/epub-index-creator/domain"
+	"github.com/marutaku/epub-index-creator/internal/database"
+	"github.com/marutaku/epub-index-creator/internal/expand"
 	"github.com/urfave/cli/v2"
 )
 

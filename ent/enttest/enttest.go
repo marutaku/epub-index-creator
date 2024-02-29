@@ -5,12 +5,12 @@ package enttest
 import (
 	"context"
 
-	"github.com/marutaku/epub-index-creator/indexer/ent"
+	"github.com/marutaku/epub-index-creator/ent"
 	// required by schema hooks.
-	_ "github.com/marutaku/epub-index-creator/indexer/ent/runtime"
+	_ "github.com/marutaku/epub-index-creator/ent/runtime"
 
 	"entgo.io/ent/dialect/sql/schema"
-	"github.com/marutaku/epub-index-creator/indexer/ent/migrate"
+	"github.com/marutaku/epub-index-creator/ent/migrate"
 )
 
 type (

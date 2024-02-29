@@ -5,7 +5,7 @@ package page
 import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
+	"github.com/marutaku/epub-index-creator/ent/predicate"
 )
 
 // ID filters vertices based on their ID field.

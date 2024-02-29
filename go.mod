@@ -1,4 +1,4 @@
-module github.com/marutaku/epub-index-creator/indexer
+module github.com/marutaku/epub-index-creator
 
 go 1.22
 

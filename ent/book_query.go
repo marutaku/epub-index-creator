@@ -11,9 +11,9 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
-	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
+	"github.com/marutaku/epub-index-creator/ent/book"
+	"github.com/marutaku/epub-index-creator/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/predicate"
 )
 
 // BookQuery is the builder for querying Book entities.

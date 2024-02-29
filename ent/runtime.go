@@ -3,10 +3,10 @@
 package ent
 
 import (
-	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
-	"github.com/marutaku/epub-index-creator/indexer/ent/schema"
+	"github.com/marutaku/epub-index-creator/ent/book"
+	"github.com/marutaku/epub-index-creator/ent/keyword"
+	"github.com/marutaku/epub-index-creator/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/schema"
 )
 
 // The init function reads all schema descriptors with runtime code

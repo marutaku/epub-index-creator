@@ -2,7 +2,7 @@
 
 package runtime
 
-// The schema-stitching logic is generated in github.com/marutaku/epub-index-creator/indexer/ent/runtime.go
+// The schema-stitching logic is generated in github.com/marutaku/epub-index-creator/ent/runtime.go
 
 const (
 	Version = "v0.13.0"                                         // Version of ent codegen.

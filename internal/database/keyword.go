@@ -3,9 +3,9 @@ package database
 import (
 	"context"
 
-	"github.com/marutaku/epub-index-creator/indexer/ent"
-	pageDB "github.com/marutaku/epub-index-creator/indexer/ent/page"
-	"github.com/marutaku/epub-index-creator/indexer/internal/domain"
+	"github.com/marutaku/epub-index-creator/domain"
+	"github.com/marutaku/epub-index-creator/ent"
+	pageDB "github.com/marutaku/epub-index-creator/ent/page"
 	_ "github.com/mattn/go-sqlite3"
 )
 

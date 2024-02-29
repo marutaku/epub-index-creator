@@ -6,7 +6,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/marutaku/epub-index-creator/indexer/ent"
+	"github.com/marutaku/epub-index-creator/ent"
 )
 
 // The BookFunc type is an adapter to allow the use of ordinary

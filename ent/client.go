@@ -9,15 +9,15 @@ import (
 	"log"
 	"reflect"
 
-	"github.com/marutaku/epub-index-creator/indexer/ent/migrate"
+	"github.com/marutaku/epub-index-creator/ent/migrate"
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/book"
+	"github.com/marutaku/epub-index-creator/ent/keyword"
+	"github.com/marutaku/epub-index-creator/ent/page"
 )
 
 // Client is the client that holds all ent builders.

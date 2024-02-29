@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/keyword"
+	"github.com/marutaku/epub-index-creator/ent/page"
 )
 
 // Keyword is the model entity for the Keyword schema.

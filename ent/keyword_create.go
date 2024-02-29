@@ -9,8 +9,8 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/keyword"
+	"github.com/marutaku/epub-index-creator/ent/page"
 )
 
 // KeywordCreate is the builder for creating a Keyword entity.

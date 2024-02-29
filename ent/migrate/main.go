@@ -7,7 +7,7 @@ import (
 	"log"
 	"os"
 
-	"github.com/marutaku/epub-index-creator/indexer/ent/migrate"
+	"github.com/marutaku/epub-index-creator/ent/migrate"
 
 	atlas "ariga.io/atlas/sql/migrate"
 	"entgo.io/ent/dialect"

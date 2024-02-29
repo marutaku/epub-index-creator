@@ -12,9 +12,9 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
-	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/book"
+	"github.com/marutaku/epub-index-creator/ent/keyword"
+	"github.com/marutaku/epub-index-creator/ent/page"
 )
 
 // ent aliases to avoid import conflicts in user's code.

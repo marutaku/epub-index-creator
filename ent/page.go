@@ -8,8 +8,8 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
-	"github.com/marutaku/epub-index-creator/indexer/ent/book"
-	"github.com/marutaku/epub-index-creator/indexer/ent/page"
+	"github.com/marutaku/epub-index-creator/ent/book"
+	"github.com/marutaku/epub-index-creator/ent/page"
 )
 
 // Page is the model entity for the Page schema.
