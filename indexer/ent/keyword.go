@@ -9,6 +9,7 @@ import (
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 )
 
 // Keyword is the model entity for the Keyword schema.
@@ -17,9 +18,34 @@ type Keyword struct {
 	// ID of the ent.
 	ID int `json:"id,omitempty"`
 	// Keyword holds the value of the "keyword" field.
-	Keyword       string `json:"keyword,omitempty"`
+	Keyword string `json:"keyword,omitempty"`
+	// Edges holds the relations/edges for other nodes in the graph.
+	// The values are being populated by the KeywordQuery when eager-loading is set.
+	Edges         KeywordEdges `json:"edges"`
 	page_keywords *int
 	selectValues  sql.SelectValues
+}
+
+// KeywordEdges holds the relations/edges for other nodes in the graph.
+type KeywordEdges struct {
+	// Page holds the value of the page edge.
+	Page *Page `json:"page,omitempty"`
+	// loadedTypes holds the information for reporting if a
+	// type was loaded (or requested) in eager-loading or not.
+	loadedTypes [1]bool
+}
+
+// PageOrErr returns the Page value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e KeywordEdges) PageOrErr() (*Page, error) {
+	if e.loadedTypes[0] {
+		if e.Page == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: page.Label}
+		}
+		return e.Page, nil
+	}
+	return nil, &NotLoadedError{edge: "page"}
 }
 
 // scanValues returns the types for scanning values from sql.Rows.
@@ -78,6 +104,11 @@ func (k *Keyword) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (k *Keyword) Value(name string) (ent.Value, error) {
 	return k.selectValues.Get(name)
+}
+
+// QueryPage queries the "page" edge of the Keyword entity.
+func (k *Keyword) QueryPage() *PageQuery {
+	return NewKeywordClient(k.config).QueryPage(k)
 }
 
 // Update returns a builder for updating this Keyword.

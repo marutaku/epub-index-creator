@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -41,9 +42,34 @@ func (ku *KeywordUpdate) SetNillableKeyword(s *string) *KeywordUpdate {
 	return ku
 }
 
+// SetPageID sets the "page" edge to the Page entity by ID.
+func (ku *KeywordUpdate) SetPageID(id int) *KeywordUpdate {
+	ku.mutation.SetPageID(id)
+	return ku
+}
+
+// SetNillablePageID sets the "page" edge to the Page entity by ID if the given value is not nil.
+func (ku *KeywordUpdate) SetNillablePageID(id *int) *KeywordUpdate {
+	if id != nil {
+		ku = ku.SetPageID(*id)
+	}
+	return ku
+}
+
+// SetPage sets the "page" edge to the Page entity.
+func (ku *KeywordUpdate) SetPage(p *Page) *KeywordUpdate {
+	return ku.SetPageID(p.ID)
+}
+
 // Mutation returns the KeywordMutation object of the builder.
 func (ku *KeywordUpdate) Mutation() *KeywordMutation {
 	return ku.mutation
+}
+
+// ClearPage clears the "page" edge to the Page entity.
+func (ku *KeywordUpdate) ClearPage() *KeywordUpdate {
+	ku.mutation.ClearPage()
+	return ku
 }
 
 // Save executes the query and returns the number of nodes affected by the update operation.
@@ -98,6 +124,35 @@ func (ku *KeywordUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	if value, ok := ku.mutation.Keyword(); ok {
 		_spec.SetField(keyword.FieldKeyword, field.TypeString, value)
 	}
+	if ku.mutation.PageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   keyword.PageTable,
+			Columns: []string{keyword.PageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := ku.mutation.PageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   keyword.PageTable,
+			Columns: []string{keyword.PageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
+	}
 	if n, err = sqlgraph.UpdateNodes(ctx, ku.driver, _spec); err != nil {
 		if _, ok := err.(*sqlgraph.NotFoundError); ok {
 			err = &NotFoundError{keyword.Label}
@@ -132,9 +187,34 @@ func (kuo *KeywordUpdateOne) SetNillableKeyword(s *string) *KeywordUpdateOne {
 	return kuo
 }
 
+// SetPageID sets the "page" edge to the Page entity by ID.
+func (kuo *KeywordUpdateOne) SetPageID(id int) *KeywordUpdateOne {
+	kuo.mutation.SetPageID(id)
+	return kuo
+}
+
+// SetNillablePageID sets the "page" edge to the Page entity by ID if the given value is not nil.
+func (kuo *KeywordUpdateOne) SetNillablePageID(id *int) *KeywordUpdateOne {
+	if id != nil {
+		kuo = kuo.SetPageID(*id)
+	}
+	return kuo
+}
+
+// SetPage sets the "page" edge to the Page entity.
+func (kuo *KeywordUpdateOne) SetPage(p *Page) *KeywordUpdateOne {
+	return kuo.SetPageID(p.ID)
+}
+
 // Mutation returns the KeywordMutation object of the builder.
 func (kuo *KeywordUpdateOne) Mutation() *KeywordMutation {
 	return kuo.mutation
+}
+
+// ClearPage clears the "page" edge to the Page entity.
+func (kuo *KeywordUpdateOne) ClearPage() *KeywordUpdateOne {
+	kuo.mutation.ClearPage()
+	return kuo
 }
 
 // Where appends a list predicates to the KeywordUpdate builder.
@@ -218,6 +298,35 @@ func (kuo *KeywordUpdateOne) sqlSave(ctx context.Context) (_node *Keyword, err e
 	}
 	if value, ok := kuo.mutation.Keyword(); ok {
 		_spec.SetField(keyword.FieldKeyword, field.TypeString, value)
+	}
+	if kuo.mutation.PageCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   keyword.PageTable,
+			Columns: []string{keyword.PageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := kuo.mutation.PageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   keyword.PageTable,
+			Columns: []string{keyword.PageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	_node = &Keyword{config: kuo.config}
 	_spec.Assign = _node.assignValues

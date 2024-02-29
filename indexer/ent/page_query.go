@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
 	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
@@ -23,6 +24,7 @@ type PageQuery struct {
 	order        []page.OrderOption
 	inters       []Interceptor
 	predicates   []predicate.Page
+	withBook     *BookQuery
 	withKeywords *KeywordQuery
 	withFKs      bool
 	// intermediate query (i.e. traversal path).
@@ -59,6 +61,28 @@ func (pq *PageQuery) Unique(unique bool) *PageQuery {
 func (pq *PageQuery) Order(o ...page.OrderOption) *PageQuery {
 	pq.order = append(pq.order, o...)
 	return pq
+}
+
+// QueryBook chains the current query on the "book" edge.
+func (pq *PageQuery) QueryBook() *BookQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := pq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := pq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(page.Table, page.FieldID, selector),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, page.BookTable, page.BookColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(pq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // QueryKeywords chains the current query on the "keywords" edge.
@@ -275,11 +299,23 @@ func (pq *PageQuery) Clone() *PageQuery {
 		order:        append([]page.OrderOption{}, pq.order...),
 		inters:       append([]Interceptor{}, pq.inters...),
 		predicates:   append([]predicate.Page{}, pq.predicates...),
+		withBook:     pq.withBook.Clone(),
 		withKeywords: pq.withKeywords.Clone(),
 		// clone intermediate query.
 		sql:  pq.sql.Clone(),
 		path: pq.path,
 	}
+}
+
+// WithBook tells the query-builder to eager-load the nodes that are connected to
+// the "book" edge. The optional arguments are used to configure the query builder of the edge.
+func (pq *PageQuery) WithBook(opts ...func(*BookQuery)) *PageQuery {
+	query := (&BookClient{config: pq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	pq.withBook = query
+	return pq
 }
 
 // WithKeywords tells the query-builder to eager-load the nodes that are connected to
@@ -372,10 +408,14 @@ func (pq *PageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Page, e
 		nodes       = []*Page{}
 		withFKs     = pq.withFKs
 		_spec       = pq.querySpec()
-		loadedTypes = [1]bool{
+		loadedTypes = [2]bool{
+			pq.withBook != nil,
 			pq.withKeywords != nil,
 		}
 	)
+	if pq.withBook != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, page.ForeignKeys...)
 	}
@@ -397,6 +437,12 @@ func (pq *PageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Page, e
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := pq.withBook; query != nil {
+		if err := pq.loadBook(ctx, query, nodes, nil,
+			func(n *Page, e *Book) { n.Edges.Book = e }); err != nil {
+			return nil, err
+		}
+	}
 	if query := pq.withKeywords; query != nil {
 		if err := pq.loadKeywords(ctx, query, nodes,
 			func(n *Page) { n.Edges.Keywords = []*Keyword{} },
@@ -407,6 +453,38 @@ func (pq *PageQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Page, e
 	return nodes, nil
 }
 
+func (pq *PageQuery) loadBook(ctx context.Context, query *BookQuery, nodes []*Page, init func(*Page), assign func(*Page, *Book)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Page)
+	for i := range nodes {
+		if nodes[i].book_pages == nil {
+			continue
+		}
+		fk := *nodes[i].book_pages
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(book.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "book_pages" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
+}
 func (pq *PageQuery) loadKeywords(ctx context.Context, query *KeywordQuery, nodes []*Page, init func(*Page), assign func(*Page, *Keyword)) error {
 	fks := make([]driver.Value, 0, len(nodes))
 	nodeids := make(map[int]*Page)

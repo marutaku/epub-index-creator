@@ -123,6 +123,29 @@ func TitleContainsFold(v string) predicate.Page {
 	return predicate.Page(sql.FieldContainsFold(FieldTitle, v))
 }
 
+// HasBook applies the HasEdge predicate on the "book" edge.
+func HasBook() predicate.Page {
+	return predicate.Page(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, BookTable, BookColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasBookWith applies the HasEdge predicate on the "book" edge with a given conditions (other predicates).
+func HasBookWith(preds ...predicate.Book) predicate.Page {
+	return predicate.Page(func(s *sql.Selector) {
+		step := newBookStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
+}
+
 // HasKeywords applies the HasEdge predicate on the "keywords" edge.
 func HasKeywords() predicate.Page {
 	return predicate.Page(func(s *sql.Selector) {

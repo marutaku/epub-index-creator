@@ -6,6 +6,7 @@ import (
 	"github.com/marutaku/epub-index-creator/indexer/ent"
 	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/internal/domain"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 type BookDatabase struct {

@@ -9,6 +9,7 @@ import (
 
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
 	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 )
@@ -24,6 +25,25 @@ type PageCreate struct {
 func (pc *PageCreate) SetTitle(s string) *PageCreate {
 	pc.mutation.SetTitle(s)
 	return pc
+}
+
+// SetBookID sets the "book" edge to the Book entity by ID.
+func (pc *PageCreate) SetBookID(id int) *PageCreate {
+	pc.mutation.SetBookID(id)
+	return pc
+}
+
+// SetNillableBookID sets the "book" edge to the Book entity by ID if the given value is not nil.
+func (pc *PageCreate) SetNillableBookID(id *int) *PageCreate {
+	if id != nil {
+		pc = pc.SetBookID(*id)
+	}
+	return pc
+}
+
+// SetBook sets the "book" edge to the Book entity.
+func (pc *PageCreate) SetBook(b *Book) *PageCreate {
+	return pc.SetBookID(b.ID)
 }
 
 // AddKeywordIDs adds the "keywords" edge to the Keyword entity by IDs.
@@ -112,6 +132,23 @@ func (pc *PageCreate) createSpec() (*Page, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if nodes := pc.mutation.BookIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   page.BookTable,
+			Columns: []string{page.BookColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.book_pages = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	if nodes := pc.mutation.KeywordsIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

@@ -8,6 +8,7 @@ import (
 
 	"entgo.io/ent"
 	"entgo.io/ent/dialect/sql"
+	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 )
 
@@ -27,17 +28,32 @@ type Page struct {
 
 // PageEdges holds the relations/edges for other nodes in the graph.
 type PageEdges struct {
+	// Book holds the value of the book edge.
+	Book *Book `json:"book,omitempty"`
 	// Keywords holds the value of the keywords edge.
 	Keywords []*Keyword `json:"keywords,omitempty"`
 	// loadedTypes holds the information for reporting if a
 	// type was loaded (or requested) in eager-loading or not.
-	loadedTypes [1]bool
+	loadedTypes [2]bool
+}
+
+// BookOrErr returns the Book value or an error if the edge
+// was not loaded in eager-loading, or loaded but was not found.
+func (e PageEdges) BookOrErr() (*Book, error) {
+	if e.loadedTypes[0] {
+		if e.Book == nil {
+			// Edge was loaded but was not found.
+			return nil, &NotFoundError{label: book.Label}
+		}
+		return e.Book, nil
+	}
+	return nil, &NotLoadedError{edge: "book"}
 }
 
 // KeywordsOrErr returns the Keywords value or an error if the edge
 // was not loaded in eager-loading.
 func (e PageEdges) KeywordsOrErr() ([]*Keyword, error) {
-	if e.loadedTypes[0] {
+	if e.loadedTypes[1] {
 		return e.Keywords, nil
 	}
 	return nil, &NotLoadedError{edge: "keywords"}
@@ -99,6 +115,11 @@ func (pa *Page) assignValues(columns []string, values []any) error {
 // This includes values selected through modifiers, order, etc.
 func (pa *Page) Value(name string) (ent.Value, error) {
 	return pa.selectValues.Get(name)
+}
+
+// QueryBook queries the "book" edge of the Page entity.
+func (pa *Page) QueryBook() *BookQuery {
+	return NewPageClient(pa.config).QueryBook(pa)
 }
 
 // QueryKeywords queries the "keywords" edge of the Page entity.

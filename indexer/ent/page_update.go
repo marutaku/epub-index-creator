@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql"
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
+	"github.com/marutaku/epub-index-creator/indexer/ent/book"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
 	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
@@ -42,6 +43,25 @@ func (pu *PageUpdate) SetNillableTitle(s *string) *PageUpdate {
 	return pu
 }
 
+// SetBookID sets the "book" edge to the Book entity by ID.
+func (pu *PageUpdate) SetBookID(id int) *PageUpdate {
+	pu.mutation.SetBookID(id)
+	return pu
+}
+
+// SetNillableBookID sets the "book" edge to the Book entity by ID if the given value is not nil.
+func (pu *PageUpdate) SetNillableBookID(id *int) *PageUpdate {
+	if id != nil {
+		pu = pu.SetBookID(*id)
+	}
+	return pu
+}
+
+// SetBook sets the "book" edge to the Book entity.
+func (pu *PageUpdate) SetBook(b *Book) *PageUpdate {
+	return pu.SetBookID(b.ID)
+}
+
 // AddKeywordIDs adds the "keywords" edge to the Keyword entity by IDs.
 func (pu *PageUpdate) AddKeywordIDs(ids ...int) *PageUpdate {
 	pu.mutation.AddKeywordIDs(ids...)
@@ -60,6 +80,12 @@ func (pu *PageUpdate) AddKeywords(k ...*Keyword) *PageUpdate {
 // Mutation returns the PageMutation object of the builder.
 func (pu *PageUpdate) Mutation() *PageMutation {
 	return pu.mutation
+}
+
+// ClearBook clears the "book" edge to the Book entity.
+func (pu *PageUpdate) ClearBook() *PageUpdate {
+	pu.mutation.ClearBook()
+	return pu
 }
 
 // ClearKeywords clears all "keywords" edges to the Keyword entity.
@@ -134,6 +160,35 @@ func (pu *PageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
+	}
+	if pu.mutation.BookCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   page.BookTable,
+			Columns: []string{page.BookColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := pu.mutation.BookIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   page.BookTable,
+			Columns: []string{page.BookColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if pu.mutation.KeywordsCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -214,6 +269,25 @@ func (puo *PageUpdateOne) SetNillableTitle(s *string) *PageUpdateOne {
 	return puo
 }
 
+// SetBookID sets the "book" edge to the Book entity by ID.
+func (puo *PageUpdateOne) SetBookID(id int) *PageUpdateOne {
+	puo.mutation.SetBookID(id)
+	return puo
+}
+
+// SetNillableBookID sets the "book" edge to the Book entity by ID if the given value is not nil.
+func (puo *PageUpdateOne) SetNillableBookID(id *int) *PageUpdateOne {
+	if id != nil {
+		puo = puo.SetBookID(*id)
+	}
+	return puo
+}
+
+// SetBook sets the "book" edge to the Book entity.
+func (puo *PageUpdateOne) SetBook(b *Book) *PageUpdateOne {
+	return puo.SetBookID(b.ID)
+}
+
 // AddKeywordIDs adds the "keywords" edge to the Keyword entity by IDs.
 func (puo *PageUpdateOne) AddKeywordIDs(ids ...int) *PageUpdateOne {
 	puo.mutation.AddKeywordIDs(ids...)
@@ -232,6 +306,12 @@ func (puo *PageUpdateOne) AddKeywords(k ...*Keyword) *PageUpdateOne {
 // Mutation returns the PageMutation object of the builder.
 func (puo *PageUpdateOne) Mutation() *PageMutation {
 	return puo.mutation
+}
+
+// ClearBook clears the "book" edge to the Book entity.
+func (puo *PageUpdateOne) ClearBook() *PageUpdateOne {
+	puo.mutation.ClearBook()
+	return puo
 }
 
 // ClearKeywords clears all "keywords" edges to the Keyword entity.
@@ -336,6 +416,35 @@ func (puo *PageUpdateOne) sqlSave(ctx context.Context) (_node *Page, err error) 
 	}
 	if value, ok := puo.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
+	}
+	if puo.mutation.BookCleared() {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   page.BookTable,
+			Columns: []string{page.BookColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		_spec.Edges.Clear = append(_spec.Edges.Clear, edge)
+	}
+	if nodes := puo.mutation.BookIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   page.BookTable,
+			Columns: []string{page.BookColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(book.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_spec.Edges.Add = append(_spec.Edges.Add, edge)
 	}
 	if puo.mutation.KeywordsCleared() {
 		edge := &sqlgraph.EdgeSpec{

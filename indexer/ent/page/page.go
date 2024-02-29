@@ -14,10 +14,19 @@ const (
 	FieldID = "id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// EdgeBook holds the string denoting the book edge name in mutations.
+	EdgeBook = "book"
 	// EdgeKeywords holds the string denoting the keywords edge name in mutations.
 	EdgeKeywords = "keywords"
 	// Table holds the table name of the page in the database.
 	Table = "pages"
+	// BookTable is the table that holds the book relation/edge.
+	BookTable = "pages"
+	// BookInverseTable is the table name for the Book entity.
+	// It exists in this package in order to avoid circular dependency with the "book" package.
+	BookInverseTable = "books"
+	// BookColumn is the table column denoting the book relation/edge.
+	BookColumn = "book_pages"
 	// KeywordsTable is the table that holds the keywords relation/edge.
 	KeywordsTable = "keywords"
 	// KeywordsInverseTable is the table name for the Keyword entity.
@@ -72,6 +81,13 @@ func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
 }
 
+// ByBookField orders the results by book field.
+func ByBookField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newBookStep(), sql.OrderByField(field, opts...))
+	}
+}
+
 // ByKeywordsCount orders the results by keywords count.
 func ByKeywordsCount(opts ...sql.OrderTermOption) OrderOption {
 	return func(s *sql.Selector) {
@@ -84,6 +100,13 @@ func ByKeywords(term sql.OrderTerm, terms ...sql.OrderTerm) OrderOption {
 	return func(s *sql.Selector) {
 		sqlgraph.OrderByNeighborTerms(s, newKeywordsStep(), append([]sql.OrderTerm{term}, terms...)...)
 	}
+}
+func newBookStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(BookInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, BookTable, BookColumn),
+	)
 }
 func newKeywordsStep() *sqlgraph.Step {
 	return sqlgraph.NewStep(

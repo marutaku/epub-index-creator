@@ -2,6 +2,7 @@ package schema
 
 import (
 	"entgo.io/ent"
+	"entgo.io/ent/schema/edge"
 	"entgo.io/ent/schema/field"
 )
 
@@ -19,5 +20,7 @@ func (Keyword) Fields() []ent.Field {
 
 // Edges of the Keyword.
 func (Keyword) Edges() []ent.Edge {
-	return nil
+	return []ent.Edge{
+		edge.From("page", Page.Type).Ref("keywords").Unique(),
+	}
 }

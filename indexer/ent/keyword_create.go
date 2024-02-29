@@ -10,6 +10,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 )
 
 // KeywordCreate is the builder for creating a Keyword entity.
@@ -23,6 +24,25 @@ type KeywordCreate struct {
 func (kc *KeywordCreate) SetKeyword(s string) *KeywordCreate {
 	kc.mutation.SetKeyword(s)
 	return kc
+}
+
+// SetPageID sets the "page" edge to the Page entity by ID.
+func (kc *KeywordCreate) SetPageID(id int) *KeywordCreate {
+	kc.mutation.SetPageID(id)
+	return kc
+}
+
+// SetNillablePageID sets the "page" edge to the Page entity by ID if the given value is not nil.
+func (kc *KeywordCreate) SetNillablePageID(id *int) *KeywordCreate {
+	if id != nil {
+		kc = kc.SetPageID(*id)
+	}
+	return kc
+}
+
+// SetPage sets the "page" edge to the Page entity.
+func (kc *KeywordCreate) SetPage(p *Page) *KeywordCreate {
+	return kc.SetPageID(p.ID)
 }
 
 // Mutation returns the KeywordMutation object of the builder.
@@ -96,6 +116,23 @@ func (kc *KeywordCreate) createSpec() (*Keyword, *sqlgraph.CreateSpec) {
 	if value, ok := kc.mutation.Keyword(); ok {
 		_spec.SetField(keyword.FieldKeyword, field.TypeString, value)
 		_node.Keyword = value
+	}
+	if nodes := kc.mutation.PageIDs(); len(nodes) > 0 {
+		edge := &sqlgraph.EdgeSpec{
+			Rel:     sqlgraph.M2O,
+			Inverse: true,
+			Table:   keyword.PageTable,
+			Columns: []string{keyword.PageColumn},
+			Bidi:    false,
+			Target: &sqlgraph.EdgeTarget{
+				IDSpec: sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt),
+			},
+		}
+		for _, k := range nodes {
+			edge.Target.Nodes = append(edge.Target.Nodes, k)
+		}
+		_node.page_keywords = &nodes[0]
+		_spec.Edges = append(_spec.Edges, edge)
 	}
 	return _node, _spec
 }

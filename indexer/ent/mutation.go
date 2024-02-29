@@ -673,6 +673,8 @@ type KeywordMutation struct {
 	id            *int
 	keyword       *string
 	clearedFields map[string]struct{}
+	page          *int
+	clearedpage   bool
 	done          bool
 	oldValue      func(context.Context) (*Keyword, error)
 	predicates    []predicate.Keyword
@@ -812,6 +814,45 @@ func (m *KeywordMutation) ResetKeyword() {
 	m.keyword = nil
 }
 
+// SetPageID sets the "page" edge to the Page entity by id.
+func (m *KeywordMutation) SetPageID(id int) {
+	m.page = &id
+}
+
+// ClearPage clears the "page" edge to the Page entity.
+func (m *KeywordMutation) ClearPage() {
+	m.clearedpage = true
+}
+
+// PageCleared reports if the "page" edge to the Page entity was cleared.
+func (m *KeywordMutation) PageCleared() bool {
+	return m.clearedpage
+}
+
+// PageID returns the "page" edge ID in the mutation.
+func (m *KeywordMutation) PageID() (id int, exists bool) {
+	if m.page != nil {
+		return *m.page, true
+	}
+	return
+}
+
+// PageIDs returns the "page" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// PageID instead. It exists only for internal usage by the builders.
+func (m *KeywordMutation) PageIDs() (ids []int) {
+	if id := m.page; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetPage resets all changes to the "page" edge.
+func (m *KeywordMutation) ResetPage() {
+	m.page = nil
+	m.clearedpage = false
+}
+
 // Where appends a list predicates to the KeywordMutation builder.
 func (m *KeywordMutation) Where(ps ...predicate.Keyword) {
 	m.predicates = append(m.predicates, ps...)
@@ -945,19 +986,28 @@ func (m *KeywordMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *KeywordMutation) AddedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.page != nil {
+		edges = append(edges, keyword.EdgePage)
+	}
 	return edges
 }
 
 // AddedIDs returns all IDs (to other nodes) that were added for the given edge
 // name in this mutation.
 func (m *KeywordMutation) AddedIDs(name string) []ent.Value {
+	switch name {
+	case keyword.EdgePage:
+		if id := m.page; id != nil {
+			return []ent.Value{*id}
+		}
+	}
 	return nil
 }
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *KeywordMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
 	return edges
 }
 
@@ -969,25 +1019,42 @@ func (m *KeywordMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *KeywordMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 0)
+	edges := make([]string, 0, 1)
+	if m.clearedpage {
+		edges = append(edges, keyword.EdgePage)
+	}
 	return edges
 }
 
 // EdgeCleared returns a boolean which indicates if the edge with the given name
 // was cleared in this mutation.
 func (m *KeywordMutation) EdgeCleared(name string) bool {
+	switch name {
+	case keyword.EdgePage:
+		return m.clearedpage
+	}
 	return false
 }
 
 // ClearEdge clears the value of the edge with the given name. It returns an error
 // if that edge is not defined in the schema.
 func (m *KeywordMutation) ClearEdge(name string) error {
+	switch name {
+	case keyword.EdgePage:
+		m.ClearPage()
+		return nil
+	}
 	return fmt.Errorf("unknown Keyword unique edge %s", name)
 }
 
 // ResetEdge resets all changes to the edge with the given name in this mutation.
 // It returns an error if the edge is not defined in the schema.
 func (m *KeywordMutation) ResetEdge(name string) error {
+	switch name {
+	case keyword.EdgePage:
+		m.ResetPage()
+		return nil
+	}
 	return fmt.Errorf("unknown Keyword edge %s", name)
 }
 
@@ -999,6 +1066,8 @@ type PageMutation struct {
 	id              *int
 	title           *string
 	clearedFields   map[string]struct{}
+	book            *int
+	clearedbook     bool
 	keywords        map[int]struct{}
 	removedkeywords map[int]struct{}
 	clearedkeywords bool
@@ -1139,6 +1208,45 @@ func (m *PageMutation) OldTitle(ctx context.Context) (v string, err error) {
 // ResetTitle resets all changes to the "title" field.
 func (m *PageMutation) ResetTitle() {
 	m.title = nil
+}
+
+// SetBookID sets the "book" edge to the Book entity by id.
+func (m *PageMutation) SetBookID(id int) {
+	m.book = &id
+}
+
+// ClearBook clears the "book" edge to the Book entity.
+func (m *PageMutation) ClearBook() {
+	m.clearedbook = true
+}
+
+// BookCleared reports if the "book" edge to the Book entity was cleared.
+func (m *PageMutation) BookCleared() bool {
+	return m.clearedbook
+}
+
+// BookID returns the "book" edge ID in the mutation.
+func (m *PageMutation) BookID() (id int, exists bool) {
+	if m.book != nil {
+		return *m.book, true
+	}
+	return
+}
+
+// BookIDs returns the "book" edge IDs in the mutation.
+// Note that IDs always returns len(IDs) <= 1 for unique edges, and you should use
+// BookID instead. It exists only for internal usage by the builders.
+func (m *PageMutation) BookIDs() (ids []int) {
+	if id := m.book; id != nil {
+		ids = append(ids, *id)
+	}
+	return
+}
+
+// ResetBook resets all changes to the "book" edge.
+func (m *PageMutation) ResetBook() {
+	m.book = nil
+	m.clearedbook = false
 }
 
 // AddKeywordIDs adds the "keywords" edge to the Keyword entity by ids.
@@ -1328,7 +1436,10 @@ func (m *PageMutation) ResetField(name string) error {
 
 // AddedEdges returns all edge names that were set/added in this mutation.
 func (m *PageMutation) AddedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.book != nil {
+		edges = append(edges, page.EdgeBook)
+	}
 	if m.keywords != nil {
 		edges = append(edges, page.EdgeKeywords)
 	}
@@ -1339,6 +1450,10 @@ func (m *PageMutation) AddedEdges() []string {
 // name in this mutation.
 func (m *PageMutation) AddedIDs(name string) []ent.Value {
 	switch name {
+	case page.EdgeBook:
+		if id := m.book; id != nil {
+			return []ent.Value{*id}
+		}
 	case page.EdgeKeywords:
 		ids := make([]ent.Value, 0, len(m.keywords))
 		for id := range m.keywords {
@@ -1351,7 +1466,7 @@ func (m *PageMutation) AddedIDs(name string) []ent.Value {
 
 // RemovedEdges returns all edge names that were removed in this mutation.
 func (m *PageMutation) RemovedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
 	if m.removedkeywords != nil {
 		edges = append(edges, page.EdgeKeywords)
 	}
@@ -1374,7 +1489,10 @@ func (m *PageMutation) RemovedIDs(name string) []ent.Value {
 
 // ClearedEdges returns all edge names that were cleared in this mutation.
 func (m *PageMutation) ClearedEdges() []string {
-	edges := make([]string, 0, 1)
+	edges := make([]string, 0, 2)
+	if m.clearedbook {
+		edges = append(edges, page.EdgeBook)
+	}
 	if m.clearedkeywords {
 		edges = append(edges, page.EdgeKeywords)
 	}
@@ -1385,6 +1503,8 @@ func (m *PageMutation) ClearedEdges() []string {
 // was cleared in this mutation.
 func (m *PageMutation) EdgeCleared(name string) bool {
 	switch name {
+	case page.EdgeBook:
+		return m.clearedbook
 	case page.EdgeKeywords:
 		return m.clearedkeywords
 	}
@@ -1395,6 +1515,9 @@ func (m *PageMutation) EdgeCleared(name string) bool {
 // if that edge is not defined in the schema.
 func (m *PageMutation) ClearEdge(name string) error {
 	switch name {
+	case page.EdgeBook:
+		m.ClearBook()
+		return nil
 	}
 	return fmt.Errorf("unknown Page unique edge %s", name)
 }
@@ -1403,6 +1526,9 @@ func (m *PageMutation) ClearEdge(name string) error {
 // It returns an error if the edge is not defined in the schema.
 func (m *PageMutation) ResetEdge(name string) error {
 	switch name {
+	case page.EdgeBook:
+		m.ResetBook()
+		return nil
 	case page.EdgeKeywords:
 		m.ResetKeywords()
 		return nil

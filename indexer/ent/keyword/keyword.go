@@ -4,6 +4,7 @@ package keyword
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 )
 
 const (
@@ -13,8 +14,17 @@ const (
 	FieldID = "id"
 	// FieldKeyword holds the string denoting the keyword field in the database.
 	FieldKeyword = "keyword"
+	// EdgePage holds the string denoting the page edge name in mutations.
+	EdgePage = "page"
 	// Table holds the table name of the keyword in the database.
 	Table = "keywords"
+	// PageTable is the table that holds the page relation/edge.
+	PageTable = "keywords"
+	// PageInverseTable is the table name for the Page entity.
+	// It exists in this package in order to avoid circular dependency with the "page" package.
+	PageInverseTable = "pages"
+	// PageColumn is the table column denoting the page relation/edge.
+	PageColumn = "page_keywords"
 )
 
 // Columns holds all SQL columns for keyword fields.
@@ -60,4 +70,18 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByKeyword orders the results by the keyword field.
 func ByKeyword(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldKeyword, opts...).ToFunc()
+}
+
+// ByPageField orders the results by page field.
+func ByPageField(field string, opts ...sql.OrderTermOption) OrderOption {
+	return func(s *sql.Selector) {
+		sqlgraph.OrderByNeighborTerms(s, newPageStep(), sql.OrderByField(field, opts...))
+	}
+}
+func newPageStep() *sqlgraph.Step {
+	return sqlgraph.NewStep(
+		sqlgraph.From(Table, FieldID),
+		sqlgraph.To(PageInverseTable, FieldID),
+		sqlgraph.Edge(sqlgraph.M2O, true, PageTable, PageColumn),
+	)
 }

@@ -11,6 +11,7 @@ import (
 	"entgo.io/ent/dialect/sql/sqlgraph"
 	"entgo.io/ent/schema/field"
 	"github.com/marutaku/epub-index-creator/indexer/ent/keyword"
+	"github.com/marutaku/epub-index-creator/indexer/ent/page"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -21,6 +22,7 @@ type KeywordQuery struct {
 	order      []keyword.OrderOption
 	inters     []Interceptor
 	predicates []predicate.Keyword
+	withPage   *PageQuery
 	withFKs    bool
 	// intermediate query (i.e. traversal path).
 	sql  *sql.Selector
@@ -56,6 +58,28 @@ func (kq *KeywordQuery) Unique(unique bool) *KeywordQuery {
 func (kq *KeywordQuery) Order(o ...keyword.OrderOption) *KeywordQuery {
 	kq.order = append(kq.order, o...)
 	return kq
+}
+
+// QueryPage chains the current query on the "page" edge.
+func (kq *KeywordQuery) QueryPage() *PageQuery {
+	query := (&PageClient{config: kq.config}).Query()
+	query.path = func(ctx context.Context) (fromU *sql.Selector, err error) {
+		if err := kq.prepareQuery(ctx); err != nil {
+			return nil, err
+		}
+		selector := kq.sqlQuery(ctx)
+		if err := selector.Err(); err != nil {
+			return nil, err
+		}
+		step := sqlgraph.NewStep(
+			sqlgraph.From(keyword.Table, keyword.FieldID, selector),
+			sqlgraph.To(page.Table, page.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, keyword.PageTable, keyword.PageColumn),
+		)
+		fromU = sqlgraph.SetNeighbors(kq.driver.Dialect(), step)
+		return fromU, nil
+	}
+	return query
 }
 
 // First returns the first Keyword entity from the query.
@@ -250,10 +274,22 @@ func (kq *KeywordQuery) Clone() *KeywordQuery {
 		order:      append([]keyword.OrderOption{}, kq.order...),
 		inters:     append([]Interceptor{}, kq.inters...),
 		predicates: append([]predicate.Keyword{}, kq.predicates...),
+		withPage:   kq.withPage.Clone(),
 		// clone intermediate query.
 		sql:  kq.sql.Clone(),
 		path: kq.path,
 	}
+}
+
+// WithPage tells the query-builder to eager-load the nodes that are connected to
+// the "page" edge. The optional arguments are used to configure the query builder of the edge.
+func (kq *KeywordQuery) WithPage(opts ...func(*PageQuery)) *KeywordQuery {
+	query := (&PageClient{config: kq.config}).Query()
+	for _, opt := range opts {
+		opt(query)
+	}
+	kq.withPage = query
+	return kq
 }
 
 // GroupBy is used to group vertices by one or more fields/columns.
@@ -332,10 +368,16 @@ func (kq *KeywordQuery) prepareQuery(ctx context.Context) error {
 
 func (kq *KeywordQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Keyword, error) {
 	var (
-		nodes   = []*Keyword{}
-		withFKs = kq.withFKs
-		_spec   = kq.querySpec()
+		nodes       = []*Keyword{}
+		withFKs     = kq.withFKs
+		_spec       = kq.querySpec()
+		loadedTypes = [1]bool{
+			kq.withPage != nil,
+		}
 	)
+	if kq.withPage != nil {
+		withFKs = true
+	}
 	if withFKs {
 		_spec.Node.Columns = append(_spec.Node.Columns, keyword.ForeignKeys...)
 	}
@@ -345,6 +387,7 @@ func (kq *KeywordQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Keyw
 	_spec.Assign = func(columns []string, values []any) error {
 		node := &Keyword{config: kq.config}
 		nodes = append(nodes, node)
+		node.Edges.loadedTypes = loadedTypes
 		return node.assignValues(columns, values)
 	}
 	for i := range hooks {
@@ -356,7 +399,46 @@ func (kq *KeywordQuery) sqlAll(ctx context.Context, hooks ...queryHook) ([]*Keyw
 	if len(nodes) == 0 {
 		return nodes, nil
 	}
+	if query := kq.withPage; query != nil {
+		if err := kq.loadPage(ctx, query, nodes, nil,
+			func(n *Keyword, e *Page) { n.Edges.Page = e }); err != nil {
+			return nil, err
+		}
+	}
 	return nodes, nil
+}
+
+func (kq *KeywordQuery) loadPage(ctx context.Context, query *PageQuery, nodes []*Keyword, init func(*Keyword), assign func(*Keyword, *Page)) error {
+	ids := make([]int, 0, len(nodes))
+	nodeids := make(map[int][]*Keyword)
+	for i := range nodes {
+		if nodes[i].page_keywords == nil {
+			continue
+		}
+		fk := *nodes[i].page_keywords
+		if _, ok := nodeids[fk]; !ok {
+			ids = append(ids, fk)
+		}
+		nodeids[fk] = append(nodeids[fk], nodes[i])
+	}
+	if len(ids) == 0 {
+		return nil
+	}
+	query.Where(page.IDIn(ids...))
+	neighbors, err := query.All(ctx)
+	if err != nil {
+		return err
+	}
+	for _, n := range neighbors {
+		nodes, ok := nodeids[n.ID]
+		if !ok {
+			return fmt.Errorf(`unexpected foreign-key "page_keywords" returned %v`, n.ID)
+		}
+		for i := range nodes {
+			assign(nodes[i], n)
+		}
+	}
+	return nil
 }
 
 func (kq *KeywordQuery) sqlCount(ctx context.Context) (int, error) {

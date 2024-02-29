@@ -474,6 +474,22 @@ func (c *KeywordClient) GetX(ctx context.Context, id int) *Keyword {
 	return obj
 }
 
+// QueryPage queries the page edge of a Keyword.
+func (c *KeywordClient) QueryPage(k *Keyword) *PageQuery {
+	query := (&PageClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := k.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(keyword.Table, keyword.FieldID, id),
+			sqlgraph.To(page.Table, page.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, keyword.PageTable, keyword.PageColumn),
+		)
+		fromV = sqlgraph.Neighbors(k.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
+}
+
 // Hooks returns the client hooks.
 func (c *KeywordClient) Hooks() []Hook {
 	return c.hooks.Keyword
@@ -605,6 +621,22 @@ func (c *PageClient) GetX(ctx context.Context, id int) *Page {
 		panic(err)
 	}
 	return obj
+}
+
+// QueryBook queries the book edge of a Page.
+func (c *PageClient) QueryBook(pa *Page) *BookQuery {
+	query := (&BookClient{config: c.config}).Query()
+	query.path = func(context.Context) (fromV *sql.Selector, _ error) {
+		id := pa.ID
+		step := sqlgraph.NewStep(
+			sqlgraph.From(page.Table, page.FieldID, id),
+			sqlgraph.To(book.Table, book.FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, page.BookTable, page.BookColumn),
+		)
+		fromV = sqlgraph.Neighbors(pa.driver.Dialect(), step)
+		return fromV, nil
+	}
+	return query
 }
 
 // QueryKeywords queries the keywords edge of a Page.

@@ -20,5 +20,8 @@ func (Page) Fields() []ent.Field {
 
 // Edges of the Page.
 func (Page) Edges() []ent.Edge {
-	return []ent.Edge{edge.To("keywords", Keyword.Type)}
+	return []ent.Edge{
+		edge.From("book", Book.Type).Ref("pages").Unique(),
+		edge.To("keywords", Keyword.Type),
+	}
 }

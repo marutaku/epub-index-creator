@@ -4,6 +4,7 @@ package keyword
 
 import (
 	"entgo.io/ent/dialect/sql"
+	"entgo.io/ent/dialect/sql/sqlgraph"
 	"github.com/marutaku/epub-index-creator/indexer/ent/predicate"
 )
 
@@ -120,6 +121,29 @@ func KeywordEqualFold(v string) predicate.Keyword {
 // KeywordContainsFold applies the ContainsFold predicate on the "keyword" field.
 func KeywordContainsFold(v string) predicate.Keyword {
 	return predicate.Keyword(sql.FieldContainsFold(FieldKeyword, v))
+}
+
+// HasPage applies the HasEdge predicate on the "page" edge.
+func HasPage() predicate.Keyword {
+	return predicate.Keyword(func(s *sql.Selector) {
+		step := sqlgraph.NewStep(
+			sqlgraph.From(Table, FieldID),
+			sqlgraph.Edge(sqlgraph.M2O, true, PageTable, PageColumn),
+		)
+		sqlgraph.HasNeighbors(s, step)
+	})
+}
+
+// HasPageWith applies the HasEdge predicate on the "page" edge with a given conditions (other predicates).
+func HasPageWith(preds ...predicate.Page) predicate.Keyword {
+	return predicate.Keyword(func(s *sql.Selector) {
+		step := newPageStep()
+		sqlgraph.HasNeighborsWith(s, step, func(s *sql.Selector) {
+			for _, p := range preds {
+				p(s)
+			}
+		})
+	})
 }
 
 // And groups predicates with the AND operator between them.
