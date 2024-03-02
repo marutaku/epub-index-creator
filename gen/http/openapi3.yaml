@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+    title: Epup Index Creator
+    version: 0.0.1
+servers:
+    - url: http://localhost:8000
+paths:
+    /books/{isbn}:
+        get:
+            tags:
+                - epub_index_creator
+            summary: List epub_index_creator
+            operationId: epub_index_creator#List
+            parameters:
+                - name: isbn
+                  in: path
+                  description: ISBN of the book
+                  required: true
+                  schema:
+                    type: string
+                    description: ISBN of the book
+                    example: Quidem nam autem animi assumenda.
+                  example: Ex asperiores aspernatur enim.
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Book'
+                            example:
+                                author: Consectetur consequatur repudiandae dolorem est.
+                                isbn: Odit numquam ut repudiandae beatae et.
+                                pages:
+                                    - keywords:
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                                    - keywords:
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                                    - keywords:
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                                    - keywords:
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                        - keyword: Ipsa porro rerum qui in omnis.
+                                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                                title: Consequatur dolore ad tempore aut incidunt.
+    /openapi.json:
+        get:
+            tags:
+                - epub_index_creator
+            summary: Download ./gen/http/openapi.json
+            operationId: epub_index_creator#/openapi.json
+            responses:
+                "200":
+                    description: File downloaded
+components:
+    schemas:
+        Book:
+            type: object
+            properties:
+                author:
+                    type: string
+                    description: Author of the book
+                    example: Esse in cupiditate sunt.
+                isbn:
+                    type: string
+                    description: ISBN of the book
+                    example: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                pages:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Page'
+                    description: Pages of the book
+                    example:
+                        - keywords:
+                            - keyword: Ipsa porro rerum qui in omnis.
+                            - keyword: Ipsa porro rerum qui in omnis.
+                          title: Nam quibusdam vero rem aliquam voluptatibus.
+                        - keywords:
+                            - keyword: Ipsa porro rerum qui in omnis.
+                            - keyword: Ipsa porro rerum qui in omnis.
+                          title: Nam quibusdam vero rem aliquam voluptatibus.
+                title:
+                    type: string
+                    description: Title of the book
+                    example: Sunt et.
+            example:
+                author: Dolorem et iste sit quia.
+                isbn: Voluptates maiores.
+                pages:
+                    - keywords:
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                    - keywords:
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                    - keywords:
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                    - keywords:
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                title: Ut cumque non consequatur fuga voluptas.
+        Keyword:
+            type: object
+            properties:
+                keyword:
+                    type: string
+                    description: Keyword of the page
+                    example: Et quis.
+            example:
+                keyword: Quasi molestiae veniam.
+        Page:
+            type: object
+            properties:
+                keywords:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Keyword'
+                    description: Keywords of the page
+                    example:
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                        - keyword: Ipsa porro rerum qui in omnis.
+                title:
+                    type: string
+                    description: Title of the page
+                    example: In reiciendis quaerat temporibus.
+            example:
+                keywords:
+                    - keyword: Ipsa porro rerum qui in omnis.
+                    - keyword: Ipsa porro rerum qui in omnis.
+                    - keyword: Ipsa porro rerum qui in omnis.
+                title: Sit error voluptatum asperiores nihil.
+tags:
+    - name: epub_index_creator

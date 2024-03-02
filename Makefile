@@ -1,4 +1,7 @@
-.PHONY: migrate ent_create gen_migration migrate
+.PHONY: migrate ent_create gen_migration migrate goa_generate
+
+goa_generate:
+	goa gen github.com/marutaku/epub-index-creator/design
 
 ent_create:
 	go run -mod=mod entgo.io/ent/cmd/ent new $(name)

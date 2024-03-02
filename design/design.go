@@ -4,10 +4,9 @@ import (
 	. "goa.design/goa/v3/dsl"
 )
 
-var _ = API("calc", func() {
-	Title("Calculator Service")
-	Description("Service for multiplying numbers, a Goa teaser")
-	Server("calc", func() {
+var _ = API("epub-index-creator", func() {
+	Title("Epup Index Creator")
+	Server("web", func() {
 		Host("localhost", func() {
 			URI("http://localhost:8000")
 			URI("grpc://localhost:8080")
@@ -16,21 +15,16 @@ var _ = API("calc", func() {
 })
 
 var _ = Service("epub_index_creator", func() {
-	Description("The calc service performs operations on numbers.")
-
 	Method("List", func() {
 		Payload(func() {
 			Attribute("isbn", String, "ISBN of the book")
 			Required("isbn")
 		})
 
-		Result(Int)
+		Result(Book)
 
 		HTTP(func() {
 			GET("/books/{isbn}")
-		})
-
-		GRPC(func() {
 		})
 	})
 
