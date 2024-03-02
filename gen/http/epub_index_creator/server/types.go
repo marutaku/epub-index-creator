@@ -15,27 +15,27 @@ import (
 // endpoint HTTP response body.
 type ListResponseBody struct {
 	// ISBN of the book
-	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
+	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
-	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
-	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	Author string `form:"author" json:"author" xml:"author"`
 	// Pages of the book
-	Pages []*PageResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+	Pages []*PageResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
 
 // PageResponseBody is used to define fields on response body types.
 type PageResponseBody struct {
 	// Title of the page
-	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
-	Keywords []*KeywordResponseBody `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+	Keywords []*KeywordResponseBody `form:"keywords" json:"keywords" xml:"keywords"`
 }
 
 // KeywordResponseBody is used to define fields on response body types.
 type KeywordResponseBody struct {
 	// Keyword of the page
-	Keyword *string `form:"keyword,omitempty" json:"keyword,omitempty" xml:"keyword,omitempty"`
+	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
 }
 
 // NewListResponseBody builds the HTTP response body from the result of the
@@ -51,6 +51,8 @@ func NewListResponseBody(res *epubindexcreator.Book) *ListResponseBody {
 		for i, val := range res.Pages {
 			body.Pages[i] = marshalEpubindexcreatorPageToPageResponseBody(val)
 		}
+	} else {
+		body.Pages = []*PageResponseBody{}
 	}
 	return body
 }

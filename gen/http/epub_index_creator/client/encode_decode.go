@@ -70,6 +70,10 @@ func DecodeListResponse(decoder func(*http.Response) goahttp.Decoder, restoreBod
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("epub_index_creator", "List", err)
 			}
+			err = ValidateListResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("epub_index_creator", "List", err)
+			}
 			res := NewListBookOK(&body)
 			return res, nil
 		default:
@@ -82,17 +86,12 @@ func DecodeListResponse(decoder func(*http.Response) goahttp.Decoder, restoreBod
 // unmarshalPageResponseBodyToEpubindexcreatorPage builds a value of type
 // *epubindexcreator.Page from a value of type *PageResponseBody.
 func unmarshalPageResponseBodyToEpubindexcreatorPage(v *PageResponseBody) *epubindexcreator.Page {
-	if v == nil {
-		return nil
-	}
 	res := &epubindexcreator.Page{
-		Title: v.Title,
+		Title: *v.Title,
 	}
-	if v.Keywords != nil {
-		res.Keywords = make([]*epubindexcreator.Keyword, len(v.Keywords))
-		for i, val := range v.Keywords {
-			res.Keywords[i] = unmarshalKeywordResponseBodyToEpubindexcreatorKeyword(val)
-		}
+	res.Keywords = make([]*epubindexcreator.Keyword, len(v.Keywords))
+	for i, val := range v.Keywords {
+		res.Keywords[i] = unmarshalKeywordResponseBodyToEpubindexcreatorKeyword(val)
 	}
 
 	return res
@@ -101,11 +100,8 @@ func unmarshalPageResponseBodyToEpubindexcreatorPage(v *PageResponseBody) *epubi
 // unmarshalKeywordResponseBodyToEpubindexcreatorKeyword builds a value of type
 // *epubindexcreator.Keyword from a value of type *KeywordResponseBody.
 func unmarshalKeywordResponseBodyToEpubindexcreatorKeyword(v *KeywordResponseBody) *epubindexcreator.Keyword {
-	if v == nil {
-		return nil
-	}
 	res := &epubindexcreator.Keyword{
-		Keyword: v.Keyword,
+		Keyword: *v.Keyword,
 	}
 
 	return res

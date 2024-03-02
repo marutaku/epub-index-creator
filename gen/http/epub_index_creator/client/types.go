@@ -9,6 +9,7 @@ package client
 
 import (
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
+	goa "goa.design/goa/v3/pkg"
 )
 
 // ListResponseBody is the type of the "epub_index_creator" service "List"
@@ -42,16 +43,65 @@ type KeywordResponseBody struct {
 // from a HTTP "OK" response.
 func NewListBookOK(body *ListResponseBody) *epubindexcreator.Book {
 	v := &epubindexcreator.Book{
-		Isbn:   body.Isbn,
-		Title:  body.Title,
-		Author: body.Author,
+		Isbn:   *body.Isbn,
+		Title:  *body.Title,
+		Author: *body.Author,
 	}
-	if body.Pages != nil {
-		v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
-		for i, val := range body.Pages {
-			v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
-		}
+	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+	for i, val := range body.Pages {
+		v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
 	}
 
 	return v
+}
+
+// ValidateListResponseBody runs the validations defined on ListResponseBody
+func ValidateListResponseBody(body *ListResponseBody) (err error) {
+	if body.Isbn == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("isbn", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Author == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Pages == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
+	}
+	for _, e := range body.Pages {
+		if e != nil {
+			if err2 := ValidatePageResponseBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidatePageResponseBody runs the validations defined on PageResponseBody
+func ValidatePageResponseBody(body *PageResponseBody) (err error) {
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	for _, e := range body.Keywords {
+		if e != nil {
+			if err2 := ValidateKeywordResponseBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidateKeywordResponseBody runs the validations defined on
+// KeywordResponseBody
+func ValidateKeywordResponseBody(body *KeywordResponseBody) (err error) {
+	if body.Keyword == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "body"))
+	}
+	return
 }

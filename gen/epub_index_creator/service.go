@@ -36,18 +36,18 @@ var MethodNames = [1]string{"List"}
 // Book is the result type of the epub_index_creator service List method.
 type Book struct {
 	// ISBN of the book
-	Isbn *string
+	Isbn string
 	// Title of the book
-	Title *string
+	Title string
 	// Author of the book
-	Author *string
+	Author string
 	// Pages of the book
 	Pages []*Page
 }
 
 type Keyword struct {
 	// Keyword of the page
-	Keyword *string
+	Keyword string
 }
 
 // ListPayload is the payload type of the epub_index_creator service List
@@ -59,7 +59,7 @@ type ListPayload struct {
 
 type Page struct {
 	// Title of the page
-	Title *string
+	Title string
 	// Keywords of the page
 	Keywords []*Keyword
 }

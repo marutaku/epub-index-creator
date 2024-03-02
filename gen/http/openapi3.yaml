@@ -110,6 +110,11 @@ components:
                         - keyword: Ipsa porro rerum qui in omnis.
                       title: Nam quibusdam vero rem aliquam voluptatibus.
                 title: Ut cumque non consequatur fuga voluptas.
+            required:
+                - isbn
+                - title
+                - author
+                - pages
         Keyword:
             type: object
             properties:
@@ -119,6 +124,8 @@ components:
                     example: Et quis.
             example:
                 keyword: Quasi molestiae veniam.
+            required:
+                - keyword
         Page:
             type: object
             properties:
@@ -142,5 +149,8 @@ components:
                     - keyword: Ipsa porro rerum qui in omnis.
                     - keyword: Ipsa porro rerum qui in omnis.
                 title: Sit error voluptatum asperiores nihil.
+            required:
+                - title
+                - keywords
 tags:
     - name: epub_index_creator

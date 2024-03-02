@@ -46,9 +46,6 @@ func DecodeListRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.De
 // marshalEpubindexcreatorPageToPageResponseBody builds a value of type
 // *PageResponseBody from a value of type *epubindexcreator.Page.
 func marshalEpubindexcreatorPageToPageResponseBody(v *epubindexcreator.Page) *PageResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &PageResponseBody{
 		Title: v.Title,
 	}
@@ -57,6 +54,8 @@ func marshalEpubindexcreatorPageToPageResponseBody(v *epubindexcreator.Page) *Pa
 		for i, val := range v.Keywords {
 			res.Keywords[i] = marshalEpubindexcreatorKeywordToKeywordResponseBody(val)
 		}
+	} else {
+		res.Keywords = []*KeywordResponseBody{}
 	}
 
 	return res
@@ -65,9 +64,6 @@ func marshalEpubindexcreatorPageToPageResponseBody(v *epubindexcreator.Page) *Pa
 // marshalEpubindexcreatorKeywordToKeywordResponseBody builds a value of type
 // *KeywordResponseBody from a value of type *epubindexcreator.Keyword.
 func marshalEpubindexcreatorKeywordToKeywordResponseBody(v *epubindexcreator.Keyword) *KeywordResponseBody {
-	if v == nil {
-		return nil
-	}
 	res := &KeywordResponseBody{
 		Keyword: v.Keyword,
 	}

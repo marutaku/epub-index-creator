@@ -29,6 +29,11 @@ paths:
                     description: OK response.
                     schema:
                         $ref: '#/definitions/EpubIndexCreatorListResponseBody'
+                        required:
+                            - isbn
+                            - title
+                            - author
+                            - pages
             schemes:
                 - http
     /openapi.json:
@@ -96,6 +101,11 @@ definitions:
                     - keyword: Ipsa porro rerum qui in omnis.
                   title: Nam quibusdam vero rem aliquam voluptatibus.
             title: Nulla corporis aspernatur ut dicta.
+        required:
+            - isbn
+            - title
+            - author
+            - pages
     KeywordResponseBody:
         title: KeywordResponseBody
         type: object
@@ -106,6 +116,8 @@ definitions:
                 example: Unde recusandae saepe velit ullam omnis.
         example:
             keyword: Atque labore ad.
+        required:
+            - keyword
     PageResponseBody:
         title: PageResponseBody
         type: object
@@ -128,3 +140,6 @@ definitions:
                 - keyword: Ipsa porro rerum qui in omnis.
                 - keyword: Ipsa porro rerum qui in omnis.
             title: Quae consequatur.
+        required:
+            - title
+            - keywords
