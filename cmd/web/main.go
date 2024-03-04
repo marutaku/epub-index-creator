@@ -12,7 +12,7 @@ import (
 	"sync"
 	"syscall"
 
-	epubindexcreatorapi "github.com/marutaku/epub-index-creator"
+	epubindexcreatorapi "github.com/marutaku/epub-index-creator/controller"
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 )
 
@@ -92,7 +92,7 @@ func main() {
 			} else if u.Port() == "" {
 				u.Host = net.JoinHostPort(u.Host, "80")
 			}
-			handleHTTPServer(ctx, u, epubIndexCreatorEndpoints, &wg, errc, logger, *dbgF)
+			HandleHTTPServer(ctx, u, epubIndexCreatorEndpoints, &wg, errc, logger, *dbgF)
 		}
 
 	default:

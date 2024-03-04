@@ -13,8 +13,10 @@ import (
 
 // Service is the epub_index_creator service interface.
 type Service interface {
-	// List implements List.
-	List(context.Context, *ListPayload) (res *Book, err error)
+	// ListBooks implements ListBooks.
+	ListBooks(context.Context, *ListBooksPayload) (res []*Book, err error)
+	// FindBook implements FindBook.
+	FindBook(context.Context, *FindBookPayload) (res *Book, err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -31,9 +33,9 @@ const ServiceName = "epub_index_creator"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [1]string{"List"}
+var MethodNames = [2]string{"ListBooks", "FindBook"}
 
-// Book is the result type of the epub_index_creator service List method.
+// Book is the result type of the epub_index_creator service FindBook method.
 type Book struct {
 	// ISBN of the book
 	Isbn string
@@ -45,16 +47,25 @@ type Book struct {
 	Pages []*Page
 }
 
+// FindBookPayload is the payload type of the epub_index_creator service
+// FindBook method.
+type FindBookPayload struct {
+	// ISBN of the book
+	Isbn string
+}
+
 type Keyword struct {
 	// Keyword of the page
 	Keyword string
 }
 
-// ListPayload is the payload type of the epub_index_creator service List
-// method.
-type ListPayload struct {
-	// ISBN of the book
-	Isbn string
+// ListBooksPayload is the payload type of the epub_index_creator service
+// ListBooks method.
+type ListBooksPayload struct {
+	// Maximum number of books to return
+	Limit int
+	// Field to paginate books
+	Offset int
 }
 
 type Page struct {

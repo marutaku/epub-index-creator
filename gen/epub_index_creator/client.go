@@ -15,21 +15,33 @@ import (
 
 // Client is the "epub_index_creator" service client.
 type Client struct {
-	ListEndpoint goa.Endpoint
+	ListBooksEndpoint goa.Endpoint
+	FindBookEndpoint  goa.Endpoint
 }
 
 // NewClient initializes a "epub_index_creator" service client given the
 // endpoints.
-func NewClient(list goa.Endpoint) *Client {
+func NewClient(listBooks, findBook goa.Endpoint) *Client {
 	return &Client{
-		ListEndpoint: list,
+		ListBooksEndpoint: listBooks,
+		FindBookEndpoint:  findBook,
 	}
 }
 
-// List calls the "List" endpoint of the "epub_index_creator" service.
-func (c *Client) List(ctx context.Context, p *ListPayload) (res *Book, err error) {
+// ListBooks calls the "ListBooks" endpoint of the "epub_index_creator" service.
+func (c *Client) ListBooks(ctx context.Context, p *ListBooksPayload) (res []*Book, err error) {
 	var ires any
-	ires, err = c.ListEndpoint(ctx, p)
+	ires, err = c.ListBooksEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.([]*Book), nil
+}
+
+// FindBook calls the "FindBook" endpoint of the "epub_index_creator" service.
+func (c *Client) FindBook(ctx context.Context, p *FindBookPayload) (res *Book, err error) {
+	var ires any
+	ires, err = c.FindBookEndpoint(ctx, p)
 	if err != nil {
 		return
 	}

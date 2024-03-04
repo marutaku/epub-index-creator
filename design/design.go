@@ -15,7 +15,25 @@ var _ = API("epub-index-creator", func() {
 })
 
 var _ = Service("epub_index_creator", func() {
-	Method("List", func() {
+	Method("ListBooks", func() {
+		Payload(func() {
+			Attribute("limit", Int, "Maximum number of books to return", func() {
+				Minimum(1)
+				Maximum(100)
+				Default(100)
+			})
+			Attribute("offset", Int, "Field to paginate books", func() {
+				Minimum(0)
+				Default(0)
+			})
+		})
+		Result(ArrayOf(Book))
+
+		HTTP(func() {
+			GET("/books")
+		})
+	})
+	Method("FindBook", func() {
 		Payload(func() {
 			Attribute("isbn", String, "ISBN of the book")
 			Required("isbn")

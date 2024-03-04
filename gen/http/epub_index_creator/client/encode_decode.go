@@ -16,25 +16,16 @@ import (
 
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 	goahttp "goa.design/goa/v3/http"
+	goa "goa.design/goa/v3/pkg"
 )
 
-// BuildListRequest instantiates a HTTP request object with method and path set
-// to call the "epub_index_creator" service "List" endpoint
-func (c *Client) BuildListRequest(ctx context.Context, v any) (*http.Request, error) {
-	var (
-		isbn string
-	)
-	{
-		p, ok := v.(*epubindexcreator.ListPayload)
-		if !ok {
-			return nil, goahttp.ErrInvalidType("epub_index_creator", "List", "*epubindexcreator.ListPayload", v)
-		}
-		isbn = p.Isbn
-	}
-	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: ListEpubIndexCreatorPath(isbn)}
+// BuildListBooksRequest instantiates a HTTP request object with method and
+// path set to call the "epub_index_creator" service "ListBooks" endpoint
+func (c *Client) BuildListBooksRequest(ctx context.Context, v any) (*http.Request, error) {
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: ListBooksEpubIndexCreatorPath()}
 	req, err := http.NewRequest("GET", u.String(), nil)
 	if err != nil {
-		return nil, goahttp.ErrInvalidURL("epub_index_creator", "List", u.String(), err)
+		return nil, goahttp.ErrInvalidURL("epub_index_creator", "ListBooks", u.String(), err)
 	}
 	if ctx != nil {
 		req = req.WithContext(ctx)
@@ -43,10 +34,26 @@ func (c *Client) BuildListRequest(ctx context.Context, v any) (*http.Request, er
 	return req, nil
 }
 
-// DecodeListResponse returns a decoder for responses returned by the
-// epub_index_creator List endpoint. restoreBody controls whether the response
-// body should be restored after having been read.
-func DecodeListResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
+// EncodeListBooksRequest returns an encoder for requests sent to the
+// epub_index_creator ListBooks server.
+func EncodeListBooksRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
+	return func(req *http.Request, v any) error {
+		p, ok := v.(*epubindexcreator.ListBooksPayload)
+		if !ok {
+			return goahttp.ErrInvalidType("epub_index_creator", "ListBooks", "*epubindexcreator.ListBooksPayload", v)
+		}
+		body := NewListBooksRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("epub_index_creator", "ListBooks", err)
+		}
+		return nil
+	}
+}
+
+// DecodeListBooksResponse returns a decoder for responses returned by the
+// epub_index_creator ListBooks endpoint. restoreBody controls whether the
+// response body should be restored after having been read.
+func DecodeListBooksResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
 	return func(resp *http.Response) (any, error) {
 		if restoreBody {
 			b, err := io.ReadAll(resp.Body)
@@ -63,24 +70,135 @@ func DecodeListResponse(decoder func(*http.Response) goahttp.Decoder, restoreBod
 		switch resp.StatusCode {
 		case http.StatusOK:
 			var (
-				body ListResponseBody
+				body ListBooksResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
-				return nil, goahttp.ErrDecodingError("epub_index_creator", "List", err)
+				return nil, goahttp.ErrDecodingError("epub_index_creator", "ListBooks", err)
 			}
-			err = ValidateListResponseBody(&body)
+			for _, e := range body {
+				if e != nil {
+					if err2 := ValidateBookResponse(e); err2 != nil {
+						err = goa.MergeErrors(err, err2)
+					}
+				}
+			}
 			if err != nil {
-				return nil, goahttp.ErrValidationError("epub_index_creator", "List", err)
+				return nil, goahttp.ErrValidationError("epub_index_creator", "ListBooks", err)
 			}
-			res := NewListBookOK(&body)
+			res := NewListBooksBookOK(body)
 			return res, nil
 		default:
 			body, _ := io.ReadAll(resp.Body)
-			return nil, goahttp.ErrInvalidResponse("epub_index_creator", "List", resp.StatusCode, string(body))
+			return nil, goahttp.ErrInvalidResponse("epub_index_creator", "ListBooks", resp.StatusCode, string(body))
 		}
 	}
+}
+
+// BuildFindBookRequest instantiates a HTTP request object with method and path
+// set to call the "epub_index_creator" service "FindBook" endpoint
+func (c *Client) BuildFindBookRequest(ctx context.Context, v any) (*http.Request, error) {
+	var (
+		isbn string
+	)
+	{
+		p, ok := v.(*epubindexcreator.FindBookPayload)
+		if !ok {
+			return nil, goahttp.ErrInvalidType("epub_index_creator", "FindBook", "*epubindexcreator.FindBookPayload", v)
+		}
+		isbn = p.Isbn
+	}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: FindBookEpubIndexCreatorPath(isbn)}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("epub_index_creator", "FindBook", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// DecodeFindBookResponse returns a decoder for responses returned by the
+// epub_index_creator FindBook endpoint. restoreBody controls whether the
+// response body should be restored after having been read.
+func DecodeFindBookResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
+	return func(resp *http.Response) (any, error) {
+		if restoreBody {
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body FindBookResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("epub_index_creator", "FindBook", err)
+			}
+			err = ValidateFindBookResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("epub_index_creator", "FindBook", err)
+			}
+			res := NewFindBookBookOK(&body)
+			return res, nil
+		default:
+			body, _ := io.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("epub_index_creator", "FindBook", resp.StatusCode, string(body))
+		}
+	}
+}
+
+// unmarshalBookResponseToEpubindexcreatorBook builds a value of type
+// *epubindexcreator.Book from a value of type *BookResponse.
+func unmarshalBookResponseToEpubindexcreatorBook(v *BookResponse) *epubindexcreator.Book {
+	res := &epubindexcreator.Book{
+		Isbn:   *v.Isbn,
+		Title:  *v.Title,
+		Author: *v.Author,
+	}
+	res.Pages = make([]*epubindexcreator.Page, len(v.Pages))
+	for i, val := range v.Pages {
+		res.Pages[i] = unmarshalPageResponseToEpubindexcreatorPage(val)
+	}
+
+	return res
+}
+
+// unmarshalPageResponseToEpubindexcreatorPage builds a value of type
+// *epubindexcreator.Page from a value of type *PageResponse.
+func unmarshalPageResponseToEpubindexcreatorPage(v *PageResponse) *epubindexcreator.Page {
+	res := &epubindexcreator.Page{
+		Title: *v.Title,
+	}
+	res.Keywords = make([]*epubindexcreator.Keyword, len(v.Keywords))
+	for i, val := range v.Keywords {
+		res.Keywords[i] = unmarshalKeywordResponseToEpubindexcreatorKeyword(val)
+	}
+
+	return res
+}
+
+// unmarshalKeywordResponseToEpubindexcreatorKeyword builds a value of type
+// *epubindexcreator.Keyword from a value of type *KeywordResponse.
+func unmarshalKeywordResponseToEpubindexcreatorKeyword(v *KeywordResponse) *epubindexcreator.Keyword {
+	res := &epubindexcreator.Keyword{
+		Keyword: *v.Keyword,
+	}
+
+	return res
 }
 
 // unmarshalPageResponseBodyToEpubindexcreatorPage builds a value of type

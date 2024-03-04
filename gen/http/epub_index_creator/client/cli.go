@@ -8,17 +8,51 @@
 package client
 
 import (
+	"encoding/json"
+	"fmt"
+
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 )
 
-// BuildListPayload builds the payload for the epub_index_creator List endpoint
-// from CLI flags.
-func BuildListPayload(epubIndexCreatorListIsbn string) (*epubindexcreator.ListPayload, error) {
+// BuildListBooksPayload builds the payload for the epub_index_creator
+// ListBooks endpoint from CLI flags.
+func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcreator.ListBooksPayload, error) {
+	var err error
+	var body ListBooksRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorListBooksBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 62,\n      \"offset\": 7864368622572586298\n   }'")
+		}
+	}
+	v := &epubindexcreator.ListBooksPayload{
+		Limit:  body.Limit,
+		Offset: body.Offset,
+	}
+	{
+		var zero int
+		if v.Limit == zero {
+			v.Limit = 100
+		}
+	}
+	{
+		var zero int
+		if v.Offset == zero {
+			v.Offset = 0
+		}
+	}
+
+	return v, nil
+}
+
+// BuildFindBookPayload builds the payload for the epub_index_creator FindBook
+// endpoint from CLI flags.
+func BuildFindBookPayload(epubIndexCreatorFindBookIsbn string) (*epubindexcreator.FindBookPayload, error) {
 	var isbn string
 	{
-		isbn = epubIndexCreatorListIsbn
+		isbn = epubIndexCreatorFindBookIsbn
 	}
-	v := &epubindexcreator.ListPayload{}
+	v := &epubindexcreator.FindBookPayload{}
 	v.Isbn = isbn
 
 	return v, nil

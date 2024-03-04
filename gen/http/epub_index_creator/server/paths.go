@@ -11,7 +11,12 @@ import (
 	"fmt"
 )
 
-// ListEpubIndexCreatorPath returns the URL path to the epub_index_creator service List HTTP endpoint.
-func ListEpubIndexCreatorPath(isbn string) string {
+// ListBooksEpubIndexCreatorPath returns the URL path to the epub_index_creator service ListBooks HTTP endpoint.
+func ListBooksEpubIndexCreatorPath() string {
+	return "/books"
+}
+
+// FindBookEpubIndexCreatorPath returns the URL path to the epub_index_creator service FindBook HTTP endpoint.
+func FindBookEpubIndexCreatorPath(isbn string) string {
 	return fmt.Sprintf("/books/%v", isbn)
 }

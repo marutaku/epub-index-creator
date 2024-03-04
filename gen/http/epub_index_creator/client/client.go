@@ -17,8 +17,13 @@ import (
 
 // Client lists the epub_index_creator service endpoint HTTP clients.
 type Client struct {
-	// List Doer is the HTTP client used to make requests to the List endpoint.
-	ListDoer goahttp.Doer
+	// ListBooks Doer is the HTTP client used to make requests to the ListBooks
+	// endpoint.
+	ListBooksDoer goahttp.Doer
+
+	// FindBook Doer is the HTTP client used to make requests to the FindBook
+	// endpoint.
+	FindBookDoer goahttp.Doer
 
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
@@ -41,7 +46,8 @@ func NewClient(
 	restoreBody bool,
 ) *Client {
 	return &Client{
-		ListDoer:            doer,
+		ListBooksDoer:       doer,
+		FindBookDoer:        doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -50,20 +56,44 @@ func NewClient(
 	}
 }
 
-// List returns an endpoint that makes HTTP requests to the epub_index_creator
-// service List server.
-func (c *Client) List() goa.Endpoint {
+// ListBooks returns an endpoint that makes HTTP requests to the
+// epub_index_creator service ListBooks server.
+func (c *Client) ListBooks() goa.Endpoint {
 	var (
-		decodeResponse = DecodeListResponse(c.decoder, c.RestoreResponseBody)
+		encodeRequest  = EncodeListBooksRequest(c.encoder)
+		decodeResponse = DecodeListBooksResponse(c.decoder, c.RestoreResponseBody)
 	)
 	return func(ctx context.Context, v any) (any, error) {
-		req, err := c.BuildListRequest(ctx, v)
+		req, err := c.BuildListBooksRequest(ctx, v)
 		if err != nil {
 			return nil, err
 		}
-		resp, err := c.ListDoer.Do(req)
+		err = encodeRequest(req, v)
 		if err != nil {
-			return nil, goahttp.ErrRequestError("epub_index_creator", "List", err)
+			return nil, err
+		}
+		resp, err := c.ListBooksDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "ListBooks", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FindBook returns an endpoint that makes HTTP requests to the
+// epub_index_creator service FindBook server.
+func (c *Client) FindBook() goa.Endpoint {
+	var (
+		decodeResponse = DecodeFindBookResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildFindBookRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FindBookDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "FindBook", err)
 		}
 		return decodeResponse(resp)
 	}

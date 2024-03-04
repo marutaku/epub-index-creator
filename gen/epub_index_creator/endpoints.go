@@ -15,28 +15,40 @@ import (
 
 // Endpoints wraps the "epub_index_creator" service endpoints.
 type Endpoints struct {
-	List goa.Endpoint
+	ListBooks goa.Endpoint
+	FindBook  goa.Endpoint
 }
 
 // NewEndpoints wraps the methods of the "epub_index_creator" service with
 // endpoints.
 func NewEndpoints(s Service) *Endpoints {
 	return &Endpoints{
-		List: NewListEndpoint(s),
+		ListBooks: NewListBooksEndpoint(s),
+		FindBook:  NewFindBookEndpoint(s),
 	}
 }
 
 // Use applies the given middleware to all the "epub_index_creator" service
 // endpoints.
 func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
-	e.List = m(e.List)
+	e.ListBooks = m(e.ListBooks)
+	e.FindBook = m(e.FindBook)
 }
 
-// NewListEndpoint returns an endpoint function that calls the method "List" of
-// service "epub_index_creator".
-func NewListEndpoint(s Service) goa.Endpoint {
+// NewListBooksEndpoint returns an endpoint function that calls the method
+// "ListBooks" of service "epub_index_creator".
+func NewListBooksEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*ListPayload)
-		return s.List(ctx, p)
+		p := req.(*ListBooksPayload)
+		return s.ListBooks(ctx, p)
+	}
+}
+
+// NewFindBookEndpoint returns an endpoint function that calls the method
+// "FindBook" of service "epub_index_creator".
+func NewFindBookEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*FindBookPayload)
+		return s.FindBook(ctx, p)
 	}
 }

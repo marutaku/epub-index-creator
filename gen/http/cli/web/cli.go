@@ -22,13 +22,16 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `epub-index-creator list
+	return `epub-index-creator (list-books|find-book)
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` epub-index-creator list --isbn "Alias placeat dolor aliquam qui eligendi placeat."` + "\n" +
+	return os.Args[0] + ` epub-index-creator list-books --body '{
+      "limit": 62,
+      "offset": 7864368622572586298
+   }'` + "\n" +
 		""
 }
 
@@ -44,11 +47,15 @@ func ParseEndpoint(
 	var (
 		epubIndexCreatorFlags = flag.NewFlagSet("epub-index-creator", flag.ContinueOnError)
 
-		epubIndexCreatorListFlags    = flag.NewFlagSet("list", flag.ExitOnError)
-		epubIndexCreatorListIsbnFlag = epubIndexCreatorListFlags.String("isbn", "REQUIRED", "ISBN of the book")
+		epubIndexCreatorListBooksFlags    = flag.NewFlagSet("list-books", flag.ExitOnError)
+		epubIndexCreatorListBooksBodyFlag = epubIndexCreatorListBooksFlags.String("body", "REQUIRED", "")
+
+		epubIndexCreatorFindBookFlags    = flag.NewFlagSet("find-book", flag.ExitOnError)
+		epubIndexCreatorFindBookIsbnFlag = epubIndexCreatorFindBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
 	)
 	epubIndexCreatorFlags.Usage = epubIndexCreatorUsage
-	epubIndexCreatorListFlags.Usage = epubIndexCreatorListUsage
+	epubIndexCreatorListBooksFlags.Usage = epubIndexCreatorListBooksUsage
+	epubIndexCreatorFindBookFlags.Usage = epubIndexCreatorFindBookUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -84,8 +91,11 @@ func ParseEndpoint(
 		switch svcn {
 		case "epub-index-creator":
 			switch epn {
-			case "list":
-				epf = epubIndexCreatorListFlags
+			case "list-books":
+				epf = epubIndexCreatorListBooksFlags
+
+			case "find-book":
+				epf = epubIndexCreatorFindBookFlags
 
 			}
 
@@ -112,9 +122,12 @@ func ParseEndpoint(
 		case "epub-index-creator":
 			c := epubindexcreatorc.NewClient(scheme, host, doer, enc, dec, restore)
 			switch epn {
-			case "list":
-				endpoint = c.List()
-				data, err = epubindexcreatorc.BuildListPayload(*epubIndexCreatorListIsbnFlag)
+			case "list-books":
+				endpoint = c.ListBooks()
+				data, err = epubindexcreatorc.BuildListBooksPayload(*epubIndexCreatorListBooksBodyFlag)
+			case "find-book":
+				endpoint = c.FindBook()
+				data, err = epubindexcreatorc.BuildFindBookPayload(*epubIndexCreatorFindBookIsbnFlag)
 			}
 		}
 	}
@@ -133,19 +146,34 @@ Usage:
     %[1]s [globalflags] epub-index-creator COMMAND [flags]
 
 COMMAND:
-    list: List implements List.
+    list-books: ListBooks implements ListBooks.
+    find-book: FindBook implements FindBook.
 
 Additional help:
     %[1]s epub-index-creator COMMAND --help
 `, os.Args[0])
 }
-func epubIndexCreatorListUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator list -isbn STRING
+func epubIndexCreatorListBooksUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator list-books -body JSON
 
-List implements List.
+ListBooks implements ListBooks.
+    -body JSON: 
+
+Example:
+    %[1]s epub-index-creator list-books --body '{
+      "limit": 62,
+      "offset": 7864368622572586298
+   }'
+`, os.Args[0])
+}
+
+func epubIndexCreatorFindBookUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator find-book -isbn STRING
+
+FindBook implements FindBook.
     -isbn STRING: ISBN of the book
 
 Example:
-    %[1]s epub-index-creator list --isbn "Alias placeat dolor aliquam qui eligendi placeat."
+    %[1]s epub-index-creator find-book --isbn "Reiciendis est est ut nihil."
 `, os.Args[0])
 }

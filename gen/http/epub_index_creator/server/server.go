@@ -19,7 +19,8 @@ import (
 // Server lists the epub_index_creator service endpoint HTTP handlers.
 type Server struct {
 	Mounts             []*MountPoint
-	List               http.Handler
+	ListBooks          http.Handler
+	FindBook           http.Handler
 	GenHTTPOpenapiJSON http.Handler
 }
 
@@ -54,10 +55,12 @@ func New(
 	}
 	return &Server{
 		Mounts: []*MountPoint{
-			{"List", "GET", "/books/{isbn}"},
+			{"ListBooks", "GET", "/books"},
+			{"FindBook", "GET", "/books/{isbn}"},
 			{"./gen/http/openapi.json", "GET", "/openapi.json"},
 		},
-		List:               NewListHandler(e.List, mux, decoder, encoder, errhandler, formatter),
+		ListBooks:          NewListBooksHandler(e.ListBooks, mux, decoder, encoder, errhandler, formatter),
+		FindBook:           NewFindBookHandler(e.FindBook, mux, decoder, encoder, errhandler, formatter),
 		GenHTTPOpenapiJSON: http.FileServer(fileSystemGenHTTPOpenapiJSON),
 	}
 }
@@ -67,7 +70,8 @@ func (s *Server) Service() string { return "epub_index_creator" }
 
 // Use wraps the server handlers with the given middleware.
 func (s *Server) Use(m func(http.Handler) http.Handler) {
-	s.List = m(s.List)
+	s.ListBooks = m(s.ListBooks)
+	s.FindBook = m(s.FindBook)
 }
 
 // MethodNames returns the methods served.
@@ -75,7 +79,8 @@ func (s *Server) MethodNames() []string { return epubindexcreator.MethodNames[:]
 
 // Mount configures the mux to serve the epub_index_creator endpoints.
 func Mount(mux goahttp.Muxer, h *Server) {
-	MountListHandler(mux, h.List)
+	MountListBooksHandler(mux, h.ListBooks)
+	MountFindBookHandler(mux, h.FindBook)
 	MountGenHTTPOpenapiJSON(mux, goahttp.Replace("", "/./gen/http/openapi.json", h.GenHTTPOpenapiJSON))
 }
 
@@ -84,9 +89,60 @@ func (s *Server) Mount(mux goahttp.Muxer) {
 	Mount(mux, s)
 }
 
-// MountListHandler configures the mux to serve the "epub_index_creator"
-// service "List" endpoint.
-func MountListHandler(mux goahttp.Muxer, h http.Handler) {
+// MountListBooksHandler configures the mux to serve the "epub_index_creator"
+// service "ListBooks" endpoint.
+func MountListBooksHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/books", f)
+}
+
+// NewListBooksHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "ListBooks" endpoint.
+func NewListBooksHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeListBooksRequest(mux, decoder)
+		encodeResponse = EncodeListBooksResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "ListBooks")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFindBookHandler configures the mux to serve the "epub_index_creator"
+// service "FindBook" endpoint.
+func MountFindBookHandler(mux goahttp.Muxer, h http.Handler) {
 	f, ok := h.(http.HandlerFunc)
 	if !ok {
 		f = func(w http.ResponseWriter, r *http.Request) {
@@ -96,9 +152,9 @@ func MountListHandler(mux goahttp.Muxer, h http.Handler) {
 	mux.Handle("GET", "/books/{isbn}", f)
 }
 
-// NewListHandler creates a HTTP handler which loads the HTTP request and calls
-// the "epub_index_creator" service "List" endpoint.
-func NewListHandler(
+// NewFindBookHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "FindBook" endpoint.
+func NewFindBookHandler(
 	endpoint goa.Endpoint,
 	mux goahttp.Muxer,
 	decoder func(*http.Request) goahttp.Decoder,
@@ -107,13 +163,13 @@ func NewListHandler(
 	formatter func(ctx context.Context, err error) goahttp.Statuser,
 ) http.Handler {
 	var (
-		decodeRequest  = DecodeListRequest(mux, decoder)
-		encodeResponse = EncodeListResponse(encoder)
+		decodeRequest  = DecodeFindBookRequest(mux, decoder)
+		encodeResponse = EncodeFindBookResponse(encoder)
 		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
 	)
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
-		ctx = context.WithValue(ctx, goa.MethodKey, "List")
+		ctx = context.WithValue(ctx, goa.MethodKey, "FindBook")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
 		payload, err := decodeRequest(r)
 		if err != nil {

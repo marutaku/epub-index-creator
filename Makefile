@@ -1,4 +1,4 @@
-.PHONY: migrate ent_create gen_migration migrate goa_generate
+.PHONY: migrate ent_create gen_migration migrate goa_generate run
 
 goa_generate:
 	goa gen github.com/marutaku/epub-index-creator/design
@@ -14,3 +14,6 @@ gen_migration:
 
 migrate:
 	atlas migrate apply --dir "file://ent/migrate/migrations" --url "sqlite://${db_name}"
+
+run:
+	go run cmd/web/main.go

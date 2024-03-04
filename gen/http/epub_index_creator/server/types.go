@@ -9,11 +9,25 @@ package server
 
 import (
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
+	goa "goa.design/goa/v3/pkg"
 )
 
-// ListResponseBody is the type of the "epub_index_creator" service "List"
-// endpoint HTTP response body.
-type ListResponseBody struct {
+// ListBooksRequestBody is the type of the "epub_index_creator" service
+// "ListBooks" endpoint HTTP request body.
+type ListBooksRequestBody struct {
+	// Maximum number of books to return
+	Limit *int `form:"limit,omitempty" json:"limit,omitempty" xml:"limit,omitempty"`
+	// Field to paginate books
+	Offset *int `form:"offset,omitempty" json:"offset,omitempty" xml:"offset,omitempty"`
+}
+
+// ListBooksResponseBody is the type of the "epub_index_creator" service
+// "ListBooks" endpoint HTTP response body.
+type ListBooksResponseBody []*BookResponse
+
+// FindBookResponseBody is the type of the "epub_index_creator" service
+// "FindBook" endpoint HTTP response body.
+type FindBookResponseBody struct {
 	// ISBN of the book
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
@@ -22,6 +36,32 @@ type ListResponseBody struct {
 	Author string `form:"author" json:"author" xml:"author"`
 	// Pages of the book
 	Pages []*PageResponseBody `form:"pages" json:"pages" xml:"pages"`
+}
+
+// BookResponse is used to define fields on response body types.
+type BookResponse struct {
+	// ISBN of the book
+	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
+	// Title of the book
+	Title string `form:"title" json:"title" xml:"title"`
+	// Author of the book
+	Author string `form:"author" json:"author" xml:"author"`
+	// Pages of the book
+	Pages []*PageResponse `form:"pages" json:"pages" xml:"pages"`
+}
+
+// PageResponse is used to define fields on response body types.
+type PageResponse struct {
+	// Title of the page
+	Title string `form:"title" json:"title" xml:"title"`
+	// Keywords of the page
+	Keywords []*KeywordResponse `form:"keywords" json:"keywords" xml:"keywords"`
+}
+
+// KeywordResponse is used to define fields on response body types.
+type KeywordResponse struct {
+	// Keyword of the page
+	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
 }
 
 // PageResponseBody is used to define fields on response body types.
@@ -38,10 +78,20 @@ type KeywordResponseBody struct {
 	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
 }
 
-// NewListResponseBody builds the HTTP response body from the result of the
-// "List" endpoint of the "epub_index_creator" service.
-func NewListResponseBody(res *epubindexcreator.Book) *ListResponseBody {
-	body := &ListResponseBody{
+// NewListBooksResponseBody builds the HTTP response body from the result of
+// the "ListBooks" endpoint of the "epub_index_creator" service.
+func NewListBooksResponseBody(res []*epubindexcreator.Book) ListBooksResponseBody {
+	body := make([]*BookResponse, len(res))
+	for i, val := range res {
+		body[i] = marshalEpubindexcreatorBookToBookResponse(val)
+	}
+	return body
+}
+
+// NewFindBookResponseBody builds the HTTP response body from the result of the
+// "FindBook" endpoint of the "epub_index_creator" service.
+func NewFindBookResponseBody(res *epubindexcreator.Book) *FindBookResponseBody {
+	body := &FindBookResponseBody{
 		Isbn:   res.Isbn,
 		Title:  res.Title,
 		Author: res.Author,
@@ -57,10 +107,52 @@ func NewListResponseBody(res *epubindexcreator.Book) *ListResponseBody {
 	return body
 }
 
-// NewListPayload builds a epub_index_creator service List endpoint payload.
-func NewListPayload(isbn string) *epubindexcreator.ListPayload {
-	v := &epubindexcreator.ListPayload{}
+// NewListBooksPayload builds a epub_index_creator service ListBooks endpoint
+// payload.
+func NewListBooksPayload(body *ListBooksRequestBody) *epubindexcreator.ListBooksPayload {
+	v := &epubindexcreator.ListBooksPayload{}
+	if body.Limit != nil {
+		v.Limit = *body.Limit
+	}
+	if body.Offset != nil {
+		v.Offset = *body.Offset
+	}
+	if body.Limit == nil {
+		v.Limit = 100
+	}
+	if body.Offset == nil {
+		v.Offset = 0
+	}
+
+	return v
+}
+
+// NewFindBookPayload builds a epub_index_creator service FindBook endpoint
+// payload.
+func NewFindBookPayload(isbn string) *epubindexcreator.FindBookPayload {
+	v := &epubindexcreator.FindBookPayload{}
 	v.Isbn = isbn
 
 	return v
+}
+
+// ValidateListBooksRequestBody runs the validations defined on
+// ListBooksRequestBody
+func ValidateListBooksRequestBody(body *ListBooksRequestBody) (err error) {
+	if body.Limit != nil {
+		if *body.Limit < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.limit", *body.Limit, 1, true))
+		}
+	}
+	if body.Limit != nil {
+		if *body.Limit > 100 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.limit", *body.Limit, 100, false))
+		}
+	}
+	if body.Offset != nil {
+		if *body.Offset < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("body.offset", *body.Offset, 0, true))
+		}
+	}
+	return
 }
