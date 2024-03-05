@@ -13,7 +13,9 @@ import (
 	"syscall"
 
 	epubindexcreatorapi "github.com/marutaku/epub-index-creator/controller"
+	"github.com/marutaku/epub-index-creator/ent"
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
+	"github.com/marutaku/epub-index-creator/middleware"
 )
 
 func main() {
@@ -51,6 +53,7 @@ func main() {
 	)
 	{
 		epubIndexCreatorEndpoints = epubindexcreator.NewEndpoints(epubIndexCreatorSvc)
+
 	}
 
 	// Create channel used by both the signal handler and server goroutines
@@ -67,6 +70,15 @@ func main() {
 
 	var wg sync.WaitGroup
 	ctx, cancel := context.WithCancel(context.Background())
+	sqliteDBPath, ok := os.LookupEnv("DB_PATH")
+	if !ok {
+		fmt.Println("DB_PATH is not set")
+	}
+	entClient, err := ent.Open("sqlite3", sqliteDBPath)
+	if err != nil {
+		log.Fatal(err)
+	}
+	epubIndexCreatorEndpoints.Use(middleware.NewTransaction(ctx, entClient))
 
 	// Start the servers and send errors (if any) to the error channel.
 	switch *hostF {
