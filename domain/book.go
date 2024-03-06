@@ -5,6 +5,7 @@ import (
 	"path"
 
 	"github.com/antchfx/xmlquery"
+	"github.com/marutaku/epub-index-creator/ent"
 )
 
 type Book struct {
@@ -51,4 +52,8 @@ func NewBook(isbn, title, language, author, publisher string, pages []*Page) *Bo
 		Publisher: publisher,
 		Pages:     pages,
 	}
+}
+
+func NewBookFromEnt(entBook *ent.Book) *Book {
+	return NewBook(entBook.Isbn, entBook.Title, entBook.Language, entBook.Author, entBook.Publisher, nil)
 }
