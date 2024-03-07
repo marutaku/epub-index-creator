@@ -15,5 +15,5 @@ gen_migration:
 migrate:
 	atlas migrate apply --dir "file://ent/migrate/migrations" --url "sqlite://${db_name}"
 
-run:
-	go build -o epub_index_creator_web ./cmd/web && ./epub_index_creator_web
+dev:
+	air -c .air.toml
