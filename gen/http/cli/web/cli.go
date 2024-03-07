@@ -29,8 +29,8 @@ func UsageCommands() string {
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` epub-index-creator list-books --body '{
-      "limit": 62,
-      "offset": 8630709808136651387
+      "limit": 52,
+      "offset": 8387359067837253274
    }'` + "\n" +
 		""
 }
@@ -196,8 +196,8 @@ ListBooks implements ListBooks.
 
 Example:
     %[1]s epub-index-creator list-books --body '{
-      "limit": 62,
-      "offset": 8630709808136651387
+      "limit": 52,
+      "offset": 8387359067837253274
    }'
 `, os.Args[0])
 }
@@ -209,7 +209,7 @@ FindBook implements FindBook.
     -isbn STRING: ISBN of the book
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "Recusandae saepe velit."
+    %[1]s epub-index-creator find-book --isbn "Ab dolor provident nulla corporis."
 `, os.Args[0])
 }
 
@@ -221,63 +221,35 @@ CreateBook implements CreateBook.
 
 Example:
     %[1]s epub-index-creator create-book --body '{
-      "author": "Molestiae veniam veritatis est sit error voluptatum.",
-      "isbn": "Aperiam in reiciendis quaerat temporibus omnis.",
+      "author": "Ut cumque non consequatur fuga voluptas.",
+      "isbn": "Molestiae veniam veritatis est sit error voluptatum.",
+      "language": "Dolorem et iste sit quia.",
       "pages": [
          {
             "keywords": [
                {
-                  "keyword": "Dolorem et iste sit quia."
+                  "keyword": "Tenetur iusto animi mollitia eius magni."
                },
                {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
+                  "keyword": "Tenetur iusto animi mollitia eius magni."
                }
             ],
-            "title": "Cumque non consequatur fuga."
+            "title": "Assumenda est ex asperiores aspernatur enim mollitia."
          },
          {
             "keywords": [
                {
-                  "keyword": "Dolorem et iste sit quia."
+                  "keyword": "Tenetur iusto animi mollitia eius magni."
                },
                {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
+                  "keyword": "Tenetur iusto animi mollitia eius magni."
                }
             ],
-            "title": "Cumque non consequatur fuga."
-         },
-         {
-            "keywords": [
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               },
-               {
-                  "keyword": "Dolorem et iste sit quia."
-               }
-            ],
-            "title": "Cumque non consequatur fuga."
+            "title": "Assumenda est ex asperiores aspernatur enim mollitia."
          }
       ],
-      "publisher": "Nihil harum quia consequatur voluptates maiores.",
-      "title": "Quis rerum."
+      "publisher": "Ratione quidem nam.",
+      "title": "Nihil harum quia consequatur voluptates maiores."
    }'
 `, os.Args[0])
 }
@@ -291,10 +263,11 @@ UpdateBook implements UpdateBook.
 
 Example:
     %[1]s epub-index-creator update-book --body '{
-      "author": "Dignissimos sed qui et consequatur aspernatur.",
-      "publisher": "Quam nemo eaque aut.",
-      "title": "Natus voluptatum voluptatem corporis."
-   }' --isbn "Exercitationem placeat ad."
+      "author": "Doloremque totam voluptatibus excepturi.",
+      "language": "Placeat nam omnis esse.",
+      "publisher": "Veniam assumenda quae dolores cum molestiae.",
+      "title": "Modi dolores non ducimus officia saepe."
+   }' --isbn "Quis sequi voluptas provident."
 `, os.Args[0])
 }
 
@@ -308,47 +281,58 @@ DeleteBook implements DeleteBook.
 Example:
     %[1]s epub-index-creator delete-book --body '{
       "book": {
-         "author": "Suscipit facilis quasi qui ab.",
-         "isbn": "Veniam assumenda quae dolores cum molestiae.",
+         "author": "Sunt qui nisi ut et dolor et.",
+         "isbn": "Sed explicabo quibusdam.",
+         "language": "Est eveniet aspernatur beatae eum et nihil.",
          "pages": [
             {
                "keywords": [
                   {
-                     "keyword": "Dolorem et iste sit quia."
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
                   },
                   {
-                     "keyword": "Dolorem et iste sit quia."
-                  },
-                  {
-                     "keyword": "Dolorem et iste sit quia."
-                  },
-                  {
-                     "keyword": "Dolorem et iste sit quia."
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
                   }
                ],
-               "title": "Cumque non consequatur fuga."
+               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
             },
             {
                "keywords": [
                   {
-                     "keyword": "Dolorem et iste sit quia."
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
                   },
                   {
-                     "keyword": "Dolorem et iste sit quia."
-                  },
-                  {
-                     "keyword": "Dolorem et iste sit quia."
-                  },
-                  {
-                     "keyword": "Dolorem et iste sit quia."
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
                   }
                ],
-               "title": "Cumque non consequatur fuga."
+               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+            },
+            {
+               "keywords": [
+                  {
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                  },
+                  {
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                  }
+               ],
+               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+            },
+            {
+               "keywords": [
+                  {
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                  },
+                  {
+                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                  }
+               ],
+               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
             }
          ],
-         "publisher": "Magnam voluptatem occaecati possimus non facere.",
-         "title": "Quis sequi voluptas provident."
+         "publisher": "Non id cum nemo voluptas illum.",
+         "title": "Odit aliquam nihil aliquid."
       }
-   }' --isbn "Sit et eum."
+   }' --isbn "Neque perspiciatis ipsa."
 `, os.Args[0])
 }

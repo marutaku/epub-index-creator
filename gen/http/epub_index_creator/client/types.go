@@ -30,6 +30,8 @@ type CreateBookRequestBody struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
 	Author string `form:"author" json:"author" xml:"author"`
+	// Language of the book
+	Language string `form:"language" json:"language" xml:"language"`
 	// Publisher of the book
 	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 	// Pages of the book
@@ -43,6 +45,8 @@ type UpdateBookRequestBody struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
 	Author string `form:"author" json:"author" xml:"author"`
+	// Language of the book
+	Language string `form:"language" json:"language" xml:"language"`
 	// Publisher of the book
 	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 }
@@ -66,6 +70,8 @@ type FindBookResponseBody struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Author of the book
 	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Language of the book
+	Language *string `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
@@ -81,6 +87,8 @@ type CreateBookResponseBody struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Author of the book
 	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Language of the book
+	Language *string `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
@@ -96,6 +104,8 @@ type UpdateBookResponseBody struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Author of the book
 	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Language of the book
+	Language *string `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
@@ -110,6 +120,8 @@ type BookResponse struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Author of the book
 	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Language of the book
+	Language *string `form:"language,omitempty" json:"language,omitempty" xml:"language,omitempty"`
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
@@ -166,6 +178,8 @@ type BookRequestBody struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
 	Author string `form:"author" json:"author" xml:"author"`
+	// Language of the book
+	Language string `form:"language" json:"language" xml:"language"`
 	// Publisher of the book
 	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 	// Pages of the book
@@ -201,6 +215,7 @@ func NewCreateBookRequestBody(p *epubindexcreator.Book) *CreateBookRequestBody {
 		Isbn:      p.Isbn,
 		Title:     p.Title,
 		Author:    p.Author,
+		Language:  p.Language,
 		Publisher: p.Publisher,
 	}
 	if p.Pages != nil {
@@ -220,6 +235,7 @@ func NewUpdateBookRequestBody(p *epubindexcreator.UpdateBookPayload) *UpdateBook
 	body := &UpdateBookRequestBody{
 		Title:     p.Title,
 		Author:    p.Author,
+		Language:  p.Language,
 		Publisher: p.Publisher,
 	}
 	return body
@@ -253,6 +269,7 @@ func NewFindBookBookOK(body *FindBookResponseBody) *epubindexcreator.Book {
 		Isbn:      *body.Isbn,
 		Title:     *body.Title,
 		Author:    *body.Author,
+		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
 	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
@@ -270,6 +287,7 @@ func NewCreateBookBookOK(body *CreateBookResponseBody) *epubindexcreator.Book {
 		Isbn:      *body.Isbn,
 		Title:     *body.Title,
 		Author:    *body.Author,
+		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
 	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
@@ -287,6 +305,7 @@ func NewUpdateBookBookOK(body *UpdateBookResponseBody) *epubindexcreator.Book {
 		Isbn:      *body.Isbn,
 		Title:     *body.Title,
 		Author:    *body.Author,
+		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
 	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
@@ -308,6 +327,9 @@ func ValidateFindBookResponseBody(body *FindBookResponseBody) (err error) {
 	}
 	if body.Author == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Language == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("language", "body"))
 	}
 	if body.Publisher == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
@@ -337,6 +359,9 @@ func ValidateCreateBookResponseBody(body *CreateBookResponseBody) (err error) {
 	if body.Author == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
 	}
+	if body.Language == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("language", "body"))
+	}
 	if body.Publisher == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
 	}
@@ -365,6 +390,9 @@ func ValidateUpdateBookResponseBody(body *UpdateBookResponseBody) (err error) {
 	if body.Author == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
 	}
+	if body.Language == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("language", "body"))
+	}
 	if body.Publisher == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
 	}
@@ -391,6 +419,9 @@ func ValidateBookResponse(body *BookResponse) (err error) {
 	}
 	if body.Author == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Language == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("language", "body"))
 	}
 	if body.Publisher == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))

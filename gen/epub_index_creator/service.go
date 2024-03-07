@@ -49,6 +49,8 @@ type Book struct {
 	Title string
 	// Author of the book
 	Author string
+	// Language of the book
+	Language string
 	// Publisher of the book
 	Publisher string
 	// Pages of the book
@@ -100,6 +102,8 @@ type UpdateBookPayload struct {
 	Title string
 	// Author of the book
 	Author string
+	// Language of the book
+	Language string
 	// Publisher of the book
 	Publisher string
 }

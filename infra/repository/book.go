@@ -12,6 +12,8 @@ type BookRepository interface {
 	FindAll(ctx context.Context, limit, offset int) ([]*domain.Book, error)
 	FindByISBN(ctx context.Context, isbn string) (*domain.Book, error)
 	Save(ctx context.Context, book *domain.Book) error
+	Update(ctx context.Context, isbn string, book *domain.Book) error
+	Delete(ctx context.Context, isbn string) error
 }
 
 type BookRepositoryImpl struct{}
@@ -66,6 +68,30 @@ func (r *BookRepositoryImpl) Save(ctx context.Context, book *domain.Book) error 
 		if err != nil {
 			return err
 		}
+	}
+	return nil
+}
+
+func (r *BookRepositoryImpl) Update(ctx context.Context, isbn string, book *domain.Book) error {
+	tx := ent.TxFromContext(ctx)
+	_, err := tx.Book.Update().Where(bookModel.Isbn(isbn)).
+		SetIsbn(book.ISBN).
+		SetTitle(book.Title).
+		SetLanguage(book.Language).
+		SetAuthor(book.Author).
+		SetPublisher(book.Publisher).
+		Save(ctx)
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
+func (r *BookRepositoryImpl) Delete(ctx context.Context, isbn string) error {
+	tx := ent.TxFromContext(ctx)
+	_, err := tx.Book.Delete().Where(bookModel.Isbn(isbn)).Exec(ctx)
+	if err != nil {
+		return err
 	}
 	return nil
 }

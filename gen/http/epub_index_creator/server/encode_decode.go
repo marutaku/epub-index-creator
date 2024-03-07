@@ -211,6 +211,7 @@ func marshalEpubindexcreatorBookToBookResponse(v *epubindexcreator.Book) *BookRe
 		Isbn:      v.Isbn,
 		Title:     v.Title,
 		Author:    v.Author,
+		Language:  v.Language,
 		Publisher: v.Publisher,
 	}
 	if v.Pages != nil {
@@ -312,6 +313,7 @@ func unmarshalBookRequestBodyToEpubindexcreatorBook(v *BookRequestBody) *epubind
 		Isbn:      *v.Isbn,
 		Title:     *v.Title,
 		Author:    *v.Author,
+		Language:  *v.Language,
 		Publisher: *v.Publisher,
 	}
 	res.Pages = make([]*epubindexcreator.Page, len(v.Pages))

@@ -61,8 +61,9 @@ var _ = Service("epub_index_creator", func() {
 			Attribute("isbn", String, "ISBN of the book")
 			Attribute("title", String, "Title of the book")
 			Attribute("author", String, "Author of the book")
+			Attribute("language", String, "Language of the book")
 			Attribute("publisher", String, "Publisher of the book")
-			Required("isbn", "title", "author", "publisher")
+			Required("isbn", "title", "author", "language", "publisher")
 		})
 		Result(Book)
 		HTTP(func() {

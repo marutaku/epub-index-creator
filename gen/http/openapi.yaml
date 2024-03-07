@@ -48,6 +48,7 @@ paths:
                         - isbn
                         - title
                         - author
+                        - language
                         - publisher
                         - pages
             responses:
@@ -59,6 +60,7 @@ paths:
                             - isbn
                             - title
                             - author
+                            - language
                             - publisher
                             - pages
             schemes:
@@ -84,6 +86,7 @@ paths:
                             - isbn
                             - title
                             - author
+                            - language
                             - publisher
                             - pages
             schemes:
@@ -107,6 +110,7 @@ paths:
                     required:
                         - title
                         - author
+                        - language
                         - publisher
             responses:
                 "200":
@@ -117,6 +121,7 @@ paths:
                             - isbn
                             - title
                             - author
+                            - language
                             - publisher
                             - pages
             schemes:
@@ -165,11 +170,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Inventore aut voluptatem consequatur assumenda.
+                example: Aut quia eos et.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Deleniti nulla voluptates.
+                example: Voluptas saepe.
+            language:
+                type: string
+                description: Language of the book
+                example: Sit rerum sed ab impedit dicta.
             pages:
                 type: array
                 items:
@@ -177,59 +186,57 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
+                    - keywords:
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Excepturi voluptatem cum accusamus consequuntur.
+                example: Eum et quos et iste.
             title:
                 type: string
                 description: Title of the book
-                example: Et omnis.
+                example: Sequi quia et voluptatem.
         example:
-            author: Ut beatae voluptates quia cupiditate voluptatum doloremque.
-            isbn: Et aut possimus dolores.
+            author: Voluptatibus sint soluta est corporis ipsa repellendus.
+            isbn: Eos beatae et alias est laudantium.
+            language: Eos illo accusantium culpa perspiciatis impedit.
             pages:
                 - keywords:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                  title: Cumque non consequatur fuga.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
                 - keywords:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                  title: Cumque non consequatur fuga.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
                 - keywords:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                  title: Cumque non consequatur fuga.
-            publisher: Dicta et culpa sed voluptatibus quis.
-            title: Quis laboriosam adipisci voluptas sit molestiae.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
+                - keywords:
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
+            publisher: Ipsa voluptatem itaque dolorem asperiores necessitatibus incidunt.
+            title: Quo modi.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     BookResponse:
@@ -239,11 +246,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Facere non optio voluptas incidunt.
+                example: Atque deserunt sit dolores aspernatur quis error.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Doloribus a ipsum deserunt.
+                example: Libero consectetur sunt.
+            language:
+                type: string
+                description: Language of the book
+                example: Earum ea nihil delectus repellat architecto.
             pages:
                 type: array
                 items:
@@ -251,48 +262,55 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                      title: Velit dolores aperiam adipisci qui.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                      title: Sint sint repellat sapiente porro.
                     - keywords:
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                      title: Velit dolores aperiam adipisci qui.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                      title: Sint sint repellat sapiente porro.
+                    - keywords:
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                      title: Sint sint repellat sapiente porro.
+                    - keywords:
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                        - keyword: Unde recusandae saepe velit ullam omnis.
+                      title: Sint sint repellat sapiente porro.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Consequatur sed explicabo quibusdam optio odit.
+                example: Totam officiis quibusdam nobis nemo iusto.
             title:
                 type: string
                 description: Title of the book
-                example: Non qui non deleniti deserunt.
+                example: Nesciunt nisi in enim.
         example:
-            author: Deserunt sit dolores aspernatur quis.
-            isbn: Dolorum libero consectetur.
+            author: Doloremque consequatur dolores.
+            isbn: Culpa molestiae quia blanditiis dolor sint.
+            language: Magni et cupiditate et aut pariatur.
             pages:
                 - keywords:
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                  title: Velit dolores aperiam adipisci qui.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                  title: Sint sint repellat sapiente porro.
                 - keywords:
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                  title: Velit dolores aperiam adipisci qui.
-                - keywords:
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                  title: Velit dolores aperiam adipisci qui.
-            publisher: Harum earum ea nihil delectus repellat architecto.
-            title: Maxime nesciunt nisi in enim quia.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                  title: Sint sint repellat sapiente porro.
+            publisher: Ut ipsum nam vero.
+            title: Quia eum.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     EpubIndexCreatorCreateBookRequestBody:
@@ -302,11 +320,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Modi vel reprehenderit magnam animi.
+                example: Aperiam et molestias.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Atque dolores.
+                example: Repellat neque maxime quaerat est voluptatem quibusdam.
+            language:
+                type: string
+                description: Language of the book
+                example: Nobis consequuntur sint deleniti corporis.
             pages:
                 type: array
                 items:
@@ -314,53 +336,45 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
-                    - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Id iusto quod est esse.
+                example: Quisquam porro doloremque magni mollitia eum.
             title:
                 type: string
                 description: Title of the book
-                example: Architecto ex odit iusto exercitationem rem molestiae.
+                example: Tempore reiciendis voluptatem doloribus voluptates.
         example:
-            author: Quia iusto omnis sunt.
-            isbn: Veniam quo similique recusandae qui.
+            author: Repellat aperiam est sit.
+            isbn: Ut excepturi maxime aperiam illum aperiam.
+            language: Ad voluptatem ex non animi ea.
             pages:
                 - keywords:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                  title: Cumque non consequatur fuga.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
                 - keywords:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                  title: Cumque non consequatur fuga.
-            publisher: Qui consequatur possimus.
-            title: Quibusdam ratione quia nesciunt autem molestias.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
+                - keywords:
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                  title: Assumenda est ex asperiores aspernatur enim mollitia.
+            publisher: Molestiae aliquam saepe in saepe ipsa.
+            title: Quod deleniti eum ab necessitatibus ullam.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     EpubIndexCreatorCreateBookResponseBody:
@@ -370,11 +384,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Est quo.
+                example: Id iusto quod est esse.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Harum voluptas dolorem asperiores.
+                example: Iusto exercitationem rem molestiae.
+            language:
+                type: string
+                description: Language of the book
+                example: Sit sint enim cupiditate.
             pages:
                 type: array
                 items:
@@ -382,65 +400,55 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
-                    - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
-                    - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Similique perspiciatis nam.
+                example: Aut consequatur dolorum.
             title:
                 type: string
                 description: Title of the book
-                example: Est repellat.
+                example: Modi vel reprehenderit magnam animi.
         example:
-            author: Id ut assumenda autem quos omnis.
-            isbn: Aperiam et voluptatibus dolores et.
+            author: Similique recusandae qui unde quibusdam ratione.
+            isbn: Est repellendus quia ad qui atque est.
+            language: Nesciunt autem molestias at quia iusto.
             pages:
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-            publisher: Autem ab ratione animi et magnam.
-            title: Quo eum.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
+            publisher: Sunt excepturi qui consequatur.
+            title: Ad dolores dolores veniam.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     EpubIndexCreatorDeleteBookRequestBody:
@@ -451,23 +459,28 @@ definitions:
                 $ref: '#/definitions/BookRequestBody'
         example:
             book:
-                author: Suscipit facilis quasi qui ab.
-                isbn: Veniam assumenda quae dolores cum molestiae.
+                author: Sunt qui nisi ut et dolor et.
+                isbn: Sed explicabo quibusdam.
+                language: Est eveniet aspernatur beatae eum et nihil.
                 pages:
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
                     - keywords:
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                        - keyword: Dolorem et iste sit quia.
-                      title: Cumque non consequatur fuga.
-                publisher: Magnam voluptatem occaecati possimus non facere.
-                title: Quis sequi voluptas provident.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
+                    - keywords:
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
+                    - keywords:
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                        - keyword: Tenetur iusto animi mollitia eius magni.
+                      title: Assumenda est ex asperiores aspernatur enim mollitia.
+                publisher: Non id cum nemo voluptas illum.
+                title: Odit aliquam nihil aliquid.
         required:
             - book
     EpubIndexCreatorFindBookResponseBody:
@@ -477,11 +490,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Dolor quis sed laborum quam aut reprehenderit.
+                example: Blanditiis dolor incidunt.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Iusto corporis facilis molestiae est sit.
+                example: Vel voluptatibus ut.
+            language:
+                type: string
+                description: Language of the book
+                example: Veritatis atque et totam et architecto laudantium.
             pages:
                 type: array
                 items:
@@ -489,59 +506,61 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
+                    - keywords:
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
+                    - keywords:
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Perspiciatis et culpa molestiae quia.
+                example: Harum voluptas dolorem asperiores.
             title:
                 type: string
                 description: Title of the book
-                example: Repellat velit consequatur sed aliquam.
+                example: Corporis natus similique sequi quod aut.
         example:
-            author: Quod aut exercitationem blanditiis dolor incidunt quis.
-            isbn: Iusto rerum vel voluptatibus ut dolorum.
+            author: Autem ab ratione animi et magnam.
+            isbn: Nisi id ut assumenda.
+            language: Consequatur atque.
             pages:
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-                - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-                - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-            publisher: Atque et totam et architecto.
-            title: Natus similique.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
+            publisher: Blanditiis architecto.
+            title: Quos omnis.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     EpubIndexCreatorListBooksRequestBody:
@@ -552,7 +571,7 @@ definitions:
                 type: integer
                 description: Maximum number of books to return
                 default: 100
-                example: 46
+                example: 27
                 format: int64
                 minimum: 1
                 maximum: 100
@@ -560,12 +579,12 @@ definitions:
                 type: integer
                 description: Field to paginate books
                 default: 0
-                example: 7562947300137636682
+                example: 6812915334521696847
                 format: int64
                 minimum: 0
         example:
-            limit: 42
-            offset: 8290653278683707636
+            limit: 15
+            offset: 2048494907766633765
     EpubIndexCreatorUpdateBookRequestBody:
         title: EpubIndexCreatorUpdateBookRequestBody
         type: object
@@ -573,22 +592,28 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Ut excepturi maxime aperiam illum aperiam.
+                example: Sapiente ipsam est.
+            language:
+                type: string
+                description: Language of the book
+                example: Tempora doloremque.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Quod deleniti eum ab necessitatibus ullam.
+                example: Quia dolores ut est.
             title:
                 type: string
                 description: Title of the book
-                example: Enim sit ea natus facere vero.
+                example: Eos dolores ullam.
         example:
-            author: Ad voluptatem ex non animi ea.
-            publisher: Molestiae aliquam saepe in saepe ipsa.
-            title: Repellat aperiam est sit.
+            author: Voluptatibus nobis.
+            language: Quos magnam non et provident quia tempore.
+            publisher: Autem suscipit similique ut autem.
+            title: Maxime laudantium sunt.
         required:
             - title
             - author
+            - language
             - publisher
     EpubIndexCreatorUpdateBookResponseBody:
         title: EpubIndexCreatorUpdateBookResponseBody
@@ -597,11 +622,15 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Voluptatem doloribus voluptates consequatur aperiam.
+                example: Voluptatem cum accusamus.
             isbn:
                 type: string
                 description: ISBN of the book
-                example: Neque maxime quaerat est.
+                example: Nulla voluptates iste et.
+            language:
+                type: string
+                description: Language of the book
+                example: Quis animi et.
             pages:
                 type: array
                 items:
@@ -609,65 +638,61 @@ definitions:
                 description: Pages of the book
                 example:
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
                     - keywords:
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                        - keyword: Autem autem facilis aliquam ab dolor.
-                      title: Omnis et atque labore ad ut laboriosam.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                        - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                      title: Ut dicta.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Molestias quia nobis consequuntur.
+                example: Possimus dolores.
             title:
                 type: string
                 description: Title of the book
-                example: Quibusdam aut tempore.
+                example: Reiciendis inventore aut voluptatem consequatur assumenda iste.
         example:
-            author: Sapiente praesentium libero consectetur quia.
-            isbn: Corporis est quisquam porro doloremque magni mollitia.
+            author: Et culpa sed voluptatibus quis.
+            isbn: Laboriosam adipisci voluptas sit molestiae itaque ut.
+            language: Possimus quia in labore asperiores.
             pages:
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
                 - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-                - keywords:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                  title: Omnis et atque labore ad ut laboriosam.
-            publisher: Sed deleniti et dolor pariatur.
-            title: Earum perspiciatis molestiae officiis.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                  title: Ut dicta.
+            publisher: Deleniti debitis et.
+            title: Voluptates quia cupiditate voluptatum doloremque omnis.
         required:
             - isbn
             - title
             - author
+            - language
             - publisher
             - pages
     KeywordRequestBody:
@@ -677,9 +702,9 @@ definitions:
             keyword:
                 type: string
                 description: Keyword of the page
-                example: Aut consequatur dolorum.
+                example: Libero consectetur.
         example:
-            keyword: Itaque est.
+            keyword: Ab sed deleniti et.
         required:
             - keyword
     KeywordResponse:
@@ -689,9 +714,9 @@ definitions:
             keyword:
                 type: string
                 description: Keyword of the page
-                example: Sunt qui nisi ut et dolor et.
+                example: Sit iure repellat.
         example:
-            keyword: Est eveniet aspernatur beatae eum et nihil.
+            keyword: Consequatur sed.
         required:
             - keyword
     KeywordResponseBody:
@@ -701,9 +726,9 @@ definitions:
             keyword:
                 type: string
                 description: Keyword of the page
-                example: Eveniet doloremque consequatur dolores.
+                example: Est quo.
         example:
-            keyword: Magni et cupiditate et aut pariatur.
+            keyword: Similique perspiciatis nam.
         required:
             - keyword
     PageRequestBody:
@@ -716,19 +741,18 @@ definitions:
                     $ref: '#/definitions/KeywordRequestBody'
                 description: Keywords of the page
                 example:
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
-                    - keyword: Dolorem et iste sit quia.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
+                    - keyword: Tenetur iusto animi mollitia eius magni.
             title:
                 type: string
                 description: Title of the page
-                example: Sit sint enim cupiditate.
+                example: Perspiciatis molestiae officiis id sapiente.
         example:
             keywords:
-                - keyword: Dolorem et iste sit quia.
-                - keyword: Dolorem et iste sit quia.
-                - keyword: Dolorem et iste sit quia.
-            title: Ad qui atque est eum.
+                - keyword: Tenetur iusto animi mollitia eius magni.
+                - keyword: Tenetur iusto animi mollitia eius magni.
+                - keyword: Tenetur iusto animi mollitia eius magni.
+            title: Dolore modi enim sit ea natus.
         required:
             - title
             - keywords
@@ -742,18 +766,20 @@ definitions:
                     $ref: '#/definitions/KeywordResponse'
                 description: Keywords of the page
                 example:
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
-                    - keyword: Veniam est aut occaecati odio corrupti quis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
+                    - keyword: Unde recusandae saepe velit ullam omnis.
             title:
                 type: string
                 description: Title of the page
-                example: Nihil aliquid.
+                example: Facilis molestiae.
         example:
             keywords:
-                - keyword: Veniam est aut occaecati odio corrupti quis.
-                - keyword: Veniam est aut occaecati odio corrupti quis.
-            title: Id cum nemo voluptas illum magnam enim.
+                - keyword: Unde recusandae saepe velit ullam omnis.
+                - keyword: Unde recusandae saepe velit ullam omnis.
+                - keyword: Unde recusandae saepe velit ullam omnis.
+            title: Dolor quis sed laborum quam aut reprehenderit.
         required:
             - title
             - keywords
@@ -767,19 +793,19 @@ definitions:
                     $ref: '#/definitions/KeywordResponseBody'
                 description: Keywords of the page
                 example:
-                    - keyword: Autem autem facilis aliquam ab dolor.
-                    - keyword: Autem autem facilis aliquam ab dolor.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                    - keyword: Totam omnis qui dolorem perferendis voluptatibus.
             title:
                 type: string
                 description: Title of the page
-                example: Dolor sint aut quia.
+                example: Est repellat.
         example:
             keywords:
-                - keyword: Autem autem facilis aliquam ab dolor.
-                - keyword: Autem autem facilis aliquam ab dolor.
-                - keyword: Autem autem facilis aliquam ab dolor.
-                - keyword: Autem autem facilis aliquam ab dolor.
-            title: Ipsum nam vero minima.
+                - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+                - keyword: Totam omnis qui dolorem perferendis voluptatibus.
+            title: Aperiam et voluptatibus dolores et.
         required:
             - title
             - keywords

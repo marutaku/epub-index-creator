@@ -8,9 +8,10 @@ var Book = Type("Book", func() {
 	Field(1, "isbn", String, "ISBN of the book")
 	Field(2, "title", String, "Title of the book")
 	Field(3, "author", String, "Author of the book")
-	Field(4, "publisher", String, "Publisher of the book")
-	Field(4, "pages", ArrayOf(Page), "Pages of the book")
-	Required("isbn", "title", "author", "publisher", "pages")
+	Field(4, "language", String, "Language of the book")
+	Field(5, "publisher", String, "Publisher of the book")
+	Field(6, "pages", ArrayOf(Page), "Pages of the book")
+	Required("isbn", "title", "author", "language", "publisher", "pages")
 })
 
 var Page = Type("Page", func() {
