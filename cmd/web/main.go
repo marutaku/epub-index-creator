@@ -16,6 +16,7 @@ import (
 	"github.com/marutaku/epub-index-creator/ent"
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 	"github.com/marutaku/epub-index-creator/middleware"
+	_ "github.com/mattn/go-sqlite3"
 )
 
 func main() {

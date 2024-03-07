@@ -20,3 +20,18 @@ func ListBooksEpubIndexCreatorPath() string {
 func FindBookEpubIndexCreatorPath(isbn string) string {
 	return fmt.Sprintf("/books/%v", isbn)
 }
+
+// CreateBookEpubIndexCreatorPath returns the URL path to the epub_index_creator service CreateBook HTTP endpoint.
+func CreateBookEpubIndexCreatorPath() string {
+	return "/books"
+}
+
+// UpdateBookEpubIndexCreatorPath returns the URL path to the epub_index_creator service UpdateBook HTTP endpoint.
+func UpdateBookEpubIndexCreatorPath(isbn string) string {
+	return fmt.Sprintf("/books/%v", isbn)
+}
+
+// DeleteBookEpubIndexCreatorPath returns the URL path to the epub_index_creator service DeleteBook HTTP endpoint.
+func DeleteBookEpubIndexCreatorPath(isbn string) string {
+	return fmt.Sprintf("/books/%v", isbn)
+}

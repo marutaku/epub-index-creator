@@ -82,13 +82,136 @@ func DecodeFindBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahtt
 	}
 }
 
+// EncodeCreateBookResponse returns an encoder for responses returned by the
+// epub_index_creator CreateBook endpoint.
+func EncodeCreateBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.(*epubindexcreator.Book)
+		enc := encoder(ctx, w)
+		body := NewCreateBookResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeCreateBookRequest returns a decoder for requests sent to the
+// epub_index_creator CreateBook endpoint.
+func DecodeCreateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			body CreateBookRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateCreateBookRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+		payload := NewCreateBookBook(&body)
+
+		return payload, nil
+	}
+}
+
+// EncodeUpdateBookResponse returns an encoder for responses returned by the
+// epub_index_creator UpdateBook endpoint.
+func EncodeUpdateBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.(*epubindexcreator.Book)
+		enc := encoder(ctx, w)
+		body := NewUpdateBookResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeUpdateBookRequest returns a decoder for requests sent to the
+// epub_index_creator UpdateBook endpoint.
+func DecodeUpdateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			body UpdateBookRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateUpdateBookRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+
+		var (
+			isbn string
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		payload := NewUpdateBookPayload(&body, isbn)
+
+		return payload, nil
+	}
+}
+
+// EncodeDeleteBookResponse returns an encoder for responses returned by the
+// epub_index_creator DeleteBook endpoint.
+func EncodeDeleteBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		w.WriteHeader(http.StatusNoContent)
+		return nil
+	}
+}
+
+// DecodeDeleteBookRequest returns a decoder for requests sent to the
+// epub_index_creator DeleteBook endpoint.
+func DecodeDeleteBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			body DeleteBookRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateDeleteBookRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+
+		var (
+			isbn string
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		payload := NewDeleteBookPayload(&body, isbn)
+
+		return payload, nil
+	}
+}
+
 // marshalEpubindexcreatorBookToBookResponse builds a value of type
 // *BookResponse from a value of type *epubindexcreator.Book.
 func marshalEpubindexcreatorBookToBookResponse(v *epubindexcreator.Book) *BookResponse {
 	res := &BookResponse{
-		Isbn:   v.Isbn,
-		Title:  v.Title,
-		Author: v.Author,
+		Isbn:      v.Isbn,
+		Title:     v.Title,
+		Author:    v.Author,
+		Publisher: v.Publisher,
 	}
 	if v.Pages != nil {
 		res.Pages = make([]*PageResponse, len(v.Pages))
@@ -153,6 +276,47 @@ func marshalEpubindexcreatorPageToPageResponseBody(v *epubindexcreator.Page) *Pa
 func marshalEpubindexcreatorKeywordToKeywordResponseBody(v *epubindexcreator.Keyword) *KeywordResponseBody {
 	res := &KeywordResponseBody{
 		Keyword: v.Keyword,
+	}
+
+	return res
+}
+
+// unmarshalPageRequestBodyToEpubindexcreatorPage builds a value of type
+// *epubindexcreator.Page from a value of type *PageRequestBody.
+func unmarshalPageRequestBodyToEpubindexcreatorPage(v *PageRequestBody) *epubindexcreator.Page {
+	res := &epubindexcreator.Page{
+		Title: *v.Title,
+	}
+	res.Keywords = make([]*epubindexcreator.Keyword, len(v.Keywords))
+	for i, val := range v.Keywords {
+		res.Keywords[i] = unmarshalKeywordRequestBodyToEpubindexcreatorKeyword(val)
+	}
+
+	return res
+}
+
+// unmarshalKeywordRequestBodyToEpubindexcreatorKeyword builds a value of type
+// *epubindexcreator.Keyword from a value of type *KeywordRequestBody.
+func unmarshalKeywordRequestBodyToEpubindexcreatorKeyword(v *KeywordRequestBody) *epubindexcreator.Keyword {
+	res := &epubindexcreator.Keyword{
+		Keyword: *v.Keyword,
+	}
+
+	return res
+}
+
+// unmarshalBookRequestBodyToEpubindexcreatorBook builds a value of type
+// *epubindexcreator.Book from a value of type *BookRequestBody.
+func unmarshalBookRequestBodyToEpubindexcreatorBook(v *BookRequestBody) *epubindexcreator.Book {
+	res := &epubindexcreator.Book{
+		Isbn:      *v.Isbn,
+		Title:     *v.Title,
+		Author:    *v.Author,
+		Publisher: *v.Publisher,
+	}
+	res.Pages = make([]*epubindexcreator.Page, len(v.Pages))
+	for i, val := range v.Pages {
+		res.Pages[i] = unmarshalPageRequestBodyToEpubindexcreatorPage(val)
 	}
 
 	return res

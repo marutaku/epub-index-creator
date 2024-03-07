@@ -12,6 +12,7 @@ import (
 	"fmt"
 
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
+	goa "goa.design/goa/v3/pkg"
 )
 
 // BuildListBooksPayload builds the payload for the epub_index_creator
@@ -22,7 +23,7 @@ func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorListBooksBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 62,\n      \"offset\": 7864368622572586298\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 62,\n      \"offset\": 8630709808136651387\n   }'")
 		}
 	}
 	v := &epubindexcreator.ListBooksPayload{
@@ -53,6 +54,108 @@ func BuildFindBookPayload(epubIndexCreatorFindBookIsbn string) (*epubindexcreato
 		isbn = epubIndexCreatorFindBookIsbn
 	}
 	v := &epubindexcreator.FindBookPayload{}
+	v.Isbn = isbn
+
+	return v, nil
+}
+
+// BuildCreateBookPayload builds the payload for the epub_index_creator
+// CreateBook endpoint from CLI flags.
+func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcreator.Book, error) {
+	var err error
+	var body CreateBookRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Molestiae veniam veritatis est sit error voluptatum.\",\n      \"isbn\": \"Aperiam in reiciendis quaerat temporibus omnis.\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               }\n            ],\n            \"title\": \"Cumque non consequatur fuga.\"\n         },\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               }\n            ],\n            \"title\": \"Cumque non consequatur fuga.\"\n         },\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               },\n               {\n                  \"keyword\": \"Dolorem et iste sit quia.\"\n               }\n            ],\n            \"title\": \"Cumque non consequatur fuga.\"\n         }\n      ],\n      \"publisher\": \"Nihil harum quia consequatur voluptates maiores.\",\n      \"title\": \"Quis rerum.\"\n   }'")
+		}
+		if body.Pages == nil {
+			err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
+		}
+		for _, e := range body.Pages {
+			if e != nil {
+				if err2 := ValidatePageRequestBody(e); err2 != nil {
+					err = goa.MergeErrors(err, err2)
+				}
+			}
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+	v := &epubindexcreator.Book{
+		Isbn:      body.Isbn,
+		Title:     body.Title,
+		Author:    body.Author,
+		Publisher: body.Publisher,
+	}
+	if body.Pages != nil {
+		v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+		for i, val := range body.Pages {
+			v.Pages[i] = marshalPageRequestBodyToEpubindexcreatorPage(val)
+		}
+	} else {
+		v.Pages = []*epubindexcreator.Page{}
+	}
+
+	return v, nil
+}
+
+// BuildUpdateBookPayload builds the payload for the epub_index_creator
+// UpdateBook endpoint from CLI flags.
+func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCreatorUpdateBookIsbn string) (*epubindexcreator.UpdateBookPayload, error) {
+	var err error
+	var body UpdateBookRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Dignissimos sed qui et consequatur aspernatur.\",\n      \"publisher\": \"Quam nemo eaque aut.\",\n      \"title\": \"Natus voluptatum voluptatem corporis.\"\n   }'")
+		}
+	}
+	var isbn string
+	{
+		isbn = epubIndexCreatorUpdateBookIsbn
+	}
+	v := &epubindexcreator.UpdateBookPayload{
+		Title:     body.Title,
+		Author:    body.Author,
+		Publisher: body.Publisher,
+	}
+	v.Isbn = isbn
+
+	return v, nil
+}
+
+// BuildDeleteBookPayload builds the payload for the epub_index_creator
+// DeleteBook endpoint from CLI flags.
+func BuildDeleteBookPayload(epubIndexCreatorDeleteBookBody string, epubIndexCreatorDeleteBookIsbn string) (*epubindexcreator.DeleteBookPayload, error) {
+	var err error
+	var body DeleteBookRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorDeleteBookBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"book\": {\n         \"author\": \"Suscipit facilis quasi qui ab.\",\n         \"isbn\": \"Veniam assumenda quae dolores cum molestiae.\",\n         \"pages\": [\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  }\n               ],\n               \"title\": \"Cumque non consequatur fuga.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  },\n                  {\n                     \"keyword\": \"Dolorem et iste sit quia.\"\n                  }\n               ],\n               \"title\": \"Cumque non consequatur fuga.\"\n            }\n         ],\n         \"publisher\": \"Magnam voluptatem occaecati possimus non facere.\",\n         \"title\": \"Quis sequi voluptas provident.\"\n      }\n   }'")
+		}
+		if body.Book == nil {
+			err = goa.MergeErrors(err, goa.MissingFieldError("book", "body"))
+		}
+		if body.Book != nil {
+			if err2 := ValidateBookRequestBody(body.Book); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+	var isbn string
+	{
+		isbn = epubIndexCreatorDeleteBookIsbn
+	}
+	v := &epubindexcreator.DeleteBookPayload{}
+	if body.Book != nil {
+		v.Book = marshalBookRequestBodyToEpubindexcreatorBook(body.Book)
+	}
 	v.Isbn = isbn
 
 	return v, nil

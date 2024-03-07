@@ -15,16 +15,22 @@ import (
 
 // Endpoints wraps the "epub_index_creator" service endpoints.
 type Endpoints struct {
-	ListBooks goa.Endpoint
-	FindBook  goa.Endpoint
+	ListBooks  goa.Endpoint
+	FindBook   goa.Endpoint
+	CreateBook goa.Endpoint
+	UpdateBook goa.Endpoint
+	DeleteBook goa.Endpoint
 }
 
 // NewEndpoints wraps the methods of the "epub_index_creator" service with
 // endpoints.
 func NewEndpoints(s Service) *Endpoints {
 	return &Endpoints{
-		ListBooks: NewListBooksEndpoint(s),
-		FindBook:  NewFindBookEndpoint(s),
+		ListBooks:  NewListBooksEndpoint(s),
+		FindBook:   NewFindBookEndpoint(s),
+		CreateBook: NewCreateBookEndpoint(s),
+		UpdateBook: NewUpdateBookEndpoint(s),
+		DeleteBook: NewDeleteBookEndpoint(s),
 	}
 }
 
@@ -33,6 +39,9 @@ func NewEndpoints(s Service) *Endpoints {
 func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 	e.ListBooks = m(e.ListBooks)
 	e.FindBook = m(e.FindBook)
+	e.CreateBook = m(e.CreateBook)
+	e.UpdateBook = m(e.UpdateBook)
+	e.DeleteBook = m(e.DeleteBook)
 }
 
 // NewListBooksEndpoint returns an endpoint function that calls the method
@@ -50,5 +59,32 @@ func NewFindBookEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
 		p := req.(*FindBookPayload)
 		return s.FindBook(ctx, p)
+	}
+}
+
+// NewCreateBookEndpoint returns an endpoint function that calls the method
+// "CreateBook" of service "epub_index_creator".
+func NewCreateBookEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*Book)
+		return s.CreateBook(ctx, p)
+	}
+}
+
+// NewUpdateBookEndpoint returns an endpoint function that calls the method
+// "UpdateBook" of service "epub_index_creator".
+func NewUpdateBookEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*UpdateBookPayload)
+		return s.UpdateBook(ctx, p)
+	}
+}
+
+// NewDeleteBookEndpoint returns an endpoint function that calls the method
+// "DeleteBook" of service "epub_index_creator".
+func NewDeleteBookEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*DeleteBookPayload)
+		return nil, s.DeleteBook(ctx, p)
 	}
 }

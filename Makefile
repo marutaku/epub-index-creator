@@ -16,4 +16,4 @@ migrate:
 	atlas migrate apply --dir "file://ent/migrate/migrations" --url "sqlite://${db_name}"
 
 run:
-	go run cmd/web/main.go
+	go build -o epub_index_creator_web ./cmd/web && ./epub_index_creator_web

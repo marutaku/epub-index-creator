@@ -46,5 +46,41 @@ var _ = Service("epub_index_creator", func() {
 		})
 	})
 
+	Method("CreateBook", func() {
+		Payload(Book)
+
+		Result(Book)
+
+		HTTP(func() {
+			POST("/books")
+		})
+	})
+
+	Method("UpdateBook", func() {
+		Payload(func() {
+			Attribute("isbn", String, "ISBN of the book")
+			Attribute("title", String, "Title of the book")
+			Attribute("author", String, "Author of the book")
+			Attribute("publisher", String, "Publisher of the book")
+			Required("isbn", "title", "author", "publisher")
+		})
+		Result(Book)
+		HTTP(func() {
+			PUT("/books/{isbn}")
+		})
+	})
+
+	Method("DeleteBook", func() {
+		Payload(func() {
+			Attribute("isbn", String, "ISBN of the book")
+			Attribute("book", Book)
+			Required("isbn", "book")
+		})
+		Result(Empty)
+		HTTP(func() {
+			DELETE("/books/{isbn}")
+		})
+	})
+
 	Files("/openapi.json", "./gen/http/openapi.json")
 })

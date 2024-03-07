@@ -25,6 +25,18 @@ type Client struct {
 	// endpoint.
 	FindBookDoer goahttp.Doer
 
+	// CreateBook Doer is the HTTP client used to make requests to the CreateBook
+	// endpoint.
+	CreateBookDoer goahttp.Doer
+
+	// UpdateBook Doer is the HTTP client used to make requests to the UpdateBook
+	// endpoint.
+	UpdateBookDoer goahttp.Doer
+
+	// DeleteBook Doer is the HTTP client used to make requests to the DeleteBook
+	// endpoint.
+	DeleteBookDoer goahttp.Doer
+
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
 	RestoreResponseBody bool
@@ -48,6 +60,9 @@ func NewClient(
 	return &Client{
 		ListBooksDoer:       doer,
 		FindBookDoer:        doer,
+		CreateBookDoer:      doer,
+		UpdateBookDoer:      doer,
+		DeleteBookDoer:      doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -94,6 +109,78 @@ func (c *Client) FindBook() goa.Endpoint {
 		resp, err := c.FindBookDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("epub_index_creator", "FindBook", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// CreateBook returns an endpoint that makes HTTP requests to the
+// epub_index_creator service CreateBook server.
+func (c *Client) CreateBook() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeCreateBookRequest(c.encoder)
+		decodeResponse = DecodeCreateBookResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildCreateBookRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.CreateBookDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "CreateBook", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// UpdateBook returns an endpoint that makes HTTP requests to the
+// epub_index_creator service UpdateBook server.
+func (c *Client) UpdateBook() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeUpdateBookRequest(c.encoder)
+		decodeResponse = DecodeUpdateBookResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildUpdateBookRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.UpdateBookDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "UpdateBook", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// DeleteBook returns an endpoint that makes HTTP requests to the
+// epub_index_creator service DeleteBook server.
+func (c *Client) DeleteBook() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeDeleteBookRequest(c.encoder)
+		decodeResponse = DecodeDeleteBookResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildDeleteBookRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.DeleteBookDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "DeleteBook", err)
 		}
 		return decodeResponse(resp)
 	}

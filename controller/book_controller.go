@@ -4,7 +4,9 @@ import (
 	"context"
 	"log"
 
+	"github.com/marutaku/epub-index-creator/domain"
 	epubIndexCreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
+	"github.com/marutaku/epub-index-creator/infra/repository"
 )
 
 // epub_index_creator service example implementation.
@@ -18,15 +20,54 @@ func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
 	return &epubIndexCreatorsrvc{logger}
 }
 
+func convertBookToResponse(book *domain.Book) *epubIndexCreator.Book {
+	return &epubIndexCreator.Book{
+		Isbn:   book.ISBN,
+		Title:  book.Title,
+		Author: book.Author,
+		Pages:  make([]*epubIndexCreator.Page, 0), // TODO: Implement
+	}
+}
+
 // List implements List.
 func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreator.ListBooksPayload) (res []*epubIndexCreator.Book, err error) {
 	res = []*epubIndexCreator.Book{}
 	s.logger.Print("epubIndexCreator.ListBooks")
+	bookRepo := repository.NewBookRepository()
+	books, err := bookRepo.FindAll(ctx, p.Limit, p.Offset)
+	if err != nil {
+		return nil, err
+	}
+	for _, book := range books {
+		res = append(res, convertBookToResponse(book))
+	}
 	return
 }
 
 func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator.FindBookPayload) (res *epubIndexCreator.Book, err error) {
 	res = &epubIndexCreator.Book{}
 	s.logger.Print("epubIndexCreator.FindBook")
+	bookRepo := repository.NewBookRepository()
+	book, err := bookRepo.FindByISBN(ctx, p.Isbn)
+	if err != nil {
+		return nil, err
+	}
+	res = convertBookToResponse(book)
+	return
+}
+
+func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreator.Book) (res *epubIndexCreator.Book, err error) {
+	s.logger.Print("epubIndexCreator.CreateBook")
+	return
+}
+
+func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreator.UpdateBookPayload) (res *epubIndexCreator.Book, err error) {
+	res = &epubIndexCreator.Book{}
+	s.logger.Print("epubIndexCreator.UpdateBook")
+	return
+}
+
+func (s *epubIndexCreatorsrvc) DeleteBook(ctx context.Context, p *epubIndexCreator.DeleteBookPayload) (err error) {
+	s.logger.Print("epubIndexCreator.DeleteBook")
 	return
 }

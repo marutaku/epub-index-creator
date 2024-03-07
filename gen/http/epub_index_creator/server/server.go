@@ -21,6 +21,9 @@ type Server struct {
 	Mounts             []*MountPoint
 	ListBooks          http.Handler
 	FindBook           http.Handler
+	CreateBook         http.Handler
+	UpdateBook         http.Handler
+	DeleteBook         http.Handler
 	GenHTTPOpenapiJSON http.Handler
 }
 
@@ -57,10 +60,16 @@ func New(
 		Mounts: []*MountPoint{
 			{"ListBooks", "GET", "/books"},
 			{"FindBook", "GET", "/books/{isbn}"},
+			{"CreateBook", "POST", "/books"},
+			{"UpdateBook", "PUT", "/books/{isbn}"},
+			{"DeleteBook", "DELETE", "/books/{isbn}"},
 			{"./gen/http/openapi.json", "GET", "/openapi.json"},
 		},
 		ListBooks:          NewListBooksHandler(e.ListBooks, mux, decoder, encoder, errhandler, formatter),
 		FindBook:           NewFindBookHandler(e.FindBook, mux, decoder, encoder, errhandler, formatter),
+		CreateBook:         NewCreateBookHandler(e.CreateBook, mux, decoder, encoder, errhandler, formatter),
+		UpdateBook:         NewUpdateBookHandler(e.UpdateBook, mux, decoder, encoder, errhandler, formatter),
+		DeleteBook:         NewDeleteBookHandler(e.DeleteBook, mux, decoder, encoder, errhandler, formatter),
 		GenHTTPOpenapiJSON: http.FileServer(fileSystemGenHTTPOpenapiJSON),
 	}
 }
@@ -72,6 +81,9 @@ func (s *Server) Service() string { return "epub_index_creator" }
 func (s *Server) Use(m func(http.Handler) http.Handler) {
 	s.ListBooks = m(s.ListBooks)
 	s.FindBook = m(s.FindBook)
+	s.CreateBook = m(s.CreateBook)
+	s.UpdateBook = m(s.UpdateBook)
+	s.DeleteBook = m(s.DeleteBook)
 }
 
 // MethodNames returns the methods served.
@@ -81,6 +93,9 @@ func (s *Server) MethodNames() []string { return epubindexcreator.MethodNames[:]
 func Mount(mux goahttp.Muxer, h *Server) {
 	MountListBooksHandler(mux, h.ListBooks)
 	MountFindBookHandler(mux, h.FindBook)
+	MountCreateBookHandler(mux, h.CreateBook)
+	MountUpdateBookHandler(mux, h.UpdateBook)
+	MountDeleteBookHandler(mux, h.DeleteBook)
 	MountGenHTTPOpenapiJSON(mux, goahttp.Replace("", "/./gen/http/openapi.json", h.GenHTTPOpenapiJSON))
 }
 
@@ -170,6 +185,159 @@ func NewFindBookHandler(
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
 		ctx = context.WithValue(ctx, goa.MethodKey, "FindBook")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountCreateBookHandler configures the mux to serve the "epub_index_creator"
+// service "CreateBook" endpoint.
+func MountCreateBookHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("POST", "/books", f)
+}
+
+// NewCreateBookHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "CreateBook" endpoint.
+func NewCreateBookHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeCreateBookRequest(mux, decoder)
+		encodeResponse = EncodeCreateBookResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "CreateBook")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountUpdateBookHandler configures the mux to serve the "epub_index_creator"
+// service "UpdateBook" endpoint.
+func MountUpdateBookHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("PUT", "/books/{isbn}", f)
+}
+
+// NewUpdateBookHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "UpdateBook" endpoint.
+func NewUpdateBookHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeUpdateBookRequest(mux, decoder)
+		encodeResponse = EncodeUpdateBookResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "UpdateBook")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountDeleteBookHandler configures the mux to serve the "epub_index_creator"
+// service "DeleteBook" endpoint.
+func MountDeleteBookHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("DELETE", "/books/{isbn}", f)
+}
+
+// NewDeleteBookHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "DeleteBook" endpoint.
+func NewDeleteBookHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeDeleteBookRequest(mux, decoder)
+		encodeResponse = EncodeDeleteBookResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "DeleteBook")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
 		payload, err := decodeRequest(r)
 		if err != nil {

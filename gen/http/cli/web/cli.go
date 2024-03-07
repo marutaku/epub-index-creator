@@ -22,7 +22,7 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `epub-index-creator (list-books|find-book)
+	return `epub-index-creator (list-books|find-book|create-book|update-book|delete-book)
 `
 }
 
@@ -30,7 +30,7 @@ func UsageCommands() string {
 func UsageExamples() string {
 	return os.Args[0] + ` epub-index-creator list-books --body '{
       "limit": 62,
-      "offset": 7864368622572586298
+      "offset": 8630709808136651387
    }'` + "\n" +
 		""
 }
@@ -52,10 +52,24 @@ func ParseEndpoint(
 
 		epubIndexCreatorFindBookFlags    = flag.NewFlagSet("find-book", flag.ExitOnError)
 		epubIndexCreatorFindBookIsbnFlag = epubIndexCreatorFindBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
+
+		epubIndexCreatorCreateBookFlags    = flag.NewFlagSet("create-book", flag.ExitOnError)
+		epubIndexCreatorCreateBookBodyFlag = epubIndexCreatorCreateBookFlags.String("body", "REQUIRED", "")
+
+		epubIndexCreatorUpdateBookFlags    = flag.NewFlagSet("update-book", flag.ExitOnError)
+		epubIndexCreatorUpdateBookBodyFlag = epubIndexCreatorUpdateBookFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorUpdateBookIsbnFlag = epubIndexCreatorUpdateBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
+
+		epubIndexCreatorDeleteBookFlags    = flag.NewFlagSet("delete-book", flag.ExitOnError)
+		epubIndexCreatorDeleteBookBodyFlag = epubIndexCreatorDeleteBookFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorDeleteBookIsbnFlag = epubIndexCreatorDeleteBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
 	)
 	epubIndexCreatorFlags.Usage = epubIndexCreatorUsage
 	epubIndexCreatorListBooksFlags.Usage = epubIndexCreatorListBooksUsage
 	epubIndexCreatorFindBookFlags.Usage = epubIndexCreatorFindBookUsage
+	epubIndexCreatorCreateBookFlags.Usage = epubIndexCreatorCreateBookUsage
+	epubIndexCreatorUpdateBookFlags.Usage = epubIndexCreatorUpdateBookUsage
+	epubIndexCreatorDeleteBookFlags.Usage = epubIndexCreatorDeleteBookUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -97,6 +111,15 @@ func ParseEndpoint(
 			case "find-book":
 				epf = epubIndexCreatorFindBookFlags
 
+			case "create-book":
+				epf = epubIndexCreatorCreateBookFlags
+
+			case "update-book":
+				epf = epubIndexCreatorUpdateBookFlags
+
+			case "delete-book":
+				epf = epubIndexCreatorDeleteBookFlags
+
 			}
 
 		}
@@ -128,6 +151,15 @@ func ParseEndpoint(
 			case "find-book":
 				endpoint = c.FindBook()
 				data, err = epubindexcreatorc.BuildFindBookPayload(*epubIndexCreatorFindBookIsbnFlag)
+			case "create-book":
+				endpoint = c.CreateBook()
+				data, err = epubindexcreatorc.BuildCreateBookPayload(*epubIndexCreatorCreateBookBodyFlag)
+			case "update-book":
+				endpoint = c.UpdateBook()
+				data, err = epubindexcreatorc.BuildUpdateBookPayload(*epubIndexCreatorUpdateBookBodyFlag, *epubIndexCreatorUpdateBookIsbnFlag)
+			case "delete-book":
+				endpoint = c.DeleteBook()
+				data, err = epubindexcreatorc.BuildDeleteBookPayload(*epubIndexCreatorDeleteBookBodyFlag, *epubIndexCreatorDeleteBookIsbnFlag)
 			}
 		}
 	}
@@ -148,6 +180,9 @@ Usage:
 COMMAND:
     list-books: ListBooks implements ListBooks.
     find-book: FindBook implements FindBook.
+    create-book: CreateBook implements CreateBook.
+    update-book: UpdateBook implements UpdateBook.
+    delete-book: DeleteBook implements DeleteBook.
 
 Additional help:
     %[1]s epub-index-creator COMMAND --help
@@ -162,7 +197,7 @@ ListBooks implements ListBooks.
 Example:
     %[1]s epub-index-creator list-books --body '{
       "limit": 62,
-      "offset": 7864368622572586298
+      "offset": 8630709808136651387
    }'
 `, os.Args[0])
 }
@@ -174,6 +209,146 @@ FindBook implements FindBook.
     -isbn STRING: ISBN of the book
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "Reiciendis est est ut nihil."
+    %[1]s epub-index-creator find-book --isbn "Recusandae saepe velit."
+`, os.Args[0])
+}
+
+func epubIndexCreatorCreateBookUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator create-book -body JSON
+
+CreateBook implements CreateBook.
+    -body JSON: 
+
+Example:
+    %[1]s epub-index-creator create-book --body '{
+      "author": "Molestiae veniam veritatis est sit error voluptatum.",
+      "isbn": "Aperiam in reiciendis quaerat temporibus omnis.",
+      "pages": [
+         {
+            "keywords": [
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               }
+            ],
+            "title": "Cumque non consequatur fuga."
+         },
+         {
+            "keywords": [
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               }
+            ],
+            "title": "Cumque non consequatur fuga."
+         },
+         {
+            "keywords": [
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               },
+               {
+                  "keyword": "Dolorem et iste sit quia."
+               }
+            ],
+            "title": "Cumque non consequatur fuga."
+         }
+      ],
+      "publisher": "Nihil harum quia consequatur voluptates maiores.",
+      "title": "Quis rerum."
+   }'
+`, os.Args[0])
+}
+
+func epubIndexCreatorUpdateBookUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator update-book -body JSON -isbn STRING
+
+UpdateBook implements UpdateBook.
+    -body JSON: 
+    -isbn STRING: ISBN of the book
+
+Example:
+    %[1]s epub-index-creator update-book --body '{
+      "author": "Dignissimos sed qui et consequatur aspernatur.",
+      "publisher": "Quam nemo eaque aut.",
+      "title": "Natus voluptatum voluptatem corporis."
+   }' --isbn "Exercitationem placeat ad."
+`, os.Args[0])
+}
+
+func epubIndexCreatorDeleteBookUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator delete-book -body JSON -isbn STRING
+
+DeleteBook implements DeleteBook.
+    -body JSON: 
+    -isbn STRING: ISBN of the book
+
+Example:
+    %[1]s epub-index-creator delete-book --body '{
+      "book": {
+         "author": "Suscipit facilis quasi qui ab.",
+         "isbn": "Veniam assumenda quae dolores cum molestiae.",
+         "pages": [
+            {
+               "keywords": [
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  }
+               ],
+               "title": "Cumque non consequatur fuga."
+            },
+            {
+               "keywords": [
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  },
+                  {
+                     "keyword": "Dolorem et iste sit quia."
+                  }
+               ],
+               "title": "Cumque non consequatur fuga."
+            }
+         ],
+         "publisher": "Magnam voluptatem occaecati possimus non facere.",
+         "title": "Quis sequi voluptas provident."
+      }
+   }' --isbn "Sit et eum."
 `, os.Args[0])
 }

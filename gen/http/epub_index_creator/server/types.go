@@ -21,6 +21,38 @@ type ListBooksRequestBody struct {
 	Offset *int `form:"offset,omitempty" json:"offset,omitempty" xml:"offset,omitempty"`
 }
 
+// CreateBookRequestBody is the type of the "epub_index_creator" service
+// "CreateBook" endpoint HTTP request body.
+type CreateBookRequestBody struct {
+	// ISBN of the book
+	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
+	// Title of the book
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Author of the book
+	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Publisher of the book
+	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
+	// Pages of the book
+	Pages []*PageRequestBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+}
+
+// UpdateBookRequestBody is the type of the "epub_index_creator" service
+// "UpdateBook" endpoint HTTP request body.
+type UpdateBookRequestBody struct {
+	// Title of the book
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Author of the book
+	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Publisher of the book
+	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
+}
+
+// DeleteBookRequestBody is the type of the "epub_index_creator" service
+// "DeleteBook" endpoint HTTP request body.
+type DeleteBookRequestBody struct {
+	Book *BookRequestBody `form:"book,omitempty" json:"book,omitempty" xml:"book,omitempty"`
+}
+
 // ListBooksResponseBody is the type of the "epub_index_creator" service
 // "ListBooks" endpoint HTTP response body.
 type ListBooksResponseBody []*BookResponse
@@ -34,6 +66,38 @@ type FindBookResponseBody struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
 	Author string `form:"author" json:"author" xml:"author"`
+	// Publisher of the book
+	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
+	// Pages of the book
+	Pages []*PageResponseBody `form:"pages" json:"pages" xml:"pages"`
+}
+
+// CreateBookResponseBody is the type of the "epub_index_creator" service
+// "CreateBook" endpoint HTTP response body.
+type CreateBookResponseBody struct {
+	// ISBN of the book
+	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
+	// Title of the book
+	Title string `form:"title" json:"title" xml:"title"`
+	// Author of the book
+	Author string `form:"author" json:"author" xml:"author"`
+	// Publisher of the book
+	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
+	// Pages of the book
+	Pages []*PageResponseBody `form:"pages" json:"pages" xml:"pages"`
+}
+
+// UpdateBookResponseBody is the type of the "epub_index_creator" service
+// "UpdateBook" endpoint HTTP response body.
+type UpdateBookResponseBody struct {
+	// ISBN of the book
+	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
+	// Title of the book
+	Title string `form:"title" json:"title" xml:"title"`
+	// Author of the book
+	Author string `form:"author" json:"author" xml:"author"`
+	// Publisher of the book
+	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 	// Pages of the book
 	Pages []*PageResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
@@ -46,6 +110,8 @@ type BookResponse struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Author of the book
 	Author string `form:"author" json:"author" xml:"author"`
+	// Publisher of the book
+	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 	// Pages of the book
 	Pages []*PageResponse `form:"pages" json:"pages" xml:"pages"`
 }
@@ -78,6 +144,34 @@ type KeywordResponseBody struct {
 	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
 }
 
+// PageRequestBody is used to define fields on request body types.
+type PageRequestBody struct {
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []*KeywordRequestBody `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
+// KeywordRequestBody is used to define fields on request body types.
+type KeywordRequestBody struct {
+	// Keyword of the page
+	Keyword *string `form:"keyword,omitempty" json:"keyword,omitempty" xml:"keyword,omitempty"`
+}
+
+// BookRequestBody is used to define fields on request body types.
+type BookRequestBody struct {
+	// ISBN of the book
+	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
+	// Title of the book
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Author of the book
+	Author *string `form:"author,omitempty" json:"author,omitempty" xml:"author,omitempty"`
+	// Publisher of the book
+	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
+	// Pages of the book
+	Pages []*PageRequestBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+}
+
 // NewListBooksResponseBody builds the HTTP response body from the result of
 // the "ListBooks" endpoint of the "epub_index_creator" service.
 func NewListBooksResponseBody(res []*epubindexcreator.Book) ListBooksResponseBody {
@@ -92,9 +186,50 @@ func NewListBooksResponseBody(res []*epubindexcreator.Book) ListBooksResponseBod
 // "FindBook" endpoint of the "epub_index_creator" service.
 func NewFindBookResponseBody(res *epubindexcreator.Book) *FindBookResponseBody {
 	body := &FindBookResponseBody{
-		Isbn:   res.Isbn,
-		Title:  res.Title,
-		Author: res.Author,
+		Isbn:      res.Isbn,
+		Title:     res.Title,
+		Author:    res.Author,
+		Publisher: res.Publisher,
+	}
+	if res.Pages != nil {
+		body.Pages = make([]*PageResponseBody, len(res.Pages))
+		for i, val := range res.Pages {
+			body.Pages[i] = marshalEpubindexcreatorPageToPageResponseBody(val)
+		}
+	} else {
+		body.Pages = []*PageResponseBody{}
+	}
+	return body
+}
+
+// NewCreateBookResponseBody builds the HTTP response body from the result of
+// the "CreateBook" endpoint of the "epub_index_creator" service.
+func NewCreateBookResponseBody(res *epubindexcreator.Book) *CreateBookResponseBody {
+	body := &CreateBookResponseBody{
+		Isbn:      res.Isbn,
+		Title:     res.Title,
+		Author:    res.Author,
+		Publisher: res.Publisher,
+	}
+	if res.Pages != nil {
+		body.Pages = make([]*PageResponseBody, len(res.Pages))
+		for i, val := range res.Pages {
+			body.Pages[i] = marshalEpubindexcreatorPageToPageResponseBody(val)
+		}
+	} else {
+		body.Pages = []*PageResponseBody{}
+	}
+	return body
+}
+
+// NewUpdateBookResponseBody builds the HTTP response body from the result of
+// the "UpdateBook" endpoint of the "epub_index_creator" service.
+func NewUpdateBookResponseBody(res *epubindexcreator.Book) *UpdateBookResponseBody {
+	body := &UpdateBookResponseBody{
+		Isbn:      res.Isbn,
+		Title:     res.Title,
+		Author:    res.Author,
+		Publisher: res.Publisher,
 	}
 	if res.Pages != nil {
 		body.Pages = make([]*PageResponseBody, len(res.Pages))
@@ -136,6 +271,46 @@ func NewFindBookPayload(isbn string) *epubindexcreator.FindBookPayload {
 	return v
 }
 
+// NewCreateBookBook builds a epub_index_creator service CreateBook endpoint
+// payload.
+func NewCreateBookBook(body *CreateBookRequestBody) *epubindexcreator.Book {
+	v := &epubindexcreator.Book{
+		Isbn:      *body.Isbn,
+		Title:     *body.Title,
+		Author:    *body.Author,
+		Publisher: *body.Publisher,
+	}
+	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+	for i, val := range body.Pages {
+		v.Pages[i] = unmarshalPageRequestBodyToEpubindexcreatorPage(val)
+	}
+
+	return v
+}
+
+// NewUpdateBookPayload builds a epub_index_creator service UpdateBook endpoint
+// payload.
+func NewUpdateBookPayload(body *UpdateBookRequestBody, isbn string) *epubindexcreator.UpdateBookPayload {
+	v := &epubindexcreator.UpdateBookPayload{
+		Title:     *body.Title,
+		Author:    *body.Author,
+		Publisher: *body.Publisher,
+	}
+	v.Isbn = isbn
+
+	return v
+}
+
+// NewDeleteBookPayload builds a epub_index_creator service DeleteBook endpoint
+// payload.
+func NewDeleteBookPayload(body *DeleteBookRequestBody, isbn string) *epubindexcreator.DeleteBookPayload {
+	v := &epubindexcreator.DeleteBookPayload{}
+	v.Book = unmarshalBookRequestBodyToEpubindexcreatorBook(body.Book)
+	v.Isbn = isbn
+
+	return v
+}
+
 // ValidateListBooksRequestBody runs the validations defined on
 // ListBooksRequestBody
 func ValidateListBooksRequestBody(body *ListBooksRequestBody) (err error) {
@@ -152,6 +327,116 @@ func ValidateListBooksRequestBody(body *ListBooksRequestBody) (err error) {
 	if body.Offset != nil {
 		if *body.Offset < 0 {
 			err = goa.MergeErrors(err, goa.InvalidRangeError("body.offset", *body.Offset, 0, true))
+		}
+	}
+	return
+}
+
+// ValidateCreateBookRequestBody runs the validations defined on
+// CreateBookRequestBody
+func ValidateCreateBookRequestBody(body *CreateBookRequestBody) (err error) {
+	if body.Isbn == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("isbn", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Author == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Publisher == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
+	}
+	if body.Pages == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
+	}
+	for _, e := range body.Pages {
+		if e != nil {
+			if err2 := ValidatePageRequestBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidateUpdateBookRequestBody runs the validations defined on
+// UpdateBookRequestBody
+func ValidateUpdateBookRequestBody(body *UpdateBookRequestBody) (err error) {
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Author == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Publisher == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
+	}
+	return
+}
+
+// ValidateDeleteBookRequestBody runs the validations defined on
+// DeleteBookRequestBody
+func ValidateDeleteBookRequestBody(body *DeleteBookRequestBody) (err error) {
+	if body.Book == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("book", "body"))
+	}
+	if body.Book != nil {
+		if err2 := ValidateBookRequestBody(body.Book); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	return
+}
+
+// ValidatePageRequestBody runs the validations defined on PageRequestBody
+func ValidatePageRequestBody(body *PageRequestBody) (err error) {
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	for _, e := range body.Keywords {
+		if e != nil {
+			if err2 := ValidateKeywordRequestBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidateKeywordRequestBody runs the validations defined on KeywordRequestBody
+func ValidateKeywordRequestBody(body *KeywordRequestBody) (err error) {
+	if body.Keyword == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "body"))
+	}
+	return
+}
+
+// ValidateBookRequestBody runs the validations defined on BookRequestBody
+func ValidateBookRequestBody(body *BookRequestBody) (err error) {
+	if body.Isbn == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("isbn", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Author == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("author", "body"))
+	}
+	if body.Publisher == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
+	}
+	if body.Pages == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
+	}
+	for _, e := range body.Pages {
+		if e != nil {
+			if err2 := ValidatePageRequestBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
 		}
 	}
 	return

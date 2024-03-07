@@ -19,7 +19,7 @@ paths:
                             $ref: '#/components/schemas/ListBooksRequestBody'
                         example:
                             limit: 62
-                            offset: 7864368622572586298
+                            offset: 8630709808136651387
             responses:
                 "200":
                     description: OK response.
@@ -30,204 +30,231 @@ paths:
                                 items:
                                     $ref: '#/components/schemas/Book'
                                 example:
-                                    - author: Eligendi ipsa porro.
-                                      isbn: Aliquam qui eligendi placeat.
+                                    - author: Est eligendi sit velit quo reiciendis.
+                                      isbn: Beatae et non consequatur dolore ad tempore.
                                       pages:
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                        - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                      title: Nam quibusdam vero rem aliquam voluptatibus.
-                                    - author: Eligendi ipsa porro.
-                                      isbn: Aliquam qui eligendi placeat.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
+                                      publisher: Est ut.
+                                      title: Incidunt adipisci consectetur consequatur repudiandae.
+                                    - author: Est eligendi sit velit quo reiciendis.
+                                      isbn: Beatae et non consequatur dolore ad tempore.
                                       pages:
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                        - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                      title: Nam quibusdam vero rem aliquam voluptatibus.
-                                    - author: Eligendi ipsa porro.
-                                      isbn: Aliquam qui eligendi placeat.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
+                                      publisher: Est ut.
+                                      title: Incidunt adipisci consectetur consequatur repudiandae.
+                                    - author: Est eligendi sit velit quo reiciendis.
+                                      isbn: Beatae et non consequatur dolore ad tempore.
                                       pages:
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
                                         - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                        - keywords:
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                            - keyword: Non consequatur dolore ad tempore aut.
-                                          title: In omnis quaerat odit numquam ut repudiandae.
-                                      title: Nam quibusdam vero rem aliquam voluptatibus.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                                          title: Velit dolores aperiam adipisci qui.
+                                      publisher: Est ut.
+                                      title: Incidunt adipisci consectetur consequatur repudiandae.
                             example:
-                                - author: Eligendi ipsa porro.
-                                  isbn: Aliquam qui eligendi placeat.
+                                - author: Est eligendi sit velit quo reiciendis.
+                                  isbn: Beatae et non consequatur dolore ad tempore.
                                   pages:
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                    - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                  title: Nam quibusdam vero rem aliquam voluptatibus.
-                                - author: Eligendi ipsa porro.
-                                  isbn: Aliquam qui eligendi placeat.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
+                                  publisher: Est ut.
+                                  title: Incidunt adipisci consectetur consequatur repudiandae.
+                                - author: Est eligendi sit velit quo reiciendis.
+                                  isbn: Beatae et non consequatur dolore ad tempore.
                                   pages:
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                    - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                  title: Nam quibusdam vero rem aliquam voluptatibus.
-                                - author: Eligendi ipsa porro.
-                                  isbn: Aliquam qui eligendi placeat.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
+                                  publisher: Est ut.
+                                  title: Incidunt adipisci consectetur consequatur repudiandae.
+                                - author: Est eligendi sit velit quo reiciendis.
+                                  isbn: Beatae et non consequatur dolore ad tempore.
                                   pages:
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                                      title: Velit dolores aperiam adipisci qui.
+                                  publisher: Est ut.
+                                  title: Incidunt adipisci consectetur consequatur repudiandae.
+        post:
+            tags:
+                - epub_index_creator
+            summary: CreateBook epub_index_creator
+            operationId: epub_index_creator#CreateBook
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/Book'
+                        example:
+                            author: Molestiae veniam veritatis est sit error voluptatum.
+                            isbn: Aperiam in reiciendis quaerat temporibus omnis.
+                            pages:
+                                - keywords:
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                  title: Cumque non consequatur fuga.
+                                - keywords:
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                  title: Cumque non consequatur fuga.
+                                - keywords:
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                    - keyword: Dolorem et iste sit quia.
+                                  title: Cumque non consequatur fuga.
+                            publisher: Nihil harum quia consequatur voluptates maiores.
+                            title: Quis rerum.
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Book'
+                            example:
+                                author: Ex asperiores aspernatur enim.
+                                isbn: Ratione quidem nam.
+                                pages:
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                  title: Nam quibusdam vero rem aliquam voluptatibus.
-                                - author: Eligendi ipsa porro.
-                                  isbn: Aliquam qui eligendi placeat.
-                                  pages:
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
                                     - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                    - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                    - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                    - keywords:
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                        - keyword: Non consequatur dolore ad tempore aut.
-                                      title: In omnis quaerat odit numquam ut repudiandae.
-                                  title: Nam quibusdam vero rem aliquam voluptatibus.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                publisher: Laboriosam omnis tenetur iusto animi mollitia.
+                                title: Animi assumenda.
     /books/{isbn}:
+        delete:
+            tags:
+                - epub_index_creator
+            summary: DeleteBook epub_index_creator
+            operationId: epub_index_creator#DeleteBook
+            parameters:
+                - name: isbn
+                  in: path
+                  description: ISBN of the book
+                  required: true
+                  schema:
+                    type: string
+                    description: ISBN of the book
+                    example: Nostrum perspiciatis quo commodi.
+                  example: Vel est velit illum qui.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/DeleteBookRequestBody'
+                        example:
+                            book:
+                                author: Suscipit facilis quasi qui ab.
+                                isbn: Veniam assumenda quae dolores cum molestiae.
+                                pages:
+                                    - keywords:
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                      title: Cumque non consequatur fuga.
+                                    - keywords:
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                        - keyword: Dolorem et iste sit quia.
+                                      title: Cumque non consequatur fuga.
+                                publisher: Magnam voluptatem occaecati possimus non facere.
+                                title: Quis sequi voluptas provident.
+            responses:
+                "204":
+                    description: No Content response.
         get:
             tags:
                 - epub_index_creator
@@ -241,8 +268,8 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: Eius facere non optio voluptas.
-                  example: Rerum consequatur.
+                    example: Neque sequi cupiditate omnis et animi.
+                  example: Qui laborum voluptatibus iste.
             responses:
                 "200":
                     description: OK response.
@@ -251,30 +278,97 @@ paths:
                             schema:
                                 $ref: '#/components/schemas/Book'
                             example:
-                                author: Saepe velit ullam.
-                                isbn: Sint sint repellat sapiente porro.
+                                author: Qui dolorem perferendis voluptatibus aliquam.
+                                isbn: Nulla corporis aspernatur ut dicta.
                                 pages:
                                     - keywords:
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                      title: Velit dolores aperiam adipisci qui.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
                                     - keywords:
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                      title: Velit dolores aperiam adipisci qui.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
                                     - keywords:
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                      title: Velit dolores aperiam adipisci qui.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
                                     - keywords:
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                        - keyword: Veniam est aut occaecati odio corrupti quis.
-                                      title: Velit dolores aperiam adipisci qui.
-                                title: Amet unde.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                publisher: Molestias aliquam sunt et numquam esse in.
+                                title: Officiis totam.
+        put:
+            tags:
+                - epub_index_creator
+            summary: UpdateBook epub_index_creator
+            operationId: epub_index_creator#UpdateBook
+            parameters:
+                - name: isbn
+                  in: path
+                  description: ISBN of the book
+                  required: true
+                  schema:
+                    type: string
+                    description: ISBN of the book
+                    example: Autem tempore nemo explicabo voluptatem illum provident.
+                  example: Explicabo ratione praesentium voluptates.
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: '#/components/schemas/UpdateBookRequestBody'
+                        example:
+                            author: Dignissimos sed qui et consequatur aspernatur.
+                            publisher: Quam nemo eaque aut.
+                            title: Natus voluptatum voluptatem corporis.
+            responses:
+                "200":
+                    description: OK response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/Book'
+                            example:
+                                author: Dolore modi.
+                                isbn: Eos temporibus itaque nostrum magni.
+                                pages:
+                                    - keywords:
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                    - keywords:
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                    - keywords:
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                    - keywords:
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                        - keyword: Autem autem facilis aliquam ab dolor.
+                                      title: Omnis et atque labore ad ut laboriosam.
+                                publisher: Non ducimus officia saepe quos.
+                                title: Expedita dolor natus.
     /openapi.json:
         get:
             tags:
@@ -292,11 +386,11 @@ components:
                 author:
                     type: string
                     description: Author of the book
-                    example: Non ducimus officia saepe quos.
+                    example: Est et.
                 isbn:
                     type: string
                     description: ISBN of the book
-                    example: Officiis expedita dolor natus.
+                    example: Ut deleniti debitis.
                 pages:
                     type: array
                     items:
@@ -304,52 +398,90 @@ components:
                     description: Pages of the book
                     example:
                         - keywords:
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                          title: In omnis quaerat odit numquam ut repudiandae.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                          title: Velit dolores aperiam adipisci qui.
                         - keywords:
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                            - keyword: Non consequatur dolore ad tempore aut.
-                          title: In omnis quaerat odit numquam ut repudiandae.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                            - keyword: Veniam est aut occaecati odio corrupti quis.
+                          title: Velit dolores aperiam adipisci qui.
+                publisher:
+                    type: string
+                    description: Publisher of the book
+                    example: Doloremque officia quia dolores.
                 title:
                     type: string
                     description: Title of the book
-                    example: Dolore modi.
+                    example: Dolor nisi eos dolores ullam cupiditate sapiente.
             example:
-                author: A ipsum deserunt incidunt non.
-                isbn: Facere laudantium non.
+                author: Impedit dicta iure eum et.
+                isbn: Voluptatem quidem aut quia eos.
                 pages:
                     - keywords:
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                      title: In omnis quaerat odit numquam ut repudiandae.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                      title: Velit dolores aperiam adipisci qui.
                     - keywords:
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
-                      title: In omnis quaerat odit numquam ut repudiandae.
-                title: Et eum officia.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                      title: Velit dolores aperiam adipisci qui.
+                    - keywords:
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                      title: Velit dolores aperiam adipisci qui.
+                    - keywords:
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                      title: Velit dolores aperiam adipisci qui.
+                publisher: Et iste molestiae esse eos beatae et.
+                title: Omnis sit rerum sed.
             required:
                 - isbn
                 - title
                 - author
+                - publisher
                 - pages
+        DeleteBookRequestBody:
+            type: object
+            properties:
+                book:
+                    $ref: '#/components/schemas/Book'
+            example:
+                book:
+                    author: Suscipit facilis quasi qui ab.
+                    isbn: Veniam assumenda quae dolores cum molestiae.
+                    pages:
+                        - keywords:
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                          title: Cumque non consequatur fuga.
+                        - keywords:
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                            - keyword: Dolorem et iste sit quia.
+                          title: Cumque non consequatur fuga.
+                    publisher: Magnam voluptatem occaecati possimus non facere.
+                    title: Quis sequi voluptas provident.
+            required:
+                - book
         Keyword:
             type: object
             properties:
                 keyword:
                     type: string
                     description: Keyword of the page
-                    example: Esse rerum veniam assumenda quae dolores cum.
+                    example: Molestias voluptatibus nobis sed quos magnam.
             example:
-                keyword: At quis sequi voluptas provident ducimus.
+                keyword: Et provident quia tempore consequatur.
             required:
                 - keyword
         ListBooksRequestBody:
@@ -359,7 +491,7 @@ components:
                     type: integer
                     description: Maximum number of books to return
                     default: 100
-                    example: 94
+                    example: 19
                     format: int64
                     minimum: 1
                     maximum: 100
@@ -367,12 +499,12 @@ components:
                     type: integer
                     description: Field to paginate books
                     default: 0
-                    example: 1179732270369932724
+                    example: 7460377009001458954
                     format: int64
                     minimum: 0
             example:
-                limit: 11
-                offset: 2319501139948187871
+                limit: 27
+                offset: 4860095079844541244
         Page:
             type: object
             properties:
@@ -382,19 +514,43 @@ components:
                         $ref: '#/components/schemas/Keyword'
                     description: Keywords of the page
                     example:
-                        - keyword: Non consequatur dolore ad tempore aut.
-                        - keyword: Non consequatur dolore ad tempore aut.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
+                        - keyword: Veniam est aut occaecati odio corrupti quis.
                 title:
                     type: string
                     description: Title of the page
-                    example: Totam voluptatibus excepturi dignissimos placeat nam.
+                    example: Est sunt maxime laudantium.
             example:
                 keywords:
-                    - keyword: Non consequatur dolore ad tempore aut.
-                    - keyword: Non consequatur dolore ad tempore aut.
-                title: Quasi qui ab beatae magnam voluptatem.
+                    - keyword: Veniam est aut occaecati odio corrupti quis.
+                    - keyword: Veniam est aut occaecati odio corrupti quis.
+                    - keyword: Veniam est aut occaecati odio corrupti quis.
+                title: Similique ut autem non voluptas saepe repellat.
             required:
                 - title
                 - keywords
+        UpdateBookRequestBody:
+            type: object
+            properties:
+                author:
+                    type: string
+                    description: Author of the book
+                    example: Est corporis ipsa repellendus doloremque eos.
+                publisher:
+                    type: string
+                    description: Publisher of the book
+                    example: Accusantium culpa perspiciatis impedit voluptate ipsa.
+                title:
+                    type: string
+                    description: Title of the book
+                    example: Provident quo modi ullam voluptatibus sint.
+            example:
+                author: Incidunt qui harum iure.
+                publisher: Vitae aut laborum voluptates magni.
+                title: Itaque dolorem asperiores.
+            required:
+                - title
+                - author
+                - publisher
 tags:
     - name: epub_index_creator
