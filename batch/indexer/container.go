@@ -1,4 +1,4 @@
-package expand
+package indexer
 
 type RootFile struct {
 	FullPath  string `xml:"full-path,attr"`

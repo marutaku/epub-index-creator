@@ -1,4 +1,4 @@
-package expand
+package indexer
 
 import (
 	"encoding/xml"

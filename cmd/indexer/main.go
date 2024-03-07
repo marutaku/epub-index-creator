@@ -5,20 +5,20 @@ import (
 	"log"
 	"os"
 
+	"github.com/marutaku/epub-index-creator/batch/database"
+	"github.com/marutaku/epub-index-creator/batch/indexer"
 	"github.com/marutaku/epub-index-creator/domain"
-	"github.com/marutaku/epub-index-creator/internal/database"
-	"github.com/marutaku/epub-index-creator/internal/expand"
 	"github.com/urfave/cli/v2"
 )
 
 func createBookFromEpubFile(epubFilePath string) (*domain.Book, error) {
 	fmt.Printf("epubFilePath: %s\n", epubFilePath)
-	tempDir, err := expand.UnzipEPub(epubFilePath)
+	tempDir, err := indexer.UnzipEPub(epubFilePath)
 	if err != nil {
 		return nil, err
 	}
 	fmt.Printf("tempDir: %s\n", tempDir)
-	opfFilePath, err := expand.FindOPFFilePath(tempDir)
+	opfFilePath, err := indexer.FindOPFFilePath(tempDir)
 	if err != nil {
 		return nil, err
 	}
