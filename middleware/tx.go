@@ -10,7 +10,7 @@ import (
 
 func WithTx(ctx context.Context, client *ent.Client, fn func(ctx context.Context) (interface{}, error)) (interface{}, error) {
 	tx, err := client.Tx(ctx)
-	ctx = ent.NewContext(ctx, client)
+	ctx = ent.NewTxContext(ctx, tx)
 	if err != nil {
 		return nil, err
 	}
