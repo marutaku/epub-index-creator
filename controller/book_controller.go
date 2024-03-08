@@ -21,18 +21,20 @@ func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
 	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase()}
 }
 
-func convertBookToResponse(book *domain.Book) *epubIndexCreator.Book {
-	return &epubIndexCreator.Book{
-		Isbn:   epubIndexCreator.ISBN(book.ISBN),
-		Title:  book.Title,
-		Author: book.Author,
-		Pages:  make([]*epubIndexCreator.Page, 0), // TODO: Implement
+func convertBookToResponse(book *domain.Book) *epubIndexCreator.BookResponse {
+	return &epubIndexCreator.BookResponse{
+		Isbn:      epubIndexCreator.ISBN(book.ISBN),
+		Title:     book.Title,
+		Author:    book.Author,
+		Language:  book.Language,
+		Publisher: book.Publisher,
+		Pages:     make([]*epubIndexCreator.PageResponse, 0), // TODO: Implement
 	}
 }
 
 // List implements List.
-func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreator.ListBooksPayload) (res []*epubIndexCreator.Book, err error) {
-	res = []*epubIndexCreator.Book{}
+func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreator.ListBooksPayload) (res []*epubIndexCreator.BookResponse, err error) {
+	res = []*epubIndexCreator.BookResponse{}
 	s.logger.Print("epubIndexCreator.ListBooks")
 	books, err := s.bookUsecase.ListBooks(ctx, p.Limit, p.Offset)
 	for _, book := range books {
@@ -41,8 +43,8 @@ func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreato
 	return
 }
 
-func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator.FindBookPayload) (res *epubIndexCreator.Book, err error) {
-	res = &epubIndexCreator.Book{}
+func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator.FindBookPayload) (res *epubIndexCreator.BookResponse, err error) {
+	res = &epubIndexCreator.BookResponse{}
 	s.logger.Print("epubIndexCreator.FindBook")
 	book, err := s.bookUsecase.FindBook(ctx, string(p.Isbn))
 	if err != nil {
@@ -52,7 +54,7 @@ func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator
 	return
 }
 
-func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreator.Book) (res *epubIndexCreator.Book, err error) {
+func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreator.BookRequest) (res *epubIndexCreator.BookResponse, err error) {
 	s.logger.Print("epubIndexCreator.CreateBook")
 	book, err := s.bookUsecase.CreateBook(ctx, string(p.Isbn), p.Title, p.Author, p.Language, p.Publisher)
 	if err != nil {
@@ -62,8 +64,8 @@ func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreat
 	return
 }
 
-func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreator.UpdateBookPayload) (res *epubIndexCreator.Book, err error) {
-	res = &epubIndexCreator.Book{}
+func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreator.BookRequest) (res *epubIndexCreator.BookResponse, err error) {
+	res = &epubIndexCreator.BookResponse{}
 	s.logger.Print("epubIndexCreator.UpdateBook")
 	book, err := s.bookUsecase.UpdateBook(ctx, string(p.Isbn), p.Title, p.Author, p.Language, p.Publisher)
 	if err != nil {
@@ -82,8 +84,8 @@ func (s *epubIndexCreatorsrvc) DeleteBook(ctx context.Context, p *epubIndexCreat
 	return
 }
 
-func (s *epubIndexCreatorsrvc) CreatePage(ctx context.Context, p *epubIndexCreator.CreatePagePayload) (res *epubIndexCreator.Page, err error) {
-	res = &epubIndexCreator.Page{}
+func (s *epubIndexCreatorsrvc) CreatePage(ctx context.Context, p *epubIndexCreator.CreatePagePayload) (res *epubIndexCreator.PageResponse, err error) {
+	res = &epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.CreatePage")
 	return
 }

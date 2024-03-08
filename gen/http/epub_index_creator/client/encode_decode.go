@@ -180,9 +180,9 @@ func (c *Client) BuildCreateBookRequest(ctx context.Context, v any) (*http.Reque
 // epub_index_creator CreateBook server.
 func EncodeCreateBookRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
 	return func(req *http.Request, v any) error {
-		p, ok := v.(*epubindexcreator.BookResponse)
+		p, ok := v.(*epubindexcreator.BookRequest)
 		if !ok {
-			return goahttp.ErrInvalidType("epub_index_creator", "CreateBook", "*epubindexcreator.BookResponse", v)
+			return goahttp.ErrInvalidType("epub_index_creator", "CreateBook", "*epubindexcreator.BookRequest", v)
 		}
 		body := NewCreateBookRequestBody(p)
 		if err := encoder(req).Encode(&body); err != nil {
@@ -490,44 +490,6 @@ func unmarshalPageResponseResponseBodyToEpubindexcreatorPageResponse(v *PageResp
 	res.Keywords = make([]string, len(v.Keywords))
 	for i, val := range v.Keywords {
 		res.Keywords[i] = val
-	}
-
-	return res
-}
-
-// marshalEpubindexcreatorPageResponseToPageResponseRequestBody builds a value
-// of type *PageResponseRequestBody from a value of type
-// *epubindexcreator.PageResponse.
-func marshalEpubindexcreatorPageResponseToPageResponseRequestBody(v *epubindexcreator.PageResponse) *PageResponseRequestBody {
-	res := &PageResponseRequestBody{
-		Title: v.Title,
-	}
-	if v.Keywords != nil {
-		res.Keywords = make([]string, len(v.Keywords))
-		for i, val := range v.Keywords {
-			res.Keywords[i] = val
-		}
-	} else {
-		res.Keywords = []string{}
-	}
-
-	return res
-}
-
-// marshalPageResponseRequestBodyToEpubindexcreatorPageResponse builds a value
-// of type *epubindexcreator.PageResponse from a value of type
-// *PageResponseRequestBody.
-func marshalPageResponseRequestBodyToEpubindexcreatorPageResponse(v *PageResponseRequestBody) *epubindexcreator.PageResponse {
-	res := &epubindexcreator.PageResponse{
-		Title: v.Title,
-	}
-	if v.Keywords != nil {
-		res.Keywords = make([]string, len(v.Keywords))
-		for i, val := range v.Keywords {
-			res.Keywords[i] = val
-		}
-	} else {
-		res.Keywords = []string{}
 	}
 
 	return res

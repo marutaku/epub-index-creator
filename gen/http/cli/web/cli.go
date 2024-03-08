@@ -220,7 +220,7 @@ FindBook implements FindBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "882-04-483-327-9"
+    %[1]s epub-index-creator find-book --isbn "387-9-8-98-2"
 `, os.Args[0])
 }
 
@@ -232,45 +232,11 @@ CreateBook implements CreateBook.
 
 Example:
     %[1]s epub-index-creator create-book --body '{
-      "author": "Alan A. A. Donovan, Brian W. Kernighan",
-      "isbn": "171-16-075-1-0",
-      "language": "English",
-      "pages": [
-         {
-            "keywords": [
-               "Introduction",
-               "Chapter 1",
-               "Chapter 2"
-            ],
-            "title": "Introduction"
-         },
-         {
-            "keywords": [
-               "Introduction",
-               "Chapter 1",
-               "Chapter 2"
-            ],
-            "title": "Introduction"
-         },
-         {
-            "keywords": [
-               "Introduction",
-               "Chapter 1",
-               "Chapter 2"
-            ],
-            "title": "Introduction"
-         },
-         {
-            "keywords": [
-               "Introduction",
-               "Chapter 1",
-               "Chapter 2"
-            ],
-            "title": "Introduction"
-         }
-      ],
-      "publisher": "Addison-Wesley",
-      "title": "The Go Programming Language"
+      "author": "Hic temporibus numquam distinctio alias.",
+      "isbn": "940-79908-7-75-7",
+      "language": "Dolor aliquam.",
+      "publisher": "Eligendi placeat.",
+      "title": "Cum omnis dolores quo sit."
    }'
 `, os.Args[0])
 }
@@ -284,11 +250,11 @@ UpdateBook implements UpdateBook.
 
 Example:
     %[1]s epub-index-creator update-book --body '{
-      "author": "Alias placeat dolor aliquam qui eligendi placeat.",
-      "language": "Nam quibusdam vero rem aliquam voluptatibus.",
-      "publisher": "Eligendi ipsa porro.",
-      "title": "Dolores quo sit dolores hic temporibus numquam."
-   }' --isbn "406-77014-958-9083-3"
+      "author": "Eligendi ipsa porro.",
+      "language": "Qui in omnis quaerat odit.",
+      "publisher": "Ut repudiandae beatae et non consequatur dolore.",
+      "title": "Quibusdam vero rem aliquam voluptatibus."
+   }' --isbn "109-712-1-70-9"
 `, os.Args[0])
 }
 
@@ -299,7 +265,7 @@ DeleteBook implements DeleteBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --isbn "352-31-7-0-9"
+    %[1]s epub-index-creator delete-book --isbn "353-8-2-15-7"
 `, os.Args[0])
 }
 
@@ -320,6 +286,6 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "837-18-8-95-8"
+   }' --isbn "628-9-9231182-8581032-7"
 `, os.Args[0])
 }

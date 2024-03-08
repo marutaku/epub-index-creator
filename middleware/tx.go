@@ -8,8 +8,9 @@ import (
 	goa "goa.design/goa/v3/pkg"
 )
 
-func WithTx(ctx context.Context, client *ent.Client, fn func(tx *ent.Tx) (interface{}, error)) (interface{}, error) {
+func WithTx(ctx context.Context, client *ent.Client, fn func(ctx context.Context) (interface{}, error)) (interface{}, error) {
 	tx, err := client.Tx(ctx)
+	ctx = ent.NewContext(ctx, client)
 	if err != nil {
 		return nil, err
 	}
@@ -19,7 +20,7 @@ func WithTx(ctx context.Context, client *ent.Client, fn func(tx *ent.Tx) (interf
 			panic(v)
 		}
 	}()
-	v, err := fn(tx)
+	v, err := fn(ctx)
 	if err != nil {
 		if rerr := tx.Rollback(); rerr != nil {
 			err = fmt.Errorf("%w: rolling back transaction: %v", err, rerr)
@@ -36,7 +37,7 @@ func NewTransaction(ctx context.Context, client *ent.Client) func(goa.Endpoint) 
 	return func(e goa.Endpoint) goa.Endpoint {
 		// A Goa endpoint is itself a function.
 		return goa.Endpoint(func(ctx context.Context, req interface{}) (interface{}, error) {
-			return WithTx(ctx, client, func(tx *ent.Tx) (interface{}, error) {
+			return WithTx(ctx, client, func(ctx context.Context) (interface{}, error) {
 				// Call the original endpoint.
 				return e(ctx, req)
 			})

@@ -50,7 +50,6 @@ paths:
                         - author
                         - language
                         - publisher
-                        - pages
             responses:
                 "200":
                     description: OK response.
@@ -195,7 +194,7 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 454-43000-0-9316-4
+                example: 009-51-3-8-3
                 pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
             language:
                 type: string
@@ -217,16 +216,6 @@ definitions:
                         - Chapter 1
                         - Chapter 2
                       title: Introduction
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
             publisher:
                 type: string
                 description: Publisher of the book
@@ -237,9 +226,14 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 762-07-5-427-0
+            isbn: 371-86-414-5485-1
             language: English
             pages:
+                - keywords:
+                    - Introduction
+                    - Chapter 1
+                    - Chapter 2
+                  title: Introduction
                 - keywords:
                     - Introduction
                     - Chapter 1
@@ -272,7 +266,7 @@ definitions:
                 type: array
                 items:
                     type: string
-                    example: Molestias aliquam sunt et numquam esse in.
+                    example: Ut cumque non consequatur fuga voluptas.
                 description: Keywords of the page
                 example:
                     - Introduction
@@ -297,83 +291,36 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Alan A. A. Donovan, Brian W. Kernighan
+                example: Odio corrupti quis commodi sint.
             isbn:
                 type: string
-                example: 500-4-1-29719-5
+                description: ISBN of the book
+                example: 608-3-3-02-9
                 pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
             language:
                 type: string
                 description: Language of the book
-                example: English
-            pages:
-                type: array
-                items:
-                    $ref: '#/definitions/PageResponseRequestBody'
-                description: Pages of the book
-                example:
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
-                    - keywords:
-                        - Introduction
-                        - Chapter 1
-                        - Chapter 2
-                      title: Introduction
+                example: Repellat sapiente porro nesciunt amet unde recusandae.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Addison-Wesley
+                example: Velit ullam omnis et atque.
             title:
                 type: string
                 description: Title of the book
-                example: The Go Programming Language
+                example: Adipisci qui ut ut veniam est aut.
         example:
-            author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 862-219-5-306-5
-            language: English
-            pages:
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
-            publisher: Addison-Wesley
-            title: The Go Programming Language
+            author: Aliquam ab dolor.
+            isbn: 990-4-680804-3-6
+            language: Nulla corporis aspernatur ut dicta.
+            publisher: Officiis totam.
+            title: Ad ut laboriosam quae consequatur autem autem.
         required:
             - isbn
             - title
             - author
             - language
             - publisher
-            - pages
     EpubIndexCreatorCreateBookResponseBody:
         title: EpubIndexCreatorCreateBookResponseBody
         type: object
@@ -384,7 +331,7 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 323-55639-8-008-2
+                example: 187-5-8-756-6
                 pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
             language:
                 type: string
@@ -426,9 +373,14 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 303-7-955-4-5
+            isbn: 989-77-67-6058-1
             language: English
             pages:
+                - keywords:
+                    - Introduction
+                    - Chapter 1
+                    - Chapter 2
+                  title: Introduction
                 - keywords:
                     - Introduction
                     - Chapter 1
@@ -476,7 +428,7 @@ definitions:
                 type: array
                 items:
                     type: string
-                    example: Perferendis voluptatibus aliquam.
+                    example: Voluptates maiores.
                 description: Keywords of the page
                 example:
                     - Introduction
@@ -505,7 +457,7 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 707-47-7-94-8
+                example: 929-19-9-46-9
                 pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
             language:
                 type: string
@@ -527,6 +479,11 @@ definitions:
                         - Chapter 1
                         - Chapter 2
                       title: Introduction
+                    - keywords:
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
             publisher:
                 type: string
                 description: Publisher of the book
@@ -537,14 +494,9 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 791-89118-5-26-3
+            isbn: 598-00-44-3-6
             language: English
             pages:
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
                 - keywords:
                     - Introduction
                     - Chapter 1
@@ -577,7 +529,7 @@ definitions:
                 type: integer
                 description: Maximum number of books to return
                 default: 100
-                example: 36
+                example: 72
                 format: int64
                 minimum: 1
                 maximum: 100
@@ -585,12 +537,12 @@ definitions:
                 type: integer
                 description: Field to paginate books
                 default: 0
-                example: 7477527303227465786
+                example: 4764606828122740084
                 format: int64
                 minimum: 0
         example:
-            limit: 5
-            offset: 8775834142765088175
+            limit: 57
+            offset: 4499257393735694528
     EpubIndexCreatorUpdateBookRequestBody:
         title: EpubIndexCreatorUpdateBookRequestBody
         type: object
@@ -598,24 +550,24 @@ definitions:
             author:
                 type: string
                 description: Author of the book
-                example: Ut veniam est aut occaecati odio corrupti.
+                example: Molestias aliquam sunt et numquam esse in.
             language:
                 type: string
                 description: Language of the book
-                example: Commodi sint sint repellat sapiente porro nesciunt.
+                example: Sunt aperiam in.
             publisher:
                 type: string
                 description: Publisher of the book
-                example: Unde recusandae saepe velit ullam omnis.
+                example: Quaerat temporibus.
             title:
                 type: string
                 description: Title of the book
-                example: Aspernatur velit dolores aperiam adipisci qui.
+                example: Perferendis voluptatibus aliquam.
         example:
-            author: Laboriosam quae consequatur autem autem facilis aliquam.
-            language: Dolor provident nulla corporis aspernatur.
-            publisher: Dicta accusantium officiis totam omnis qui.
-            title: Atque labore ad.
+            author: Quasi molestiae veniam.
+            language: Est sit error voluptatum asperiores.
+            publisher: Harum quia.
+            title: Et quis.
         required:
             - title
             - author
@@ -631,7 +583,7 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 811-2-17-8-2
+                example: 988-51601-4-24-8
                 pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
             language:
                 type: string
@@ -653,6 +605,16 @@ definitions:
                         - Chapter 1
                         - Chapter 2
                       title: Introduction
+                    - keywords:
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
+                    - keywords:
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
             publisher:
                 type: string
                 description: Publisher of the book
@@ -663,14 +625,9 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 800-970-20-1-5
+            isbn: 866-2-42-58-0
             language: English
             pages:
-                - keywords:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-                  title: Introduction
                 - keywords:
                     - Introduction
                     - Chapter 1
@@ -695,33 +652,6 @@ definitions:
             - language
             - publisher
             - pages
-    PageResponseRequestBody:
-        title: PageResponseRequestBody
-        type: object
-        properties:
-            keywords:
-                type: array
-                items:
-                    type: string
-                    example: Sit velit quo.
-                description: Keywords of the page
-                example:
-                    - Introduction
-                    - Chapter 1
-                    - Chapter 2
-            title:
-                type: string
-                description: Title of the page
-                example: Introduction
-        example:
-            keywords:
-                - Introduction
-                - Chapter 1
-                - Chapter 2
-            title: Introduction
-        required:
-            - title
-            - keywords
     PageResponseResponse:
         title: PageResponseResponse
         type: object
@@ -730,7 +660,7 @@ definitions:
                 type: array
                 items:
                     type: string
-                    example: In omnis quaerat odit numquam ut repudiandae.
+                    example: Aut incidunt adipisci consectetur.
                 description: Keywords of the page
                 example:
                     - Introduction
@@ -757,7 +687,7 @@ definitions:
                 type: array
                 items:
                     type: string
-                    example: Aut incidunt adipisci consectetur.
+                    example: Quo reiciendis est est ut.
                 description: Keywords of the page
                 example:
                     - Introduction

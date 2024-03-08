@@ -18,7 +18,7 @@ type Service interface {
 	// FindBook implements FindBook.
 	FindBook(context.Context, *FindBookPayload) (res *BookResponse, err error)
 	// CreateBook implements CreateBook.
-	CreateBook(context.Context, *BookResponse) (res *BookResponse, err error)
+	CreateBook(context.Context, *BookRequest) (res *BookResponse, err error)
 	// UpdateBook implements UpdateBook.
 	UpdateBook(context.Context, *BookRequest) (res *BookResponse, err error)
 	// DeleteBook implements DeleteBook.
@@ -43,7 +43,7 @@ const ServiceName = "epub_index_creator"
 // MethodKey key.
 var MethodNames = [6]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "CreatePage"}
 
-// BookRequest is the payload type of the epub_index_creator service UpdateBook
+// BookRequest is the payload type of the epub_index_creator service CreateBook
 // method.
 type BookRequest struct {
 	// ISBN of the book

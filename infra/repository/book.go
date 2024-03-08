@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/marutaku/epub-index-creator/domain"
 	"github.com/marutaku/epub-index-creator/ent"
@@ -24,6 +25,9 @@ func NewBookRepository() BookRepository {
 
 func (r *BookRepositoryImpl) FindAll(ctx context.Context, limit, offset int) ([]*domain.Book, error) {
 	tx := ent.TxFromContext(ctx)
+	if tx == nil {
+		return nil, fmt.Errorf("ent.TxFromContext(ctx) is nil")
+	}
 	books, err := tx.Book.Query().Limit(limit).Offset(offset).All(ctx)
 	if err != nil {
 		return nil, err

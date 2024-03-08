@@ -47,7 +47,7 @@ var _ = Service("epub_index_creator", func() {
 	})
 
 	Method("CreateBook", func() {
-		Payload(BookResponse)
+		Payload(BookRequest)
 
 		Result(BookResponse)
 

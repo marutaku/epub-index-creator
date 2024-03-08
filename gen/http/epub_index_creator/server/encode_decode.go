@@ -118,7 +118,7 @@ func DecodeCreateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 		if err != nil {
 			return nil, err
 		}
-		payload := NewCreateBookBookResponse(&body)
+		payload := NewCreateBookBookRequest(&body)
 
 		return payload, nil
 	}
@@ -306,21 +306,6 @@ func marshalEpubindexcreatorPageResponseToPageResponseResponseBody(v *epubindexc
 		}
 	} else {
 		res.Keywords = []string{}
-	}
-
-	return res
-}
-
-// unmarshalPageResponseRequestBodyToEpubindexcreatorPageResponse builds a
-// value of type *epubindexcreator.PageResponse from a value of type
-// *PageResponseRequestBody.
-func unmarshalPageResponseRequestBodyToEpubindexcreatorPageResponse(v *PageResponseRequestBody) *epubindexcreator.PageResponse {
-	res := &epubindexcreator.PageResponse{
-		Title: *v.Title,
-	}
-	res.Keywords = make([]string, len(v.Keywords))
-	for i, val := range v.Keywords {
-		res.Keywords[i] = val
 	}
 
 	return res

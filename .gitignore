@@ -46,3 +46,4 @@ Temporary Items
 
 *.db
 epub_index_creator_web
+tmp/

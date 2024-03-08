@@ -31,7 +31,7 @@ paths:
                                     $ref: '#/components/schemas/BookResponse'
                                 example:
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 683-4-7-63-8
+                                      isbn: 482-4-12-7-0
                                       language: English
                                       pages:
                                         - keywords:
@@ -52,7 +52,7 @@ paths:
                                       publisher: Addison-Wesley
                                       title: The Go Programming Language
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 683-4-7-63-8
+                                      isbn: 482-4-12-7-0
                                       language: English
                                       pages:
                                         - keywords:
@@ -74,7 +74,7 @@ paths:
                                       title: The Go Programming Language
                             example:
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 683-4-7-63-8
+                                  isbn: 482-4-12-7-0
                                   language: English
                                   pages:
                                     - keywords:
@@ -95,7 +95,49 @@ paths:
                                   publisher: Addison-Wesley
                                   title: The Go Programming Language
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 683-4-7-63-8
+                                  isbn: 482-4-12-7-0
+                                  language: English
+                                  pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                  publisher: Addison-Wesley
+                                  title: The Go Programming Language
+                                - author: Alan A. A. Donovan, Brian W. Kernighan
+                                  isbn: 482-4-12-7-0
+                                  language: English
+                                  pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                  publisher: Addison-Wesley
+                                  title: The Go Programming Language
+                                - author: Alan A. A. Donovan, Brian W. Kernighan
+                                  isbn: 482-4-12-7-0
                                   language: English
                                   pages:
                                     - keywords:
@@ -125,34 +167,13 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/BookResponse'
+                            $ref: '#/components/schemas/CreateBookRequestBody'
                         example:
-                            author: Alan A. A. Donovan, Brian W. Kernighan
-                            isbn: 171-16-075-1-0
-                            language: English
-                            pages:
-                                - keywords:
-                                    - Introduction
-                                    - Chapter 1
-                                    - Chapter 2
-                                  title: Introduction
-                                - keywords:
-                                    - Introduction
-                                    - Chapter 1
-                                    - Chapter 2
-                                  title: Introduction
-                                - keywords:
-                                    - Introduction
-                                    - Chapter 1
-                                    - Chapter 2
-                                  title: Introduction
-                                - keywords:
-                                    - Introduction
-                                    - Chapter 1
-                                    - Chapter 2
-                                  title: Introduction
-                            publisher: Addison-Wesley
-                            title: The Go Programming Language
+                            author: Hic temporibus numquam distinctio alias.
+                            isbn: 940-79908-7-75-7
+                            language: Dolor aliquam.
+                            publisher: Eligendi placeat.
+                            title: Cum omnis dolores quo sit.
             responses:
                 "200":
                     description: OK response.
@@ -162,14 +183,9 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 340-1-4-9913247-3
+                                isbn: 414-7-8-843-1
                                 language: English
                                 pages:
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
                                     - keywords:
                                         - Introduction
                                         - Chapter 1
@@ -225,7 +241,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 325-2-0187-3-7
+                                isbn: 740-3-335-7-1
                                 language: English
                                 pages:
                                     - keywords:
@@ -263,10 +279,10 @@ paths:
                         schema:
                             $ref: '#/components/schemas/UpdateBookRequestBody'
                         example:
-                            author: Alias placeat dolor aliquam qui eligendi placeat.
-                            language: Nam quibusdam vero rem aliquam voluptatibus.
-                            publisher: Eligendi ipsa porro.
-                            title: Dolores quo sit dolores hic temporibus numquam.
+                            author: Eligendi ipsa porro.
+                            language: Qui in omnis quaerat odit.
+                            publisher: Ut repudiandae beatae et non consequatur dolore.
+                            title: Quibusdam vero rem aliquam voluptatibus.
             responses:
                 "200":
                     description: OK response.
@@ -276,19 +292,9 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 358-4366-27-24915-0
+                                isbn: 576-5-500735-915-7
                                 language: English
                                 pages:
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
                                     - keywords:
                                         - Introduction
                                         - Chapter 1
@@ -363,7 +369,7 @@ components:
                     example: Alan A. A. Donovan, Brian W. Kernighan
                 isbn:
                     type: string
-                    example: 234-3-1-7-1
+                    example: 268-77-3-3-0
                     pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
                 language:
                     type: string
@@ -390,11 +396,6 @@ components:
                             - Chapter 1
                             - Chapter 2
                           title: Introduction
-                        - keywords:
-                            - Introduction
-                            - Chapter 1
-                            - Chapter 2
-                          title: Introduction
                 publisher:
                     type: string
                     description: Publisher of the book
@@ -405,9 +406,14 @@ components:
                     example: The Go Programming Language
             example:
                 author: Alan A. A. Donovan, Brian W. Kernighan
-                isbn: 216-39773-7165-9-8
+                isbn: 748-2-47-1-6
                 language: English
                 pages:
+                    - keywords:
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
                     - keywords:
                         - Introduction
                         - Chapter 1
@@ -427,6 +433,42 @@ components:
                 - language
                 - publisher
                 - pages
+        CreateBookRequestBody:
+            type: object
+            properties:
+                author:
+                    type: string
+                    description: Author of the book
+                    example: Ex asperiores aspernatur enim.
+                isbn:
+                    type: string
+                    description: ISBN of the book
+                    example: 802-447-3-6203-1
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                language:
+                    type: string
+                    description: Language of the book
+                    example: Laboriosam omnis tenetur iusto animi mollitia.
+                publisher:
+                    type: string
+                    description: Publisher of the book
+                    example: Magni tempora ducimus omnis qui.
+                title:
+                    type: string
+                    description: Title of the book
+                    example: Animi assumenda.
+            example:
+                author: Dignissimos sed qui et consequatur aspernatur.
+                isbn: 416-6-23-9-3
+                language: Quam nemo eaque aut.
+                publisher: Exercitationem placeat ad.
+                title: Natus voluptatum voluptatem corporis.
+            required:
+                - isbn
+                - title
+                - author
+                - language
+                - publisher
         CreatePageRequest:
             type: object
             properties:
@@ -434,7 +476,7 @@ components:
                     type: array
                     items:
                         type: string
-                        example: Ex asperiores aspernatur enim.
+                        example: Possimus non.
                     description: Keywords of the page
                     example:
                         - Introduction
@@ -473,7 +515,7 @@ components:
                     type: integer
                     description: Maximum number of books to return
                     default: 100
-                    example: 36
+                    example: 31
                     format: int64
                     minimum: 1
                     maximum: 100
@@ -481,12 +523,12 @@ components:
                     type: integer
                     description: Field to paginate books
                     default: 0
-                    example: 1270659099931482815
+                    example: 5746565918375458786
                     format: int64
                     minimum: 0
             example:
-                limit: 36
-                offset: 6183587258756353562
+                limit: 77
+                offset: 6294500639283040272
         PageResponse:
             type: object
             properties:
@@ -494,7 +536,7 @@ components:
                     type: array
                     items:
                         type: string
-                        example: Quaerat temporibus.
+                        example: Quia neque.
                     description: Keywords of the page
                     example:
                         - Introduction
@@ -519,24 +561,24 @@ components:
                 author:
                     type: string
                     description: Author of the book
-                    example: Est sit error voluptatum asperiores.
+                    example: Expedita dolor natus.
                 language:
                     type: string
                     description: Language of the book
-                    example: Harum quia.
+                    example: Dolore modi.
                 publisher:
                     type: string
                     description: Publisher of the book
-                    example: Voluptates maiores.
+                    example: Non ducimus officia saepe quos.
                 title:
                     type: string
                     description: Title of the book
-                    example: Quasi molestiae veniam.
+                    example: Eos temporibus itaque nostrum magni.
             example:
-                author: Dolorem et iste sit quia.
-                language: Ratione quidem nam.
-                publisher: Animi assumenda.
-                title: Ut cumque non consequatur fuga voluptas.
+                author: Esse rerum veniam assumenda quae dolores cum.
+                language: At quis sequi voluptas provident ducimus.
+                publisher: Facilis quasi qui ab beatae magnam voluptatem.
+                title: Totam voluptatibus excepturi dignissimos placeat nam.
             required:
                 - title
                 - author

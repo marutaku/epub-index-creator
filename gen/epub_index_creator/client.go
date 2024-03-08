@@ -58,7 +58,7 @@ func (c *Client) FindBook(ctx context.Context, p *FindBookPayload) (res *BookRes
 
 // CreateBook calls the "CreateBook" endpoint of the "epub_index_creator"
 // service.
-func (c *Client) CreateBook(ctx context.Context, p *BookResponse) (res *BookResponse, err error) {
+func (c *Client) CreateBook(ctx context.Context, p *BookRequest) (res *BookResponse, err error) {
 	var ires any
 	ires, err = c.CreateBookEndpoint(ctx, p)
 	if err != nil {

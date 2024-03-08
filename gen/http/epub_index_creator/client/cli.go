@@ -66,43 +66,25 @@ func BuildFindBookPayload(epubIndexCreatorFindBookIsbn string) (*epubindexcreato
 
 // BuildCreateBookPayload builds the payload for the epub_index_creator
 // CreateBook endpoint from CLI flags.
-func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcreator.BookResponse, error) {
+func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcreator.BookRequest, error) {
 	var err error
 	var body CreateBookRequestBody
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Alan A. A. Donovan, Brian W. Kernighan\",\n      \"isbn\": \"171-16-075-1-0\",\n      \"language\": \"English\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         }\n      ],\n      \"publisher\": \"Addison-Wesley\",\n      \"title\": \"The Go Programming Language\"\n   }'")
-		}
-		if body.Pages == nil {
-			err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"940-79908-7-75-7\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
 		}
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
-		for _, e := range body.Pages {
-			if e != nil {
-				if err2 := ValidatePageResponseRequestBody(e); err2 != nil {
-					err = goa.MergeErrors(err, err2)
-				}
-			}
-		}
 		if err != nil {
 			return nil, err
 		}
 	}
-	v := &epubindexcreator.BookResponse{
+	v := &epubindexcreator.BookRequest{
 		Isbn:      epubindexcreator.ISBN(body.Isbn),
 		Title:     body.Title,
 		Author:    body.Author,
 		Language:  body.Language,
 		Publisher: body.Publisher,
-	}
-	if body.Pages != nil {
-		v.Pages = make([]*epubindexcreator.PageResponse, len(body.Pages))
-		for i, val := range body.Pages {
-			v.Pages[i] = marshalPageResponseRequestBodyToEpubindexcreatorPageResponse(val)
-		}
-	} else {
-		v.Pages = []*epubindexcreator.PageResponse{}
 	}
 
 	return v, nil
@@ -116,7 +98,7 @@ func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Alias placeat dolor aliquam qui eligendi placeat.\",\n      \"language\": \"Nam quibusdam vero rem aliquam voluptatibus.\",\n      \"publisher\": \"Eligendi ipsa porro.\",\n      \"title\": \"Dolores quo sit dolores hic temporibus numquam.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Eligendi ipsa porro.\",\n      \"language\": \"Qui in omnis quaerat odit.\",\n      \"publisher\": \"Ut repudiandae beatae et non consequatur dolore.\",\n      \"title\": \"Quibusdam vero rem aliquam voluptatibus.\"\n   }'")
 		}
 	}
 	var isbn string
