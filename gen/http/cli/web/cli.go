@@ -22,15 +22,15 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `epub-index-creator (list-books|find-book|create-book|update-book|delete-book)
+	return `epub-index-creator (list-books|find-book|create-book|update-book|delete-book|create-page)
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` epub-index-creator list-books --body '{
-      "limit": 52,
-      "offset": 8387359067837253274
+      "limit": 47,
+      "offset": 8534742228231063417
    }'` + "\n" +
 		""
 }
@@ -63,6 +63,10 @@ func ParseEndpoint(
 		epubIndexCreatorDeleteBookFlags    = flag.NewFlagSet("delete-book", flag.ExitOnError)
 		epubIndexCreatorDeleteBookBodyFlag = epubIndexCreatorDeleteBookFlags.String("body", "REQUIRED", "")
 		epubIndexCreatorDeleteBookIsbnFlag = epubIndexCreatorDeleteBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
+
+		epubIndexCreatorCreatePageFlags    = flag.NewFlagSet("create-page", flag.ExitOnError)
+		epubIndexCreatorCreatePageBodyFlag = epubIndexCreatorCreatePageFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorCreatePageIsbnFlag = epubIndexCreatorCreatePageFlags.String("isbn", "REQUIRED", "ISBN of the book")
 	)
 	epubIndexCreatorFlags.Usage = epubIndexCreatorUsage
 	epubIndexCreatorListBooksFlags.Usage = epubIndexCreatorListBooksUsage
@@ -70,6 +74,7 @@ func ParseEndpoint(
 	epubIndexCreatorCreateBookFlags.Usage = epubIndexCreatorCreateBookUsage
 	epubIndexCreatorUpdateBookFlags.Usage = epubIndexCreatorUpdateBookUsage
 	epubIndexCreatorDeleteBookFlags.Usage = epubIndexCreatorDeleteBookUsage
+	epubIndexCreatorCreatePageFlags.Usage = epubIndexCreatorCreatePageUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -120,6 +125,9 @@ func ParseEndpoint(
 			case "delete-book":
 				epf = epubIndexCreatorDeleteBookFlags
 
+			case "create-page":
+				epf = epubIndexCreatorCreatePageFlags
+
 			}
 
 		}
@@ -160,6 +168,9 @@ func ParseEndpoint(
 			case "delete-book":
 				endpoint = c.DeleteBook()
 				data, err = epubindexcreatorc.BuildDeleteBookPayload(*epubIndexCreatorDeleteBookBodyFlag, *epubIndexCreatorDeleteBookIsbnFlag)
+			case "create-page":
+				endpoint = c.CreatePage()
+				data, err = epubindexcreatorc.BuildCreatePagePayload(*epubIndexCreatorCreatePageBodyFlag, *epubIndexCreatorCreatePageIsbnFlag)
 			}
 		}
 	}
@@ -183,6 +194,7 @@ COMMAND:
     create-book: CreateBook implements CreateBook.
     update-book: UpdateBook implements UpdateBook.
     delete-book: DeleteBook implements DeleteBook.
+    create-page: CreatePage implements CreatePage.
 
 Additional help:
     %[1]s epub-index-creator COMMAND --help
@@ -196,8 +208,8 @@ ListBooks implements ListBooks.
 
 Example:
     %[1]s epub-index-creator list-books --body '{
-      "limit": 52,
-      "offset": 8387359067837253274
+      "limit": 47,
+      "offset": 8534742228231063417
    }'
 `, os.Args[0])
 }
@@ -209,7 +221,7 @@ FindBook implements FindBook.
     -isbn STRING: ISBN of the book
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "Ab dolor provident nulla corporis."
+    %[1]s epub-index-creator find-book --isbn "Et quis."
 `, os.Args[0])
 }
 
@@ -221,35 +233,41 @@ CreateBook implements CreateBook.
 
 Example:
     %[1]s epub-index-creator create-book --body '{
-      "author": "Ut cumque non consequatur fuga voluptas.",
-      "isbn": "Molestiae veniam veritatis est sit error voluptatum.",
-      "language": "Dolorem et iste sit quia.",
+      "author": "Magni tempora ducimus omnis qui.",
+      "isbn": "Ex asperiores aspernatur enim.",
+      "language": "Natus voluptatum voluptatem corporis.",
       "pages": [
          {
             "keywords": [
                {
-                  "keyword": "Tenetur iusto animi mollitia eius magni."
+                  "keyword": "Temporibus itaque nostrum."
                },
                {
-                  "keyword": "Tenetur iusto animi mollitia eius magni."
+                  "keyword": "Temporibus itaque nostrum."
+               },
+               {
+                  "keyword": "Temporibus itaque nostrum."
                }
             ],
-            "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+            "title": "Nemo eaque aut et exercitationem placeat ad."
          },
          {
             "keywords": [
                {
-                  "keyword": "Tenetur iusto animi mollitia eius magni."
+                  "keyword": "Temporibus itaque nostrum."
                },
                {
-                  "keyword": "Tenetur iusto animi mollitia eius magni."
+                  "keyword": "Temporibus itaque nostrum."
+               },
+               {
+                  "keyword": "Temporibus itaque nostrum."
                }
             ],
-            "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+            "title": "Nemo eaque aut et exercitationem placeat ad."
          }
       ],
-      "publisher": "Ratione quidem nam.",
-      "title": "Nihil harum quia consequatur voluptates maiores."
+      "publisher": "Dignissimos sed qui et consequatur aspernatur.",
+      "title": "Laboriosam omnis tenetur iusto animi mollitia."
    }'
 `, os.Args[0])
 }
@@ -263,11 +281,11 @@ UpdateBook implements UpdateBook.
 
 Example:
     %[1]s epub-index-creator update-book --body '{
-      "author": "Doloremque totam voluptatibus excepturi.",
-      "language": "Placeat nam omnis esse.",
-      "publisher": "Veniam assumenda quae dolores cum molestiae.",
-      "title": "Modi dolores non ducimus officia saepe."
-   }' --isbn "Quis sequi voluptas provident."
+      "author": "Magnam voluptatem occaecati possimus non facere.",
+      "language": "Non sit et eum officia doloribus.",
+      "publisher": "Ipsum deserunt incidunt non qui non.",
+      "title": "Suscipit facilis quasi qui ab."
+   }' --isbn "Deserunt eius facere non."
 `, os.Args[0])
 }
 
@@ -281,58 +299,77 @@ DeleteBook implements DeleteBook.
 Example:
     %[1]s epub-index-creator delete-book --body '{
       "book": {
-         "author": "Sunt qui nisi ut et dolor et.",
-         "isbn": "Sed explicabo quibusdam.",
-         "language": "Est eveniet aspernatur beatae eum et nihil.",
+         "author": "Atque deserunt sit dolores aspernatur quis error.",
+         "isbn": "Libero consectetur sunt.",
+         "language": "Earum ea nihil delectus repellat architecto.",
          "pages": [
             {
                "keywords": [
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
                   },
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
+                  },
+                  {
+                     "keyword": "Temporibus itaque nostrum."
                   }
                ],
-               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+               "title": "Nemo eaque aut et exercitationem placeat ad."
             },
             {
                "keywords": [
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
                   },
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
+                  },
+                  {
+                     "keyword": "Temporibus itaque nostrum."
                   }
                ],
-               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+               "title": "Nemo eaque aut et exercitationem placeat ad."
             },
             {
                "keywords": [
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
                   },
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
-                  }
-               ],
-               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
-            },
-            {
-               "keywords": [
-                  {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
                   },
                   {
-                     "keyword": "Tenetur iusto animi mollitia eius magni."
+                     "keyword": "Temporibus itaque nostrum."
                   }
                ],
-               "title": "Assumenda est ex asperiores aspernatur enim mollitia."
+               "title": "Nemo eaque aut et exercitationem placeat ad."
             }
          ],
-         "publisher": "Non id cum nemo voluptas illum.",
-         "title": "Odit aliquam nihil aliquid."
+         "publisher": "Totam officiis quibusdam nobis nemo iusto.",
+         "title": "Nesciunt nisi in enim."
       }
-   }' --isbn "Neque perspiciatis ipsa."
+   }' --isbn "Molestiae est sit."
+`, os.Args[0])
+}
+
+func epubIndexCreatorCreatePageUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator create-page -body JSON -isbn STRING
+
+CreatePage implements CreatePage.
+    -body JSON: 
+    -isbn STRING: ISBN of the book
+
+Example:
+    %[1]s epub-index-creator create-page --body '{
+      "page": {
+         "keywords": [
+            "Et culpa.",
+            "Quia blanditiis dolor sint aut quia.",
+            "Eveniet doloremque consequatur dolores."
+         ],
+         "title": "Dolor quis sed laborum quam aut reprehenderit."
+      }
+   }' --isbn "Magni et cupiditate et aut pariatur."
 `, os.Args[0])
 }

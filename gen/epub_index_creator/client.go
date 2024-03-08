@@ -20,17 +20,19 @@ type Client struct {
 	CreateBookEndpoint goa.Endpoint
 	UpdateBookEndpoint goa.Endpoint
 	DeleteBookEndpoint goa.Endpoint
+	CreatePageEndpoint goa.Endpoint
 }
 
 // NewClient initializes a "epub_index_creator" service client given the
 // endpoints.
-func NewClient(listBooks, findBook, createBook, updateBook, deleteBook goa.Endpoint) *Client {
+func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, createPage goa.Endpoint) *Client {
 	return &Client{
 		ListBooksEndpoint:  listBooks,
 		FindBookEndpoint:   findBook,
 		CreateBookEndpoint: createBook,
 		UpdateBookEndpoint: updateBook,
 		DeleteBookEndpoint: deleteBook,
+		CreatePageEndpoint: createPage,
 	}
 }
 
@@ -81,4 +83,15 @@ func (c *Client) UpdateBook(ctx context.Context, p *UpdateBookPayload) (res *Boo
 func (c *Client) DeleteBook(ctx context.Context, p *DeleteBookPayload) (err error) {
 	_, err = c.DeleteBookEndpoint(ctx, p)
 	return
+}
+
+// CreatePage calls the "CreatePage" endpoint of the "epub_index_creator"
+// service.
+func (c *Client) CreatePage(ctx context.Context, p *CreatePagePayload) (res *Page, err error) {
+	var ires any
+	ires, err = c.CreatePageEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*Page), nil
 }

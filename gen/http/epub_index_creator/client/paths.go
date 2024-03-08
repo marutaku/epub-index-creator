@@ -35,3 +35,8 @@ func UpdateBookEpubIndexCreatorPath(isbn string) string {
 func DeleteBookEpubIndexCreatorPath(isbn string) string {
 	return fmt.Sprintf("/books/%v", isbn)
 }
+
+// CreatePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service CreatePage HTTP endpoint.
+func CreatePageEpubIndexCreatorPath(isbn string) string {
+	return fmt.Sprintf("/books/%v/pages", isbn)
+}

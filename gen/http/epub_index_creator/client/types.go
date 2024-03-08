@@ -57,6 +57,12 @@ type DeleteBookRequestBody struct {
 	Book *BookRequestBody `form:"book" json:"book" xml:"book"`
 }
 
+// CreatePageRequestBody is the type of the "epub_index_creator" service
+// "CreatePage" endpoint HTTP request body.
+type CreatePageRequestBody struct {
+	Page *CreatePageRequestRequestBody `form:"page" json:"page" xml:"page"`
+}
+
 // ListBooksResponseBody is the type of the "epub_index_creator" service
 // "ListBooks" endpoint HTTP response body.
 type ListBooksResponseBody []*BookResponse
@@ -110,6 +116,15 @@ type UpdateBookResponseBody struct {
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
 	Pages []*PageResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+}
+
+// CreatePageResponseBody is the type of the "epub_index_creator" service
+// "CreatePage" endpoint HTTP response body.
+type CreatePageResponseBody struct {
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []*KeywordResponseBody `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
 }
 
 // BookResponse is used to define fields on response body types.
@@ -186,6 +201,14 @@ type BookRequestBody struct {
 	Pages []*PageRequestBody `form:"pages" json:"pages" xml:"pages"`
 }
 
+// CreatePageRequestRequestBody is used to define fields on request body types.
+type CreatePageRequestRequestBody struct {
+	// Title of the page
+	Title string `form:"title" json:"title" xml:"title"`
+	// Keywords of the page
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
 // NewListBooksRequestBody builds the HTTP request body from the payload of the
 // "ListBooks" endpoint of the "epub_index_creator" service.
 func NewListBooksRequestBody(p *epubindexcreator.ListBooksPayload) *ListBooksRequestBody {
@@ -251,6 +274,16 @@ func NewDeleteBookRequestBody(p *epubindexcreator.DeleteBookPayload) *DeleteBook
 	return body
 }
 
+// NewCreatePageRequestBody builds the HTTP request body from the payload of
+// the "CreatePage" endpoint of the "epub_index_creator" service.
+func NewCreatePageRequestBody(p *epubindexcreator.CreatePagePayload) *CreatePageRequestBody {
+	body := &CreatePageRequestBody{}
+	if p.Page != nil {
+		body.Page = marshalEpubindexcreatorCreatePageRequestToCreatePageRequestRequestBody(p.Page)
+	}
+	return body
+}
+
 // NewListBooksBookOK builds a "epub_index_creator" service "ListBooks"
 // endpoint result from a HTTP "OK" response.
 func NewListBooksBookOK(body []*BookResponse) []*epubindexcreator.Book {
@@ -311,6 +344,20 @@ func NewUpdateBookBookOK(body *UpdateBookResponseBody) *epubindexcreator.Book {
 	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
 	for i, val := range body.Pages {
 		v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
+	}
+
+	return v
+}
+
+// NewCreatePagePageOK builds a "epub_index_creator" service "CreatePage"
+// endpoint result from a HTTP "OK" response.
+func NewCreatePagePageOK(body *CreatePageResponseBody) *epubindexcreator.Page {
+	v := &epubindexcreator.Page{
+		Title: *body.Title,
+	}
+	v.Keywords = make([]*epubindexcreator.Keyword, len(body.Keywords))
+	for i, val := range body.Keywords {
+		v.Keywords[i] = unmarshalKeywordResponseBodyToEpubindexcreatorKeyword(val)
 	}
 
 	return v
@@ -402,6 +449,25 @@ func ValidateUpdateBookResponseBody(body *UpdateBookResponseBody) (err error) {
 	for _, e := range body.Pages {
 		if e != nil {
 			if err2 := ValidatePageResponseBody(e); err2 != nil {
+				err = goa.MergeErrors(err, err2)
+			}
+		}
+	}
+	return
+}
+
+// ValidateCreatePageResponseBody runs the validations defined on
+// CreatePageResponseBody
+func ValidateCreatePageResponseBody(body *CreatePageResponseBody) (err error) {
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	for _, e := range body.Keywords {
+		if e != nil {
+			if err2 := ValidateKeywordResponseBody(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}

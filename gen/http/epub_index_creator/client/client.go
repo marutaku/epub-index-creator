@@ -37,6 +37,10 @@ type Client struct {
 	// endpoint.
 	DeleteBookDoer goahttp.Doer
 
+	// CreatePage Doer is the HTTP client used to make requests to the CreatePage
+	// endpoint.
+	CreatePageDoer goahttp.Doer
+
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
 	RestoreResponseBody bool
@@ -63,6 +67,7 @@ func NewClient(
 		CreateBookDoer:      doer,
 		UpdateBookDoer:      doer,
 		DeleteBookDoer:      doer,
+		CreatePageDoer:      doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -181,6 +186,30 @@ func (c *Client) DeleteBook() goa.Endpoint {
 		resp, err := c.DeleteBookDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("epub_index_creator", "DeleteBook", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// CreatePage returns an endpoint that makes HTTP requests to the
+// epub_index_creator service CreatePage server.
+func (c *Client) CreatePage() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeCreatePageRequest(c.encoder)
+		decodeResponse = DecodeCreatePageResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildCreatePageRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.CreatePageDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "CreatePage", err)
 		}
 		return decodeResponse(resp)
 	}

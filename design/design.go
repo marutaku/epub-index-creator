@@ -83,5 +83,17 @@ var _ = Service("epub_index_creator", func() {
 		})
 	})
 
+	Method("CreatePage", func() {
+		Payload(func() {
+			Attribute("isbn", String, "ISBN of the book")
+			Attribute("page", CreatePageRequest)
+			Required("isbn", "page")
+		})
+		Result(Page)
+		HTTP(func() {
+			POST("/books/{isbn}/pages")
+		})
+	})
+
 	Files("/openapi.json", "./gen/http/openapi.json")
 })

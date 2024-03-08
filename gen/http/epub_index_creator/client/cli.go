@@ -23,7 +23,7 @@ func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorListBooksBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 52,\n      \"offset\": 8387359067837253274\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 47,\n      \"offset\": 8534742228231063417\n   }'")
 		}
 	}
 	v := &epubindexcreator.ListBooksPayload{
@@ -67,7 +67,7 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Ut cumque non consequatur fuga voluptas.\",\n      \"isbn\": \"Molestiae veniam veritatis est sit error voluptatum.\",\n      \"language\": \"Dolorem et iste sit quia.\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n               },\n               {\n                  \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n               }\n            ],\n            \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n         },\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n               },\n               {\n                  \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n               }\n            ],\n            \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n         }\n      ],\n      \"publisher\": \"Ratione quidem nam.\",\n      \"title\": \"Nihil harum quia consequatur voluptates maiores.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Magni tempora ducimus omnis qui.\",\n      \"isbn\": \"Ex asperiores aspernatur enim.\",\n      \"language\": \"Natus voluptatum voluptatem corporis.\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               }\n            ],\n            \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n         },\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               }\n            ],\n            \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n         }\n      ],\n      \"publisher\": \"Dignissimos sed qui et consequatur aspernatur.\",\n      \"title\": \"Laboriosam omnis tenetur iusto animi mollitia.\"\n   }'")
 		}
 		if body.Pages == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
@@ -110,7 +110,7 @@ func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Doloremque totam voluptatibus excepturi.\",\n      \"language\": \"Placeat nam omnis esse.\",\n      \"publisher\": \"Veniam assumenda quae dolores cum molestiae.\",\n      \"title\": \"Modi dolores non ducimus officia saepe.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Magnam voluptatem occaecati possimus non facere.\",\n      \"language\": \"Non sit et eum officia doloribus.\",\n      \"publisher\": \"Ipsum deserunt incidunt non qui non.\",\n      \"title\": \"Suscipit facilis quasi qui ab.\"\n   }'")
 		}
 	}
 	var isbn string
@@ -136,7 +136,7 @@ func BuildDeleteBookPayload(epubIndexCreatorDeleteBookBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorDeleteBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"book\": {\n         \"author\": \"Sunt qui nisi ut et dolor et.\",\n         \"isbn\": \"Sed explicabo quibusdam.\",\n         \"language\": \"Est eveniet aspernatur beatae eum et nihil.\",\n         \"pages\": [\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  },\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  }\n               ],\n               \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  },\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  }\n               ],\n               \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  },\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  }\n               ],\n               \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  },\n                  {\n                     \"keyword\": \"Tenetur iusto animi mollitia eius magni.\"\n                  }\n               ],\n               \"title\": \"Assumenda est ex asperiores aspernatur enim mollitia.\"\n            }\n         ],\n         \"publisher\": \"Non id cum nemo voluptas illum.\",\n         \"title\": \"Odit aliquam nihil aliquid.\"\n      }\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"book\": {\n         \"author\": \"Atque deserunt sit dolores aspernatur quis error.\",\n         \"isbn\": \"Libero consectetur sunt.\",\n         \"language\": \"Earum ea nihil delectus repellat architecto.\",\n         \"pages\": [\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            }\n         ],\n         \"publisher\": \"Totam officiis quibusdam nobis nemo iusto.\",\n         \"title\": \"Nesciunt nisi in enim.\"\n      }\n   }'")
 		}
 		if body.Book == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("book", "body"))
@@ -157,6 +157,36 @@ func BuildDeleteBookPayload(epubIndexCreatorDeleteBookBody string, epubIndexCrea
 	v := &epubindexcreator.DeleteBookPayload{}
 	if body.Book != nil {
 		v.Book = marshalBookRequestBodyToEpubindexcreatorBook(body.Book)
+	}
+	v.Isbn = isbn
+
+	return v, nil
+}
+
+// BuildCreatePagePayload builds the payload for the epub_index_creator
+// CreatePage endpoint from CLI flags.
+func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCreatorCreatePageIsbn string) (*epubindexcreator.CreatePagePayload, error) {
+	var err error
+	var body CreatePageRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorCreatePageBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"page\": {\n         \"keywords\": [\n            \"Et culpa.\",\n            \"Quia blanditiis dolor sint aut quia.\",\n            \"Eveniet doloremque consequatur dolores.\"\n         ],\n         \"title\": \"Dolor quis sed laborum quam aut reprehenderit.\"\n      }\n   }'")
+		}
+		if body.Page == nil {
+			err = goa.MergeErrors(err, goa.MissingFieldError("page", "body"))
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+	var isbn string
+	{
+		isbn = epubIndexCreatorCreatePageIsbn
+	}
+	v := &epubindexcreator.CreatePagePayload{}
+	if body.Page != nil {
+		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	}
 	v.Isbn = isbn
 

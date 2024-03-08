@@ -381,6 +381,87 @@ func DecodeDeleteBookResponse(decoder func(*http.Response) goahttp.Decoder, rest
 	}
 }
 
+// BuildCreatePageRequest instantiates a HTTP request object with method and
+// path set to call the "epub_index_creator" service "CreatePage" endpoint
+func (c *Client) BuildCreatePageRequest(ctx context.Context, v any) (*http.Request, error) {
+	var (
+		isbn string
+	)
+	{
+		p, ok := v.(*epubindexcreator.CreatePagePayload)
+		if !ok {
+			return nil, goahttp.ErrInvalidType("epub_index_creator", "CreatePage", "*epubindexcreator.CreatePagePayload", v)
+		}
+		isbn = p.Isbn
+	}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: CreatePageEpubIndexCreatorPath(isbn)}
+	req, err := http.NewRequest("POST", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("epub_index_creator", "CreatePage", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// EncodeCreatePageRequest returns an encoder for requests sent to the
+// epub_index_creator CreatePage server.
+func EncodeCreatePageRequest(encoder func(*http.Request) goahttp.Encoder) func(*http.Request, any) error {
+	return func(req *http.Request, v any) error {
+		p, ok := v.(*epubindexcreator.CreatePagePayload)
+		if !ok {
+			return goahttp.ErrInvalidType("epub_index_creator", "CreatePage", "*epubindexcreator.CreatePagePayload", v)
+		}
+		body := NewCreatePageRequestBody(p)
+		if err := encoder(req).Encode(&body); err != nil {
+			return goahttp.ErrEncodingError("epub_index_creator", "CreatePage", err)
+		}
+		return nil
+	}
+}
+
+// DecodeCreatePageResponse returns a decoder for responses returned by the
+// epub_index_creator CreatePage endpoint. restoreBody controls whether the
+// response body should be restored after having been read.
+func DecodeCreatePageResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
+	return func(resp *http.Response) (any, error) {
+		if restoreBody {
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body CreatePageResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("epub_index_creator", "CreatePage", err)
+			}
+			err = ValidateCreatePageResponseBody(&body)
+			if err != nil {
+				return nil, goahttp.ErrValidationError("epub_index_creator", "CreatePage", err)
+			}
+			res := NewCreatePagePageOK(&body)
+			return res, nil
+		default:
+			body, _ := io.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("epub_index_creator", "CreatePage", resp.StatusCode, string(body))
+		}
+	}
+}
+
 // unmarshalBookResponseToEpubindexcreatorBook builds a value of type
 // *epubindexcreator.Book from a value of type *BookResponse.
 func unmarshalBookResponseToEpubindexcreatorBook(v *BookResponse) *epubindexcreator.Book {
@@ -542,6 +623,40 @@ func marshalBookRequestBodyToEpubindexcreatorBook(v *BookRequestBody) *epubindex
 		}
 	} else {
 		res.Pages = []*epubindexcreator.Page{}
+	}
+
+	return res
+}
+
+// marshalEpubindexcreatorCreatePageRequestToCreatePageRequestRequestBody
+// builds a value of type *CreatePageRequestRequestBody from a value of type
+// *epubindexcreator.CreatePageRequest.
+func marshalEpubindexcreatorCreatePageRequestToCreatePageRequestRequestBody(v *epubindexcreator.CreatePageRequest) *CreatePageRequestRequestBody {
+	res := &CreatePageRequestRequestBody{
+		Title: v.Title,
+	}
+	if v.Keywords != nil {
+		res.Keywords = make([]string, len(v.Keywords))
+		for i, val := range v.Keywords {
+			res.Keywords[i] = val
+		}
+	}
+
+	return res
+}
+
+// marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest
+// builds a value of type *epubindexcreator.CreatePageRequest from a value of
+// type *CreatePageRequestRequestBody.
+func marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(v *CreatePageRequestRequestBody) *epubindexcreator.CreatePageRequest {
+	res := &epubindexcreator.CreatePageRequest{
+		Title: v.Title,
+	}
+	if v.Keywords != nil {
+		res.Keywords = make([]string, len(v.Keywords))
+		for i, val := range v.Keywords {
+			res.Keywords[i] = val
+		}
 	}
 
 	return res

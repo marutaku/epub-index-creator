@@ -14,6 +14,12 @@ var Book = Type("Book", func() {
 	Required("isbn", "title", "author", "language", "publisher", "pages")
 })
 
+var CreatePageRequest = Type("CreatePageRequest", func() {
+	Field(1, "title", String, "Title of the page")
+	Field(2, "keywords", ArrayOf(String), "Keywords of the page")
+	Required("title")
+})
+
 var Page = Type("Page", func() {
 	Field(1, "title", String, "Title of the page")
 	Field(2, "keywords", ArrayOf(Keyword), "Keywords of the page")

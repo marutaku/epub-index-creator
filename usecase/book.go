@@ -10,14 +10,14 @@ import (
 type BookUsecaseInterface interface {
 	ListBooks(ctx context.Context, limit, offset int) ([]*domain.Book, error)
 	FindBook(ctx context.Context, isbn string) (*domain.Book, error)
-	CreateBook(ctx context.Context, book domain.Book) (*domain.Book, error)
-	UpdateBook(ctx context.Context, isbn string, book domain.Book) (*domain.Book, error)
+	CreateBook(ctx context.Context, isbn string, title string, author string, language string, publisher string) (*domain.Book, error)
+	UpdateBook(ctx context.Context, isbn string, title string, author string, language string, publisher string) (*domain.Book, error)
 	DeleteBook(ctx context.Context, isbn string) error
 }
 
 type bookUsecase struct{}
 
-func NewBookUsecase() *bookUsecase {
+func NewBookUsecase() BookUsecaseInterface {
 	return &bookUsecase{}
 }
 
@@ -49,9 +49,17 @@ func (*bookUsecase) CreateBook(ctx context.Context, isbn string, title string, a
 	return book, nil
 }
 
-func (*bookUsecase) UpdateBook(ctx context.Context, isbn string, book *domain.Book) (*domain.Book, error) {
+func (*bookUsecase) UpdateBook(ctx context.Context, isbn string, title string, author string, language string, publisher string) (*domain.Book, error) {
 	bookRepo := repository.NewBookRepository()
-	err := bookRepo.Update(ctx, isbn, book)
+	book, err := bookRepo.FindByISBN(ctx, isbn)
+	if err != nil {
+		return nil, err
+	}
+	book.Title = title
+	book.Author = author
+	book.Language = language
+	book.Publisher = publisher
+	err = bookRepo.Update(ctx, isbn, book)
 	if err != nil {
 		return nil, err
 	}

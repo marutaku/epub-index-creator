@@ -20,6 +20,7 @@ type Endpoints struct {
 	CreateBook goa.Endpoint
 	UpdateBook goa.Endpoint
 	DeleteBook goa.Endpoint
+	CreatePage goa.Endpoint
 }
 
 // NewEndpoints wraps the methods of the "epub_index_creator" service with
@@ -31,6 +32,7 @@ func NewEndpoints(s Service) *Endpoints {
 		CreateBook: NewCreateBookEndpoint(s),
 		UpdateBook: NewUpdateBookEndpoint(s),
 		DeleteBook: NewDeleteBookEndpoint(s),
+		CreatePage: NewCreatePageEndpoint(s),
 	}
 }
 
@@ -42,6 +44,7 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 	e.CreateBook = m(e.CreateBook)
 	e.UpdateBook = m(e.UpdateBook)
 	e.DeleteBook = m(e.DeleteBook)
+	e.CreatePage = m(e.CreatePage)
 }
 
 // NewListBooksEndpoint returns an endpoint function that calls the method
@@ -86,5 +89,14 @@ func NewDeleteBookEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
 		p := req.(*DeleteBookPayload)
 		return nil, s.DeleteBook(ctx, p)
+	}
+}
+
+// NewCreatePageEndpoint returns an endpoint function that calls the method
+// "CreatePage" of service "epub_index_creator".
+func NewCreatePageEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*CreatePagePayload)
+		return s.CreatePage(ctx, p)
 	}
 }
