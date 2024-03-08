@@ -27,7 +27,7 @@ var _ = Service("epub_index_creator", func() {
 				Default(0)
 			})
 		})
-		Result(ArrayOf(Book))
+		Result(ArrayOf(BookResponse))
 
 		HTTP(func() {
 			GET("/books")
@@ -35,11 +35,11 @@ var _ = Service("epub_index_creator", func() {
 	})
 	Method("FindBook", func() {
 		Payload(func() {
-			Attribute("isbn", String, "ISBN of the book")
+			Attribute("isbn", ISBN)
 			Required("isbn")
 		})
 
-		Result(Book)
+		Result(BookResponse)
 
 		HTTP(func() {
 			GET("/books/{isbn}")
@@ -47,9 +47,9 @@ var _ = Service("epub_index_creator", func() {
 	})
 
 	Method("CreateBook", func() {
-		Payload(Book)
+		Payload(BookResponse)
 
-		Result(Book)
+		Result(BookResponse)
 
 		HTTP(func() {
 			POST("/books")
@@ -57,15 +57,8 @@ var _ = Service("epub_index_creator", func() {
 	})
 
 	Method("UpdateBook", func() {
-		Payload(func() {
-			Attribute("isbn", String, "ISBN of the book")
-			Attribute("title", String, "Title of the book")
-			Attribute("author", String, "Author of the book")
-			Attribute("language", String, "Language of the book")
-			Attribute("publisher", String, "Publisher of the book")
-			Required("isbn", "title", "author", "language", "publisher")
-		})
-		Result(Book)
+		Payload(BookRequest)
+		Result(BookResponse)
 		HTTP(func() {
 			PUT("/books/{isbn}")
 		})
@@ -73,9 +66,8 @@ var _ = Service("epub_index_creator", func() {
 
 	Method("DeleteBook", func() {
 		Payload(func() {
-			Attribute("isbn", String, "ISBN of the book")
-			Attribute("book", Book)
-			Required("isbn", "book")
+			Attribute("isbn", ISBN)
+			Required("isbn")
 		})
 		Result(Empty)
 		HTTP(func() {
@@ -85,11 +77,11 @@ var _ = Service("epub_index_creator", func() {
 
 	Method("CreatePage", func() {
 		Payload(func() {
-			Attribute("isbn", String, "ISBN of the book")
-			Attribute("page", CreatePageRequest)
+			Attribute("isbn", ISBN)
+			Attribute("page", PageRequest)
 			Required("isbn", "page")
 		})
-		Result(Page)
+		Result(PageResponse)
 		HTTP(func() {
 			POST("/books/{isbn}/pages")
 		})

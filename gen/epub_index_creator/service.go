@@ -14,17 +14,17 @@ import (
 // Service is the epub_index_creator service interface.
 type Service interface {
 	// ListBooks implements ListBooks.
-	ListBooks(context.Context, *ListBooksPayload) (res []*Book, err error)
+	ListBooks(context.Context, *ListBooksPayload) (res []*BookResponse, err error)
 	// FindBook implements FindBook.
-	FindBook(context.Context, *FindBookPayload) (res *Book, err error)
+	FindBook(context.Context, *FindBookPayload) (res *BookResponse, err error)
 	// CreateBook implements CreateBook.
-	CreateBook(context.Context, *Book) (res *Book, err error)
+	CreateBook(context.Context, *BookResponse) (res *BookResponse, err error)
 	// UpdateBook implements UpdateBook.
-	UpdateBook(context.Context, *UpdateBookPayload) (res *Book, err error)
+	UpdateBook(context.Context, *BookRequest) (res *BookResponse, err error)
 	// DeleteBook implements DeleteBook.
 	DeleteBook(context.Context, *DeleteBookPayload) (err error)
 	// CreatePage implements CreatePage.
-	CreatePage(context.Context, *CreatePagePayload) (res *Page, err error)
+	CreatePage(context.Context, *CreatePagePayload) (res *PageResponse, err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -43,10 +43,25 @@ const ServiceName = "epub_index_creator"
 // MethodKey key.
 var MethodNames = [6]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "CreatePage"}
 
-// Book is the result type of the epub_index_creator service FindBook method.
-type Book struct {
+// BookRequest is the payload type of the epub_index_creator service UpdateBook
+// method.
+type BookRequest struct {
 	// ISBN of the book
-	Isbn string
+	Isbn ISBN
+	// Title of the book
+	Title string
+	// Author of the book
+	Author string
+	// Language of the book
+	Language string
+	// Publisher of the book
+	Publisher string
+}
+
+// BookResponse is the result type of the epub_index_creator service FindBook
+// method.
+type BookResponse struct {
+	Isbn ISBN
 	// Title of the book
 	Title string
 	// Author of the book
@@ -56,14 +71,13 @@ type Book struct {
 	// Publisher of the book
 	Publisher string
 	// Pages of the book
-	Pages []*Page
+	Pages []*PageResponse
 }
 
 // CreatePagePayload is the payload type of the epub_index_creator service
 // CreatePage method.
 type CreatePagePayload struct {
-	// ISBN of the book
-	Isbn string
+	Isbn ISBN
 	Page *CreatePageRequest
 }
 
@@ -77,22 +91,17 @@ type CreatePageRequest struct {
 // DeleteBookPayload is the payload type of the epub_index_creator service
 // DeleteBook method.
 type DeleteBookPayload struct {
-	// ISBN of the book
-	Isbn string
-	Book *Book
+	Isbn ISBN
 }
 
 // FindBookPayload is the payload type of the epub_index_creator service
 // FindBook method.
 type FindBookPayload struct {
-	// ISBN of the book
-	Isbn string
+	Isbn ISBN
 }
 
-type Keyword struct {
-	// Keyword of the page
-	Keyword string
-}
+// ISBN of the book
+type ISBN string
 
 // ListBooksPayload is the payload type of the epub_index_creator service
 // ListBooks method.
@@ -103,25 +112,11 @@ type ListBooksPayload struct {
 	Offset int
 }
 
-// Page is the result type of the epub_index_creator service CreatePage method.
-type Page struct {
+// PageResponse is the result type of the epub_index_creator service CreatePage
+// method.
+type PageResponse struct {
 	// Title of the page
 	Title string
 	// Keywords of the page
-	Keywords []*Keyword
-}
-
-// UpdateBookPayload is the payload type of the epub_index_creator service
-// UpdateBook method.
-type UpdateBookPayload struct {
-	// ISBN of the book
-	Isbn string
-	// Title of the book
-	Title string
-	// Author of the book
-	Author string
-	// Language of the book
-	Language string
-	// Publisher of the book
-	Publisher string
+	Keywords []string
 }

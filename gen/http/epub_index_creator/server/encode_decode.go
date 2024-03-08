@@ -21,7 +21,7 @@ import (
 // epub_index_creator ListBooks endpoint.
 func EncodeListBooksResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.([]*epubindexcreator.Book)
+		res, _ := v.([]*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
 		body := NewListBooksResponseBody(res)
 		w.WriteHeader(http.StatusOK)
@@ -58,7 +58,7 @@ func DecodeListBooksRequest(mux goahttp.Muxer, decoder func(*http.Request) goaht
 // epub_index_creator FindBook endpoint.
 func EncodeFindBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.(*epubindexcreator.Book)
+		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
 		body := NewFindBookResponseBody(res)
 		w.WriteHeader(http.StatusOK)
@@ -72,10 +72,15 @@ func DecodeFindBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahtt
 	return func(r *http.Request) (any, error) {
 		var (
 			isbn string
+			err  error
 
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
 		payload := NewFindBookPayload(isbn)
 
 		return payload, nil
@@ -86,7 +91,7 @@ func DecodeFindBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahtt
 // epub_index_creator CreateBook endpoint.
 func EncodeCreateBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.(*epubindexcreator.Book)
+		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
 		body := NewCreateBookResponseBody(res)
 		w.WriteHeader(http.StatusOK)
@@ -113,7 +118,7 @@ func DecodeCreateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 		if err != nil {
 			return nil, err
 		}
-		payload := NewCreateBookBook(&body)
+		payload := NewCreateBookBookResponse(&body)
 
 		return payload, nil
 	}
@@ -123,7 +128,7 @@ func DecodeCreateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 // epub_index_creator UpdateBook endpoint.
 func EncodeUpdateBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.(*epubindexcreator.Book)
+		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
 		body := NewUpdateBookResponseBody(res)
 		w.WriteHeader(http.StatusOK)
@@ -157,7 +162,11 @@ func DecodeUpdateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		payload := NewUpdateBookPayload(&body, isbn)
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
+		payload := NewUpdateBookBookRequest(&body, isbn)
 
 		return payload, nil
 	}
@@ -177,28 +186,17 @@ func EncodeDeleteBookResponse(encoder func(context.Context, http.ResponseWriter)
 func DecodeDeleteBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
 	return func(r *http.Request) (any, error) {
 		var (
-			body DeleteBookRequestBody
-			err  error
-		)
-		err = decoder(r).Decode(&body)
-		if err != nil {
-			if err == io.EOF {
-				return nil, goa.MissingPayloadError()
-			}
-			return nil, goa.DecodePayloadError(err.Error())
-		}
-		err = ValidateDeleteBookRequestBody(&body)
-		if err != nil {
-			return nil, err
-		}
-
-		var (
 			isbn string
+			err  error
 
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		payload := NewDeleteBookPayload(&body, isbn)
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
+		payload := NewDeleteBookPayload(isbn)
 
 		return payload, nil
 	}
@@ -208,7 +206,7 @@ func DecodeDeleteBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 // epub_index_creator CreatePage endpoint.
 func EncodeCreatePageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		res, _ := v.(*epubindexcreator.Page)
+		res, _ := v.(*epubindexcreator.PageResponse)
 		enc := encoder(ctx, w)
 		body := NewCreatePageResponseBody(res)
 		w.WriteHeader(http.StatusOK)
@@ -242,127 +240,87 @@ func DecodeCreatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
 		payload := NewCreatePagePayload(&body, isbn)
 
 		return payload, nil
 	}
 }
 
-// marshalEpubindexcreatorBookToBookResponse builds a value of type
-// *BookResponse from a value of type *epubindexcreator.Book.
-func marshalEpubindexcreatorBookToBookResponse(v *epubindexcreator.Book) *BookResponse {
-	res := &BookResponse{
-		Isbn:      v.Isbn,
+// marshalEpubindexcreatorBookResponseToBookResponseResponse builds a value of
+// type *BookResponseResponse from a value of type
+// *epubindexcreator.BookResponse.
+func marshalEpubindexcreatorBookResponseToBookResponseResponse(v *epubindexcreator.BookResponse) *BookResponseResponse {
+	res := &BookResponseResponse{
+		Isbn:      string(v.Isbn),
 		Title:     v.Title,
 		Author:    v.Author,
 		Language:  v.Language,
 		Publisher: v.Publisher,
 	}
 	if v.Pages != nil {
-		res.Pages = make([]*PageResponse, len(v.Pages))
+		res.Pages = make([]*PageResponseResponse, len(v.Pages))
 		for i, val := range v.Pages {
-			res.Pages[i] = marshalEpubindexcreatorPageToPageResponse(val)
+			res.Pages[i] = marshalEpubindexcreatorPageResponseToPageResponseResponse(val)
 		}
 	} else {
-		res.Pages = []*PageResponse{}
+		res.Pages = []*PageResponseResponse{}
 	}
 
 	return res
 }
 
-// marshalEpubindexcreatorPageToPageResponse builds a value of type
-// *PageResponse from a value of type *epubindexcreator.Page.
-func marshalEpubindexcreatorPageToPageResponse(v *epubindexcreator.Page) *PageResponse {
-	res := &PageResponse{
+// marshalEpubindexcreatorPageResponseToPageResponseResponse builds a value of
+// type *PageResponseResponse from a value of type
+// *epubindexcreator.PageResponse.
+func marshalEpubindexcreatorPageResponseToPageResponseResponse(v *epubindexcreator.PageResponse) *PageResponseResponse {
+	res := &PageResponseResponse{
 		Title: v.Title,
 	}
 	if v.Keywords != nil {
-		res.Keywords = make([]*KeywordResponse, len(v.Keywords))
+		res.Keywords = make([]string, len(v.Keywords))
 		for i, val := range v.Keywords {
-			res.Keywords[i] = marshalEpubindexcreatorKeywordToKeywordResponse(val)
+			res.Keywords[i] = val
 		}
 	} else {
-		res.Keywords = []*KeywordResponse{}
+		res.Keywords = []string{}
 	}
 
 	return res
 }
 
-// marshalEpubindexcreatorKeywordToKeywordResponse builds a value of type
-// *KeywordResponse from a value of type *epubindexcreator.Keyword.
-func marshalEpubindexcreatorKeywordToKeywordResponse(v *epubindexcreator.Keyword) *KeywordResponse {
-	res := &KeywordResponse{
-		Keyword: v.Keyword,
-	}
-
-	return res
-}
-
-// marshalEpubindexcreatorPageToPageResponseBody builds a value of type
-// *PageResponseBody from a value of type *epubindexcreator.Page.
-func marshalEpubindexcreatorPageToPageResponseBody(v *epubindexcreator.Page) *PageResponseBody {
-	res := &PageResponseBody{
+// marshalEpubindexcreatorPageResponseToPageResponseResponseBody builds a value
+// of type *PageResponseResponseBody from a value of type
+// *epubindexcreator.PageResponse.
+func marshalEpubindexcreatorPageResponseToPageResponseResponseBody(v *epubindexcreator.PageResponse) *PageResponseResponseBody {
+	res := &PageResponseResponseBody{
 		Title: v.Title,
 	}
 	if v.Keywords != nil {
-		res.Keywords = make([]*KeywordResponseBody, len(v.Keywords))
+		res.Keywords = make([]string, len(v.Keywords))
 		for i, val := range v.Keywords {
-			res.Keywords[i] = marshalEpubindexcreatorKeywordToKeywordResponseBody(val)
+			res.Keywords[i] = val
 		}
 	} else {
-		res.Keywords = []*KeywordResponseBody{}
+		res.Keywords = []string{}
 	}
 
 	return res
 }
 
-// marshalEpubindexcreatorKeywordToKeywordResponseBody builds a value of type
-// *KeywordResponseBody from a value of type *epubindexcreator.Keyword.
-func marshalEpubindexcreatorKeywordToKeywordResponseBody(v *epubindexcreator.Keyword) *KeywordResponseBody {
-	res := &KeywordResponseBody{
-		Keyword: v.Keyword,
-	}
-
-	return res
-}
-
-// unmarshalPageRequestBodyToEpubindexcreatorPage builds a value of type
-// *epubindexcreator.Page from a value of type *PageRequestBody.
-func unmarshalPageRequestBodyToEpubindexcreatorPage(v *PageRequestBody) *epubindexcreator.Page {
-	res := &epubindexcreator.Page{
+// unmarshalPageResponseRequestBodyToEpubindexcreatorPageResponse builds a
+// value of type *epubindexcreator.PageResponse from a value of type
+// *PageResponseRequestBody.
+func unmarshalPageResponseRequestBodyToEpubindexcreatorPageResponse(v *PageResponseRequestBody) *epubindexcreator.PageResponse {
+	res := &epubindexcreator.PageResponse{
 		Title: *v.Title,
 	}
-	res.Keywords = make([]*epubindexcreator.Keyword, len(v.Keywords))
+	res.Keywords = make([]string, len(v.Keywords))
 	for i, val := range v.Keywords {
-		res.Keywords[i] = unmarshalKeywordRequestBodyToEpubindexcreatorKeyword(val)
-	}
-
-	return res
-}
-
-// unmarshalKeywordRequestBodyToEpubindexcreatorKeyword builds a value of type
-// *epubindexcreator.Keyword from a value of type *KeywordRequestBody.
-func unmarshalKeywordRequestBodyToEpubindexcreatorKeyword(v *KeywordRequestBody) *epubindexcreator.Keyword {
-	res := &epubindexcreator.Keyword{
-		Keyword: *v.Keyword,
-	}
-
-	return res
-}
-
-// unmarshalBookRequestBodyToEpubindexcreatorBook builds a value of type
-// *epubindexcreator.Book from a value of type *BookRequestBody.
-func unmarshalBookRequestBodyToEpubindexcreatorBook(v *BookRequestBody) *epubindexcreator.Book {
-	res := &epubindexcreator.Book{
-		Isbn:      *v.Isbn,
-		Title:     *v.Title,
-		Author:    *v.Author,
-		Language:  *v.Language,
-		Publisher: *v.Publisher,
-	}
-	res.Pages = make([]*epubindexcreator.Page, len(v.Pages))
-	for i, val := range v.Pages {
-		res.Pages[i] = unmarshalPageRequestBodyToEpubindexcreatorPage(val)
+		res.Keywords[i] = val
 	}
 
 	return res

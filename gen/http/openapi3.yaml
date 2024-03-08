@@ -18,8 +18,8 @@ paths:
                         schema:
                             $ref: '#/components/schemas/ListBooksRequestBody'
                         example:
-                            limit: 47
-                            offset: 8534742228231063417
+                            limit: 11
+                            offset: 3696960733945795768
             responses:
                 "200":
                     description: OK response.
@@ -28,97 +28,93 @@ paths:
                             schema:
                                 type: array
                                 items:
-                                    $ref: '#/components/schemas/Book'
+                                    $ref: '#/components/schemas/BookResponse'
                                 example:
-                                    - author: Consequatur autem autem facilis aliquam ab dolor.
-                                      isbn: Recusandae saepe velit.
-                                      language: Nulla corporis aspernatur ut dicta.
+                                    - author: Alan A. A. Donovan, Brian W. Kernighan
+                                      isbn: 683-4-7-63-8
+                                      language: English
                                       pages:
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                        - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                      publisher: Officiis totam.
-                                      title: Omnis et atque labore ad ut laboriosam.
-                                    - author: Consequatur autem autem facilis aliquam ab dolor.
-                                      isbn: Recusandae saepe velit.
-                                      language: Nulla corporis aspernatur ut dicta.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
+                                      publisher: Addison-Wesley
+                                      title: The Go Programming Language
+                                    - author: Alan A. A. Donovan, Brian W. Kernighan
+                                      isbn: 683-4-7-63-8
+                                      language: English
                                       pages:
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
                                         - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                        - keywords:
-                                            - keyword: Et numquam esse.
-                                            - keyword: Et numquam esse.
-                                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                      publisher: Officiis totam.
-                                      title: Omnis et atque labore ad ut laboriosam.
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
+                                      publisher: Addison-Wesley
+                                      title: The Go Programming Language
                             example:
-                                - author: Consequatur autem autem facilis aliquam ab dolor.
-                                  isbn: Recusandae saepe velit.
-                                  language: Nulla corporis aspernatur ut dicta.
+                                - author: Alan A. A. Donovan, Brian W. Kernighan
+                                  isbn: 683-4-7-63-8
+                                  language: English
                                   pages:
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                    - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                  publisher: Officiis totam.
-                                  title: Omnis et atque labore ad ut laboriosam.
-                                - author: Consequatur autem autem facilis aliquam ab dolor.
-                                  isbn: Recusandae saepe velit.
-                                  language: Nulla corporis aspernatur ut dicta.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                  publisher: Addison-Wesley
+                                  title: The Go Programming Language
+                                - author: Alan A. A. Donovan, Brian W. Kernighan
+                                  isbn: 683-4-7-63-8
+                                  language: English
                                   pages:
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                    - keywords:
-                                        - keyword: Et numquam esse.
-                                        - keyword: Et numquam esse.
-                                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                                  publisher: Officiis totam.
-                                  title: Omnis et atque labore ad ut laboriosam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                  publisher: Addison-Wesley
+                                  title: The Go Programming Language
         post:
             tags:
                 - epub_index_creator
@@ -129,62 +125,63 @@ paths:
                 content:
                     application/json:
                         schema:
-                            $ref: '#/components/schemas/Book'
+                            $ref: '#/components/schemas/BookResponse'
                         example:
-                            author: Magni tempora ducimus omnis qui.
-                            isbn: Ex asperiores aspernatur enim.
-                            language: Natus voluptatum voluptatem corporis.
+                            author: Alan A. A. Donovan, Brian W. Kernighan
+                            isbn: 171-16-075-1-0
+                            language: English
                             pages:
                                 - keywords:
-                                    - keyword: Temporibus itaque nostrum.
-                                    - keyword: Temporibus itaque nostrum.
-                                    - keyword: Temporibus itaque nostrum.
-                                  title: Nemo eaque aut et exercitationem placeat ad.
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                  title: Introduction
                                 - keywords:
-                                    - keyword: Temporibus itaque nostrum.
-                                    - keyword: Temporibus itaque nostrum.
-                                    - keyword: Temporibus itaque nostrum.
-                                  title: Nemo eaque aut et exercitationem placeat ad.
-                            publisher: Dignissimos sed qui et consequatur aspernatur.
-                            title: Laboriosam omnis tenetur iusto animi mollitia.
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                  title: Introduction
+                                - keywords:
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                  title: Introduction
+                                - keywords:
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                  title: Introduction
+                            publisher: Addison-Wesley
+                            title: The Go Programming Language
             responses:
                 "200":
                     description: OK response.
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Book'
+                                $ref: '#/components/schemas/BookResponse'
                             example:
-                                author: Non ducimus officia saepe quos.
-                                isbn: Officiis expedita dolor natus.
-                                language: Totam voluptatibus excepturi dignissimos placeat nam.
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 340-1-4-9913247-3
+                                language: English
                                 pages:
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                    - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                publisher: Esse rerum veniam assumenda quae dolores cum.
-                                title: Dolore modi.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
     /books/{isbn}:
         delete:
             tags:
@@ -194,42 +191,13 @@ paths:
             parameters:
                 - name: isbn
                   in: path
-                  description: ISBN of the book
                   required: true
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: Qui est mollitia quisquam excepturi neque.
-                  example: Voluptatem ut animi at.
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/DeleteBookRequestBody'
-                        example:
-                            book:
-                                author: Atque deserunt sit dolores aspernatur quis error.
-                                isbn: Libero consectetur sunt.
-                                language: Earum ea nihil delectus repellat architecto.
-                                pages:
-                                    - keywords:
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                      title: Nemo eaque aut et exercitationem placeat ad.
-                                    - keywords:
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                      title: Nemo eaque aut et exercitationem placeat ad.
-                                    - keywords:
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                        - keyword: Temporibus itaque nostrum.
-                                      title: Nemo eaque aut et exercitationem placeat ad.
-                                publisher: Totam officiis quibusdam nobis nemo iusto.
-                                title: Nesciunt nisi in enim.
+                    example: 978-3-16-148410-0
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                  example: 978-3-16-148410-0
             responses:
                 "204":
                     description: No Content response.
@@ -241,51 +209,37 @@ paths:
             parameters:
                 - name: isbn
                   in: path
-                  description: ISBN of the book
                   required: true
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: Doloremque et asperiores et voluptatem dolor ut.
-                  example: Aliquam earum quasi nihil est.
+                    example: 978-3-16-148410-0
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                  example: 978-3-16-148410-0
             responses:
                 "200":
                     description: OK response.
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Book'
+                                $ref: '#/components/schemas/BookResponse'
                             example:
-                                author: Voluptas est dolorem et.
-                                isbn: Quia consequatur voluptates maiores ea ut.
-                                language: Sit quia neque ratione quidem.
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 325-2-0187-3-7
+                                language: English
                                 pages:
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                    - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                    - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                publisher: Autem animi.
-                                title: Non consequatur.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
         put:
             tags:
                 - epub_index_creator
@@ -299,8 +253,9 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: Ullam voluptas blanditiis consequatur.
-                  example: Consequuntur occaecati ea vel.
+                    example: 978-3-16-148410-0
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                  example: 978-3-16-148410-0
             requestBody:
                 required: true
                 content:
@@ -308,48 +263,44 @@ paths:
                         schema:
                             $ref: '#/components/schemas/UpdateBookRequestBody'
                         example:
-                            author: Magnam voluptatem occaecati possimus non facere.
-                            language: Non sit et eum officia doloribus.
-                            publisher: Ipsum deserunt incidunt non qui non.
-                            title: Suscipit facilis quasi qui ab.
+                            author: Alias placeat dolor aliquam qui eligendi placeat.
+                            language: Nam quibusdam vero rem aliquam voluptatibus.
+                            publisher: Eligendi ipsa porro.
+                            title: Dolores quo sit dolores hic temporibus numquam.
             responses:
                 "200":
                     description: OK response.
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Book'
+                                $ref: '#/components/schemas/BookResponse'
                             example:
-                                author: Sunt qui nisi ut et dolor et.
-                                isbn: Voluptas incidunt rerum consequatur sed explicabo quibusdam.
-                                language: Est eveniet aspernatur beatae eum et nihil.
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 358-4366-27-24915-0
+                                language: English
                                 pages:
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                        - keyword: Sit error voluptatum asperiores nihil.
-                                      title: Quasi molestiae veniam.
-                                publisher: Non id cum nemo voluptas illum.
-                                title: Odit aliquam nihil aliquid.
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
     /books/{isbn}/pages:
         post:
             tags:
@@ -359,13 +310,13 @@ paths:
             parameters:
                 - name: isbn
                   in: path
-                  description: ISBN of the book
                   required: true
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: Minima laudantium.
-                  example: Odio autem.
+                    example: 978-3-16-148410-0
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                  example: 978-3-16-148410-0
             requestBody:
                 required: true
                 content:
@@ -375,22 +326,23 @@ paths:
                         example:
                             page:
                                 keywords:
-                                    - Et culpa.
-                                    - Quia blanditiis dolor sint aut quia.
-                                    - Eveniet doloremque consequatur dolores.
-                                title: Dolor quis sed laborum quam aut reprehenderit.
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                title: Introduction
             responses:
                 "200":
                     description: OK response.
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/Page'
+                                $ref: '#/components/schemas/PageResponse'
                             example:
                                 keywords:
-                                    - keyword: Sit error voluptatum asperiores nihil.
-                                    - keyword: Sit error voluptatum asperiores nihil.
-                                title: Ut ipsum nam vero.
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                title: Introduction
     /openapi.json:
         get:
             tags:
@@ -402,66 +354,72 @@ paths:
                     description: File downloaded
 components:
     schemas:
-        Book:
+        BookResponse:
             type: object
             properties:
                 author:
                     type: string
                     description: Author of the book
-                    example: Sed in.
+                    example: Alan A. A. Donovan, Brian W. Kernighan
                 isbn:
                     type: string
-                    description: ISBN of the book
-                    example: Enim exercitationem eveniet consectetur.
+                    example: 234-3-1-7-1
+                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
                 language:
                     type: string
                     description: Language of the book
-                    example: Omnis recusandae consequatur ut cupiditate et.
+                    example: English
                 pages:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Page'
+                        $ref: '#/components/schemas/PageResponse'
                     description: Pages of the book
                     example:
                         - keywords:
-                            - keyword: Et numquam esse.
-                            - keyword: Et numquam esse.
-                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                            - Introduction
+                            - Chapter 1
+                            - Chapter 2
+                          title: Introduction
                         - keywords:
-                            - keyword: Et numquam esse.
-                            - keyword: Et numquam esse.
-                          title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                            - Introduction
+                            - Chapter 1
+                            - Chapter 2
+                          title: Introduction
+                        - keywords:
+                            - Introduction
+                            - Chapter 1
+                            - Chapter 2
+                          title: Introduction
+                        - keywords:
+                            - Introduction
+                            - Chapter 1
+                            - Chapter 2
+                          title: Introduction
                 publisher:
                     type: string
                     description: Publisher of the book
-                    example: Quae aut est est.
+                    example: Addison-Wesley
                 title:
                     type: string
                     description: Title of the book
-                    example: Distinctio numquam culpa est magnam totam.
+                    example: The Go Programming Language
             example:
-                author: Sit occaecati repellendus similique nesciunt.
-                isbn: Dolor vel eum consectetur.
-                language: Voluptatem iure sed asperiores accusamus nemo reiciendis.
+                author: Alan A. A. Donovan, Brian W. Kernighan
+                isbn: 216-39773-7165-9-8
+                language: English
                 pages:
                     - keywords:
-                        - keyword: Et numquam esse.
-                        - keyword: Et numquam esse.
-                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
                     - keywords:
-                        - keyword: Et numquam esse.
-                        - keyword: Et numquam esse.
-                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                    - keywords:
-                        - keyword: Et numquam esse.
-                        - keyword: Et numquam esse.
-                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                    - keywords:
-                        - keyword: Et numquam esse.
-                        - keyword: Et numquam esse.
-                      title: Dolorem perferendis voluptatibus aliquam repudiandae molestias.
-                publisher: Molestiae hic nisi.
-                title: Et omnis ipsam nisi animi.
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                      title: Introduction
+                publisher: Addison-Wesley
+                title: The Go Programming Language
             required:
                 - isbn
                 - title
@@ -476,21 +434,22 @@ components:
                     type: array
                     items:
                         type: string
-                        example: Omnis dolor ducimus et aut voluptatem.
+                        example: Ex asperiores aspernatur enim.
                     description: Keywords of the page
                     example:
-                        - Sit velit nam consequatur.
-                        - Modi ipsa iste autem.
-                        - Vel hic est.
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
                 title:
                     type: string
                     description: Title of the page
-                    example: Voluptas et minima numquam et.
+                    example: Introduction
             example:
                 keywords:
-                    - Qui sunt autem.
-                    - Magnam quia quos laudantium ab suscipit necessitatibus.
-                title: Debitis qui possimus vel eveniet eligendi dignissimos.
+                    - Introduction
+                    - Chapter 1
+                    - Chapter 2
+                title: Introduction
             required:
                 - title
         CreatePageRequestBody:
@@ -501,53 +460,12 @@ components:
             example:
                 page:
                     keywords:
-                        - Et culpa.
-                        - Quia blanditiis dolor sint aut quia.
-                        - Eveniet doloremque consequatur dolores.
-                    title: Dolor quis sed laborum quam aut reprehenderit.
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
+                    title: Introduction
             required:
                 - page
-        DeleteBookRequestBody:
-            type: object
-            properties:
-                book:
-                    $ref: '#/components/schemas/Book'
-            example:
-                book:
-                    author: Atque deserunt sit dolores aspernatur quis error.
-                    isbn: Libero consectetur sunt.
-                    language: Earum ea nihil delectus repellat architecto.
-                    pages:
-                        - keywords:
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                          title: Nemo eaque aut et exercitationem placeat ad.
-                        - keywords:
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                          title: Nemo eaque aut et exercitationem placeat ad.
-                        - keywords:
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                            - keyword: Temporibus itaque nostrum.
-                          title: Nemo eaque aut et exercitationem placeat ad.
-                    publisher: Totam officiis quibusdam nobis nemo iusto.
-                    title: Nesciunt nisi in enim.
-            required:
-                - book
-        Keyword:
-            type: object
-            properties:
-                keyword:
-                    type: string
-                    description: Keyword of the page
-                    example: Mollitia consequatur.
-            example:
-                keyword: Eligendi est alias dolorum omnis.
-            required:
-                - keyword
         ListBooksRequestBody:
             type: object
             properties:
@@ -555,7 +473,7 @@ components:
                     type: integer
                     description: Maximum number of books to return
                     default: 100
-                    example: 52
+                    example: 36
                     format: int64
                     minimum: 1
                     maximum: 100
@@ -563,34 +481,35 @@ components:
                     type: integer
                     description: Field to paginate books
                     default: 0
-                    example: 4689438355925520939
+                    example: 1270659099931482815
                     format: int64
                     minimum: 0
             example:
-                limit: 96
-                offset: 1487682258006622505
-        Page:
+                limit: 36
+                offset: 6183587258756353562
+        PageResponse:
             type: object
             properties:
                 keywords:
                     type: array
                     items:
-                        $ref: '#/components/schemas/Keyword'
+                        type: string
+                        example: Quaerat temporibus.
                     description: Keywords of the page
                     example:
-                        - keyword: Et numquam esse.
-                        - keyword: Et numquam esse.
+                        - Introduction
+                        - Chapter 1
+                        - Chapter 2
                 title:
                     type: string
                     description: Title of the page
-                    example: Hic placeat voluptates aut suscipit quidem.
+                    example: Introduction
             example:
                 keywords:
-                    - keyword: Et numquam esse.
-                    - keyword: Et numquam esse.
-                    - keyword: Et numquam esse.
-                    - keyword: Et numquam esse.
-                title: Reiciendis ut totam quia odio.
+                    - Introduction
+                    - Chapter 1
+                    - Chapter 2
+                title: Introduction
             required:
                 - title
                 - keywords
@@ -600,24 +519,24 @@ components:
                 author:
                     type: string
                     description: Author of the book
-                    example: Optio voluptas a nihil iste odio.
+                    example: Est sit error voluptatum asperiores.
                 language:
                     type: string
                     description: Language of the book
-                    example: Necessitatibus qui.
+                    example: Harum quia.
                 publisher:
                     type: string
                     description: Publisher of the book
-                    example: Quisquam in sit adipisci et sed dolore.
+                    example: Voluptates maiores.
                 title:
                     type: string
                     description: Title of the book
-                    example: Velit culpa perspiciatis.
+                    example: Quasi molestiae veniam.
             example:
-                author: Aliquam nihil ipsam.
-                language: Ab occaecati est sunt.
-                publisher: Aut eveniet soluta deleniti.
-                title: Ipsum vel.
+                author: Dolorem et iste sit quia.
+                language: Ratione quidem nam.
+                publisher: Animi assumenda.
+                title: Ut cumque non consequatur fuga voluptas.
             required:
                 - title
                 - author

@@ -24,7 +24,6 @@ type ListBooksRequestBody struct {
 // CreateBookRequestBody is the type of the "epub_index_creator" service
 // "CreateBook" endpoint HTTP request body.
 type CreateBookRequestBody struct {
-	// ISBN of the book
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
 	Title string `form:"title" json:"title" xml:"title"`
@@ -35,7 +34,7 @@ type CreateBookRequestBody struct {
 	// Publisher of the book
 	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 	// Pages of the book
-	Pages []*PageRequestBody `form:"pages" json:"pages" xml:"pages"`
+	Pages []*PageResponseRequestBody `form:"pages" json:"pages" xml:"pages"`
 }
 
 // UpdateBookRequestBody is the type of the "epub_index_creator" service
@@ -51,12 +50,6 @@ type UpdateBookRequestBody struct {
 	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
 }
 
-// DeleteBookRequestBody is the type of the "epub_index_creator" service
-// "DeleteBook" endpoint HTTP request body.
-type DeleteBookRequestBody struct {
-	Book *BookRequestBody `form:"book" json:"book" xml:"book"`
-}
-
 // CreatePageRequestBody is the type of the "epub_index_creator" service
 // "CreatePage" endpoint HTTP request body.
 type CreatePageRequestBody struct {
@@ -65,12 +58,11 @@ type CreatePageRequestBody struct {
 
 // ListBooksResponseBody is the type of the "epub_index_creator" service
 // "ListBooks" endpoint HTTP response body.
-type ListBooksResponseBody []*BookResponse
+type ListBooksResponseBody []*BookResponseResponse
 
 // FindBookResponseBody is the type of the "epub_index_creator" service
 // "FindBook" endpoint HTTP response body.
 type FindBookResponseBody struct {
-	// ISBN of the book
 	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
 	// Title of the book
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
@@ -81,13 +73,12 @@ type FindBookResponseBody struct {
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
-	Pages []*PageResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+	Pages []*PageResponseResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
 // CreateBookResponseBody is the type of the "epub_index_creator" service
 // "CreateBook" endpoint HTTP response body.
 type CreateBookResponseBody struct {
-	// ISBN of the book
 	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
 	// Title of the book
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
@@ -98,13 +89,12 @@ type CreateBookResponseBody struct {
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
-	Pages []*PageResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+	Pages []*PageResponseResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
 // UpdateBookResponseBody is the type of the "epub_index_creator" service
 // "UpdateBook" endpoint HTTP response body.
 type UpdateBookResponseBody struct {
-	// ISBN of the book
 	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
 	// Title of the book
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
@@ -115,7 +105,7 @@ type UpdateBookResponseBody struct {
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
-	Pages []*PageResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+	Pages []*PageResponseResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
 // CreatePageResponseBody is the type of the "epub_index_creator" service
@@ -124,12 +114,11 @@ type CreatePageResponseBody struct {
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
-	Keywords []*KeywordResponseBody `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
 }
 
-// BookResponse is used to define fields on response body types.
-type BookResponse struct {
-	// ISBN of the book
+// BookResponseResponse is used to define fields on response body types.
+type BookResponseResponse struct {
 	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
 	// Title of the book
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
@@ -140,65 +129,31 @@ type BookResponse struct {
 	// Publisher of the book
 	Publisher *string `form:"publisher,omitempty" json:"publisher,omitempty" xml:"publisher,omitempty"`
 	// Pages of the book
-	Pages []*PageResponse `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
+	Pages []*PageResponseResponse `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
-// PageResponse is used to define fields on response body types.
-type PageResponse struct {
+// PageResponseResponse is used to define fields on response body types.
+type PageResponseResponse struct {
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
-	Keywords []*KeywordResponse `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
 }
 
-// KeywordResponse is used to define fields on response body types.
-type KeywordResponse struct {
-	// Keyword of the page
-	Keyword *string `form:"keyword,omitempty" json:"keyword,omitempty" xml:"keyword,omitempty"`
-}
-
-// PageResponseBody is used to define fields on response body types.
-type PageResponseBody struct {
+// PageResponseResponseBody is used to define fields on response body types.
+type PageResponseResponseBody struct {
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
-	Keywords []*KeywordResponseBody `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
 }
 
-// KeywordResponseBody is used to define fields on response body types.
-type KeywordResponseBody struct {
-	// Keyword of the page
-	Keyword *string `form:"keyword,omitempty" json:"keyword,omitempty" xml:"keyword,omitempty"`
-}
-
-// PageRequestBody is used to define fields on request body types.
-type PageRequestBody struct {
+// PageResponseRequestBody is used to define fields on request body types.
+type PageResponseRequestBody struct {
 	// Title of the page
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
-	Keywords []*KeywordRequestBody `form:"keywords" json:"keywords" xml:"keywords"`
-}
-
-// KeywordRequestBody is used to define fields on request body types.
-type KeywordRequestBody struct {
-	// Keyword of the page
-	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
-}
-
-// BookRequestBody is used to define fields on request body types.
-type BookRequestBody struct {
-	// ISBN of the book
-	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
-	// Title of the book
-	Title string `form:"title" json:"title" xml:"title"`
-	// Author of the book
-	Author string `form:"author" json:"author" xml:"author"`
-	// Language of the book
-	Language string `form:"language" json:"language" xml:"language"`
-	// Publisher of the book
-	Publisher string `form:"publisher" json:"publisher" xml:"publisher"`
-	// Pages of the book
-	Pages []*PageRequestBody `form:"pages" json:"pages" xml:"pages"`
+	Keywords []string `form:"keywords" json:"keywords" xml:"keywords"`
 }
 
 // CreatePageRequestRequestBody is used to define fields on request body types.
@@ -233,43 +188,33 @@ func NewListBooksRequestBody(p *epubindexcreator.ListBooksPayload) *ListBooksReq
 
 // NewCreateBookRequestBody builds the HTTP request body from the payload of
 // the "CreateBook" endpoint of the "epub_index_creator" service.
-func NewCreateBookRequestBody(p *epubindexcreator.Book) *CreateBookRequestBody {
+func NewCreateBookRequestBody(p *epubindexcreator.BookResponse) *CreateBookRequestBody {
 	body := &CreateBookRequestBody{
-		Isbn:      p.Isbn,
+		Isbn:      string(p.Isbn),
 		Title:     p.Title,
 		Author:    p.Author,
 		Language:  p.Language,
 		Publisher: p.Publisher,
 	}
 	if p.Pages != nil {
-		body.Pages = make([]*PageRequestBody, len(p.Pages))
+		body.Pages = make([]*PageResponseRequestBody, len(p.Pages))
 		for i, val := range p.Pages {
-			body.Pages[i] = marshalEpubindexcreatorPageToPageRequestBody(val)
+			body.Pages[i] = marshalEpubindexcreatorPageResponseToPageResponseRequestBody(val)
 		}
 	} else {
-		body.Pages = []*PageRequestBody{}
+		body.Pages = []*PageResponseRequestBody{}
 	}
 	return body
 }
 
 // NewUpdateBookRequestBody builds the HTTP request body from the payload of
 // the "UpdateBook" endpoint of the "epub_index_creator" service.
-func NewUpdateBookRequestBody(p *epubindexcreator.UpdateBookPayload) *UpdateBookRequestBody {
+func NewUpdateBookRequestBody(p *epubindexcreator.BookRequest) *UpdateBookRequestBody {
 	body := &UpdateBookRequestBody{
 		Title:     p.Title,
 		Author:    p.Author,
 		Language:  p.Language,
 		Publisher: p.Publisher,
-	}
-	return body
-}
-
-// NewDeleteBookRequestBody builds the HTTP request body from the payload of
-// the "DeleteBook" endpoint of the "epub_index_creator" service.
-func NewDeleteBookRequestBody(p *epubindexcreator.DeleteBookPayload) *DeleteBookRequestBody {
-	body := &DeleteBookRequestBody{}
-	if p.Book != nil {
-		body.Book = marshalEpubindexcreatorBookToBookRequestBody(p.Book)
 	}
 	return body
 }
@@ -284,80 +229,80 @@ func NewCreatePageRequestBody(p *epubindexcreator.CreatePagePayload) *CreatePage
 	return body
 }
 
-// NewListBooksBookOK builds a "epub_index_creator" service "ListBooks"
+// NewListBooksBookResponseOK builds a "epub_index_creator" service "ListBooks"
 // endpoint result from a HTTP "OK" response.
-func NewListBooksBookOK(body []*BookResponse) []*epubindexcreator.Book {
-	v := make([]*epubindexcreator.Book, len(body))
+func NewListBooksBookResponseOK(body []*BookResponseResponse) []*epubindexcreator.BookResponse {
+	v := make([]*epubindexcreator.BookResponse, len(body))
 	for i, val := range body {
-		v[i] = unmarshalBookResponseToEpubindexcreatorBook(val)
+		v[i] = unmarshalBookResponseResponseToEpubindexcreatorBookResponse(val)
 	}
 
 	return v
 }
 
-// NewFindBookBookOK builds a "epub_index_creator" service "FindBook" endpoint
-// result from a HTTP "OK" response.
-func NewFindBookBookOK(body *FindBookResponseBody) *epubindexcreator.Book {
-	v := &epubindexcreator.Book{
-		Isbn:      *body.Isbn,
+// NewFindBookBookResponseOK builds a "epub_index_creator" service "FindBook"
+// endpoint result from a HTTP "OK" response.
+func NewFindBookBookResponseOK(body *FindBookResponseBody) *epubindexcreator.BookResponse {
+	v := &epubindexcreator.BookResponse{
+		Isbn:      epubindexcreator.ISBN(*body.Isbn),
 		Title:     *body.Title,
 		Author:    *body.Author,
 		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
-	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+	v.Pages = make([]*epubindexcreator.PageResponse, len(body.Pages))
 	for i, val := range body.Pages {
-		v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
+		v.Pages[i] = unmarshalPageResponseResponseBodyToEpubindexcreatorPageResponse(val)
 	}
 
 	return v
 }
 
-// NewCreateBookBookOK builds a "epub_index_creator" service "CreateBook"
-// endpoint result from a HTTP "OK" response.
-func NewCreateBookBookOK(body *CreateBookResponseBody) *epubindexcreator.Book {
-	v := &epubindexcreator.Book{
-		Isbn:      *body.Isbn,
+// NewCreateBookBookResponseOK builds a "epub_index_creator" service
+// "CreateBook" endpoint result from a HTTP "OK" response.
+func NewCreateBookBookResponseOK(body *CreateBookResponseBody) *epubindexcreator.BookResponse {
+	v := &epubindexcreator.BookResponse{
+		Isbn:      epubindexcreator.ISBN(*body.Isbn),
 		Title:     *body.Title,
 		Author:    *body.Author,
 		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
-	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+	v.Pages = make([]*epubindexcreator.PageResponse, len(body.Pages))
 	for i, val := range body.Pages {
-		v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
+		v.Pages[i] = unmarshalPageResponseResponseBodyToEpubindexcreatorPageResponse(val)
 	}
 
 	return v
 }
 
-// NewUpdateBookBookOK builds a "epub_index_creator" service "UpdateBook"
-// endpoint result from a HTTP "OK" response.
-func NewUpdateBookBookOK(body *UpdateBookResponseBody) *epubindexcreator.Book {
-	v := &epubindexcreator.Book{
-		Isbn:      *body.Isbn,
+// NewUpdateBookBookResponseOK builds a "epub_index_creator" service
+// "UpdateBook" endpoint result from a HTTP "OK" response.
+func NewUpdateBookBookResponseOK(body *UpdateBookResponseBody) *epubindexcreator.BookResponse {
+	v := &epubindexcreator.BookResponse{
+		Isbn:      epubindexcreator.ISBN(*body.Isbn),
 		Title:     *body.Title,
 		Author:    *body.Author,
 		Language:  *body.Language,
 		Publisher: *body.Publisher,
 	}
-	v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+	v.Pages = make([]*epubindexcreator.PageResponse, len(body.Pages))
 	for i, val := range body.Pages {
-		v.Pages[i] = unmarshalPageResponseBodyToEpubindexcreatorPage(val)
+		v.Pages[i] = unmarshalPageResponseResponseBodyToEpubindexcreatorPageResponse(val)
 	}
 
 	return v
 }
 
-// NewCreatePagePageOK builds a "epub_index_creator" service "CreatePage"
-// endpoint result from a HTTP "OK" response.
-func NewCreatePagePageOK(body *CreatePageResponseBody) *epubindexcreator.Page {
-	v := &epubindexcreator.Page{
+// NewCreatePagePageResponseOK builds a "epub_index_creator" service
+// "CreatePage" endpoint result from a HTTP "OK" response.
+func NewCreatePagePageResponseOK(body *CreatePageResponseBody) *epubindexcreator.PageResponse {
+	v := &epubindexcreator.PageResponse{
 		Title: *body.Title,
 	}
-	v.Keywords = make([]*epubindexcreator.Keyword, len(body.Keywords))
+	v.Keywords = make([]string, len(body.Keywords))
 	for i, val := range body.Keywords {
-		v.Keywords[i] = unmarshalKeywordResponseBodyToEpubindexcreatorKeyword(val)
+		v.Keywords[i] = val
 	}
 
 	return v
@@ -384,9 +329,12 @@ func ValidateFindBookResponseBody(body *FindBookResponseBody) (err error) {
 	if body.Pages == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
+	if body.Isbn != nil {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+	}
 	for _, e := range body.Pages {
 		if e != nil {
-			if err2 := ValidatePageResponseBody(e); err2 != nil {
+			if err2 := ValidatePageResponseResponseBody(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
@@ -415,9 +363,12 @@ func ValidateCreateBookResponseBody(body *CreateBookResponseBody) (err error) {
 	if body.Pages == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
+	if body.Isbn != nil {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+	}
 	for _, e := range body.Pages {
 		if e != nil {
-			if err2 := ValidatePageResponseBody(e); err2 != nil {
+			if err2 := ValidatePageResponseResponseBody(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
@@ -446,9 +397,12 @@ func ValidateUpdateBookResponseBody(body *UpdateBookResponseBody) (err error) {
 	if body.Pages == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
+	if body.Isbn != nil {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+	}
 	for _, e := range body.Pages {
 		if e != nil {
-			if err2 := ValidatePageResponseBody(e); err2 != nil {
+			if err2 := ValidatePageResponseResponseBody(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
@@ -465,18 +419,12 @@ func ValidateCreatePageResponseBody(body *CreatePageResponseBody) (err error) {
 	if body.Keywords == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
 	}
-	for _, e := range body.Keywords {
-		if e != nil {
-			if err2 := ValidateKeywordResponseBody(e); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
 	return
 }
 
-// ValidateBookResponse runs the validations defined on BookResponse
-func ValidateBookResponse(body *BookResponse) (err error) {
+// ValidateBookResponseResponse runs the validations defined on
+// BookResponseResponse
+func ValidateBookResponseResponse(body *BookResponseResponse) (err error) {
 	if body.Isbn == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("isbn", "body"))
 	}
@@ -495,9 +443,12 @@ func ValidateBookResponse(body *BookResponse) (err error) {
 	if body.Pages == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
+	if body.Isbn != nil {
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+	}
 	for _, e := range body.Pages {
 		if e != nil {
-			if err2 := ValidatePageResponse(e); err2 != nil {
+			if err2 := ValidatePageResponseResponse(e); err2 != nil {
 				err = goa.MergeErrors(err, err2)
 			}
 		}
@@ -505,78 +456,35 @@ func ValidateBookResponse(body *BookResponse) (err error) {
 	return
 }
 
-// ValidatePageResponse runs the validations defined on PageResponse
-func ValidatePageResponse(body *PageResponse) (err error) {
+// ValidatePageResponseResponse runs the validations defined on
+// PageResponseResponse
+func ValidatePageResponseResponse(body *PageResponseResponse) (err error) {
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}
 	if body.Keywords == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
 	}
-	for _, e := range body.Keywords {
-		if e != nil {
-			if err2 := ValidateKeywordResponse(e); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
 	return
 }
 
-// ValidateKeywordResponse runs the validations defined on KeywordResponse
-func ValidateKeywordResponse(body *KeywordResponse) (err error) {
-	if body.Keyword == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "body"))
-	}
-	return
-}
-
-// ValidatePageResponseBody runs the validations defined on PageResponseBody
-func ValidatePageResponseBody(body *PageResponseBody) (err error) {
+// ValidatePageResponseResponseBody runs the validations defined on
+// PageResponseResponseBody
+func ValidatePageResponseResponseBody(body *PageResponseResponseBody) (err error) {
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}
 	if body.Keywords == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
 	}
-	for _, e := range body.Keywords {
-		if e != nil {
-			if err2 := ValidateKeywordResponseBody(e); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
-	}
 	return
 }
 
-// ValidateKeywordResponseBody runs the validations defined on
-// KeywordResponseBody
-func ValidateKeywordResponseBody(body *KeywordResponseBody) (err error) {
-	if body.Keyword == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "body"))
-	}
-	return
-}
-
-// ValidatePageRequestBody runs the validations defined on PageRequestBody
-func ValidatePageRequestBody(body *PageRequestBody) (err error) {
+// ValidatePageResponseRequestBody runs the validations defined on
+// PageResponseRequestBody
+func ValidatePageResponseRequestBody(body *PageResponseRequestBody) (err error) {
 	if body.Keywords == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
-	}
-	return
-}
-
-// ValidateBookRequestBody runs the validations defined on BookRequestBody
-func ValidateBookRequestBody(body *BookRequestBody) (err error) {
-	if body.Pages == nil {
-		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
-	}
-	for _, e := range body.Pages {
-		if e != nil {
-			if err2 := ValidatePageRequestBody(e); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
 	}
 	return
 }

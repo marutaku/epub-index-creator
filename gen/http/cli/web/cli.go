@@ -29,8 +29,8 @@ func UsageCommands() string {
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
 	return os.Args[0] + ` epub-index-creator list-books --body '{
-      "limit": 47,
-      "offset": 8534742228231063417
+      "limit": 11,
+      "offset": 3696960733945795768
    }'` + "\n" +
 		""
 }
@@ -51,7 +51,7 @@ func ParseEndpoint(
 		epubIndexCreatorListBooksBodyFlag = epubIndexCreatorListBooksFlags.String("body", "REQUIRED", "")
 
 		epubIndexCreatorFindBookFlags    = flag.NewFlagSet("find-book", flag.ExitOnError)
-		epubIndexCreatorFindBookIsbnFlag = epubIndexCreatorFindBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
+		epubIndexCreatorFindBookIsbnFlag = epubIndexCreatorFindBookFlags.String("isbn", "REQUIRED", "")
 
 		epubIndexCreatorCreateBookFlags    = flag.NewFlagSet("create-book", flag.ExitOnError)
 		epubIndexCreatorCreateBookBodyFlag = epubIndexCreatorCreateBookFlags.String("body", "REQUIRED", "")
@@ -61,12 +61,11 @@ func ParseEndpoint(
 		epubIndexCreatorUpdateBookIsbnFlag = epubIndexCreatorUpdateBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
 
 		epubIndexCreatorDeleteBookFlags    = flag.NewFlagSet("delete-book", flag.ExitOnError)
-		epubIndexCreatorDeleteBookBodyFlag = epubIndexCreatorDeleteBookFlags.String("body", "REQUIRED", "")
-		epubIndexCreatorDeleteBookIsbnFlag = epubIndexCreatorDeleteBookFlags.String("isbn", "REQUIRED", "ISBN of the book")
+		epubIndexCreatorDeleteBookIsbnFlag = epubIndexCreatorDeleteBookFlags.String("isbn", "REQUIRED", "")
 
 		epubIndexCreatorCreatePageFlags    = flag.NewFlagSet("create-page", flag.ExitOnError)
 		epubIndexCreatorCreatePageBodyFlag = epubIndexCreatorCreatePageFlags.String("body", "REQUIRED", "")
-		epubIndexCreatorCreatePageIsbnFlag = epubIndexCreatorCreatePageFlags.String("isbn", "REQUIRED", "ISBN of the book")
+		epubIndexCreatorCreatePageIsbnFlag = epubIndexCreatorCreatePageFlags.String("isbn", "REQUIRED", "")
 	)
 	epubIndexCreatorFlags.Usage = epubIndexCreatorUsage
 	epubIndexCreatorListBooksFlags.Usage = epubIndexCreatorListBooksUsage
@@ -167,7 +166,7 @@ func ParseEndpoint(
 				data, err = epubindexcreatorc.BuildUpdateBookPayload(*epubIndexCreatorUpdateBookBodyFlag, *epubIndexCreatorUpdateBookIsbnFlag)
 			case "delete-book":
 				endpoint = c.DeleteBook()
-				data, err = epubindexcreatorc.BuildDeleteBookPayload(*epubIndexCreatorDeleteBookBodyFlag, *epubIndexCreatorDeleteBookIsbnFlag)
+				data, err = epubindexcreatorc.BuildDeleteBookPayload(*epubIndexCreatorDeleteBookIsbnFlag)
 			case "create-page":
 				endpoint = c.CreatePage()
 				data, err = epubindexcreatorc.BuildCreatePagePayload(*epubIndexCreatorCreatePageBodyFlag, *epubIndexCreatorCreatePageIsbnFlag)
@@ -208,8 +207,8 @@ ListBooks implements ListBooks.
 
 Example:
     %[1]s epub-index-creator list-books --body '{
-      "limit": 47,
-      "offset": 8534742228231063417
+      "limit": 11,
+      "offset": 3696960733945795768
    }'
 `, os.Args[0])
 }
@@ -218,10 +217,10 @@ func epubIndexCreatorFindBookUsage() {
 	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator find-book -isbn STRING
 
 FindBook implements FindBook.
-    -isbn STRING: ISBN of the book
+    -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "Et quis."
+    %[1]s epub-index-creator find-book --isbn "882-04-483-327-9"
 `, os.Args[0])
 }
 
@@ -233,41 +232,45 @@ CreateBook implements CreateBook.
 
 Example:
     %[1]s epub-index-creator create-book --body '{
-      "author": "Magni tempora ducimus omnis qui.",
-      "isbn": "Ex asperiores aspernatur enim.",
-      "language": "Natus voluptatum voluptatem corporis.",
+      "author": "Alan A. A. Donovan, Brian W. Kernighan",
+      "isbn": "171-16-075-1-0",
+      "language": "English",
       "pages": [
          {
             "keywords": [
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               },
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               },
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               }
+               "Introduction",
+               "Chapter 1",
+               "Chapter 2"
             ],
-            "title": "Nemo eaque aut et exercitationem placeat ad."
+            "title": "Introduction"
          },
          {
             "keywords": [
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               },
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               },
-               {
-                  "keyword": "Temporibus itaque nostrum."
-               }
+               "Introduction",
+               "Chapter 1",
+               "Chapter 2"
             ],
-            "title": "Nemo eaque aut et exercitationem placeat ad."
+            "title": "Introduction"
+         },
+         {
+            "keywords": [
+               "Introduction",
+               "Chapter 1",
+               "Chapter 2"
+            ],
+            "title": "Introduction"
+         },
+         {
+            "keywords": [
+               "Introduction",
+               "Chapter 1",
+               "Chapter 2"
+            ],
+            "title": "Introduction"
          }
       ],
-      "publisher": "Dignissimos sed qui et consequatur aspernatur.",
-      "title": "Laboriosam omnis tenetur iusto animi mollitia."
+      "publisher": "Addison-Wesley",
+      "title": "The Go Programming Language"
    }'
 `, os.Args[0])
 }
@@ -281,75 +284,22 @@ UpdateBook implements UpdateBook.
 
 Example:
     %[1]s epub-index-creator update-book --body '{
-      "author": "Magnam voluptatem occaecati possimus non facere.",
-      "language": "Non sit et eum officia doloribus.",
-      "publisher": "Ipsum deserunt incidunt non qui non.",
-      "title": "Suscipit facilis quasi qui ab."
-   }' --isbn "Deserunt eius facere non."
+      "author": "Alias placeat dolor aliquam qui eligendi placeat.",
+      "language": "Nam quibusdam vero rem aliquam voluptatibus.",
+      "publisher": "Eligendi ipsa porro.",
+      "title": "Dolores quo sit dolores hic temporibus numquam."
+   }' --isbn "406-77014-958-9083-3"
 `, os.Args[0])
 }
 
 func epubIndexCreatorDeleteBookUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator delete-book -body JSON -isbn STRING
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator delete-book -isbn STRING
 
 DeleteBook implements DeleteBook.
-    -body JSON: 
-    -isbn STRING: ISBN of the book
+    -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --body '{
-      "book": {
-         "author": "Atque deserunt sit dolores aspernatur quis error.",
-         "isbn": "Libero consectetur sunt.",
-         "language": "Earum ea nihil delectus repellat architecto.",
-         "pages": [
-            {
-               "keywords": [
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  }
-               ],
-               "title": "Nemo eaque aut et exercitationem placeat ad."
-            },
-            {
-               "keywords": [
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  }
-               ],
-               "title": "Nemo eaque aut et exercitationem placeat ad."
-            },
-            {
-               "keywords": [
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  },
-                  {
-                     "keyword": "Temporibus itaque nostrum."
-                  }
-               ],
-               "title": "Nemo eaque aut et exercitationem placeat ad."
-            }
-         ],
-         "publisher": "Totam officiis quibusdam nobis nemo iusto.",
-         "title": "Nesciunt nisi in enim."
-      }
-   }' --isbn "Molestiae est sit."
+    %[1]s epub-index-creator delete-book --isbn "352-31-7-0-9"
 `, os.Args[0])
 }
 
@@ -358,18 +308,18 @@ func epubIndexCreatorCreatePageUsage() {
 
 CreatePage implements CreatePage.
     -body JSON: 
-    -isbn STRING: ISBN of the book
+    -isbn STRING: 
 
 Example:
     %[1]s epub-index-creator create-page --body '{
       "page": {
          "keywords": [
-            "Et culpa.",
-            "Quia blanditiis dolor sint aut quia.",
-            "Eveniet doloremque consequatur dolores."
+            "Introduction",
+            "Chapter 1",
+            "Chapter 2"
          ],
-         "title": "Dolor quis sed laborum quam aut reprehenderit."
+         "title": "Introduction"
       }
-   }' --isbn "Magni et cupiditate et aut pariatur."
+   }' --isbn "837-18-8-95-8"
 `, os.Args[0])
 }

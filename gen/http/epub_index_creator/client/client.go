@@ -171,15 +171,10 @@ func (c *Client) UpdateBook() goa.Endpoint {
 // epub_index_creator service DeleteBook server.
 func (c *Client) DeleteBook() goa.Endpoint {
 	var (
-		encodeRequest  = EncodeDeleteBookRequest(c.encoder)
 		decodeResponse = DecodeDeleteBookResponse(c.decoder, c.RestoreResponseBody)
 	)
 	return func(ctx context.Context, v any) (any, error) {
 		req, err := c.BuildDeleteBookRequest(ctx, v)
-		if err != nil {
-			return nil, err
-		}
-		err = encodeRequest(req, v)
 		if err != nil {
 			return nil, err
 		}

@@ -69,7 +69,7 @@ func NewFindBookEndpoint(s Service) goa.Endpoint {
 // "CreateBook" of service "epub_index_creator".
 func NewCreateBookEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*Book)
+		p := req.(*BookResponse)
 		return s.CreateBook(ctx, p)
 	}
 }
@@ -78,7 +78,7 @@ func NewCreateBookEndpoint(s Service) goa.Endpoint {
 // "UpdateBook" of service "epub_index_creator".
 func NewUpdateBookEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
-		p := req.(*UpdateBookPayload)
+		p := req.(*BookRequest)
 		return s.UpdateBook(ctx, p)
 	}
 }

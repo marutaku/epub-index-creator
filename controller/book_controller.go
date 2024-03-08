@@ -23,7 +23,7 @@ func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
 
 func convertBookToResponse(book *domain.Book) *epubIndexCreator.Book {
 	return &epubIndexCreator.Book{
-		Isbn:   book.ISBN,
+		Isbn:   epubIndexCreator.ISBN(book.ISBN),
 		Title:  book.Title,
 		Author: book.Author,
 		Pages:  make([]*epubIndexCreator.Page, 0), // TODO: Implement
@@ -44,7 +44,7 @@ func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreato
 func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator.FindBookPayload) (res *epubIndexCreator.Book, err error) {
 	res = &epubIndexCreator.Book{}
 	s.logger.Print("epubIndexCreator.FindBook")
-	book, err := s.bookUsecase.FindBook(ctx, p.Isbn)
+	book, err := s.bookUsecase.FindBook(ctx, string(p.Isbn))
 	if err != nil {
 		return nil, err
 	}
@@ -54,7 +54,7 @@ func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator
 
 func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreator.Book) (res *epubIndexCreator.Book, err error) {
 	s.logger.Print("epubIndexCreator.CreateBook")
-	book, err := s.bookUsecase.CreateBook(ctx, p.Isbn, p.Title, p.Author, p.Language, p.Publisher)
+	book, err := s.bookUsecase.CreateBook(ctx, string(p.Isbn), p.Title, p.Author, p.Language, p.Publisher)
 	if err != nil {
 		return nil, err
 	}
@@ -65,7 +65,7 @@ func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreat
 func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreator.UpdateBookPayload) (res *epubIndexCreator.Book, err error) {
 	res = &epubIndexCreator.Book{}
 	s.logger.Print("epubIndexCreator.UpdateBook")
-	book, err := s.bookUsecase.UpdateBook(ctx, p.Isbn, p.Title, p.Author, p.Language, p.Publisher)
+	book, err := s.bookUsecase.UpdateBook(ctx, string(p.Isbn), p.Title, p.Author, p.Language, p.Publisher)
 	if err != nil {
 		return nil, err
 	}
@@ -75,7 +75,7 @@ func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreat
 
 func (s *epubIndexCreatorsrvc) DeleteBook(ctx context.Context, p *epubIndexCreator.DeleteBookPayload) (err error) {
 	s.logger.Print("epubIndexCreator.DeleteBook")
-	err = s.bookUsecase.DeleteBook(ctx, p.Isbn)
+	err = s.bookUsecase.DeleteBook(ctx, string(p.Isbn))
 	if err != nil {
 		return err
 	}

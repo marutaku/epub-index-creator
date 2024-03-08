@@ -37,45 +37,45 @@ func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, createPa
 }
 
 // ListBooks calls the "ListBooks" endpoint of the "epub_index_creator" service.
-func (c *Client) ListBooks(ctx context.Context, p *ListBooksPayload) (res []*Book, err error) {
+func (c *Client) ListBooks(ctx context.Context, p *ListBooksPayload) (res []*BookResponse, err error) {
 	var ires any
 	ires, err = c.ListBooksEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.([]*Book), nil
+	return ires.([]*BookResponse), nil
 }
 
 // FindBook calls the "FindBook" endpoint of the "epub_index_creator" service.
-func (c *Client) FindBook(ctx context.Context, p *FindBookPayload) (res *Book, err error) {
+func (c *Client) FindBook(ctx context.Context, p *FindBookPayload) (res *BookResponse, err error) {
 	var ires any
 	ires, err = c.FindBookEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Book), nil
+	return ires.(*BookResponse), nil
 }
 
 // CreateBook calls the "CreateBook" endpoint of the "epub_index_creator"
 // service.
-func (c *Client) CreateBook(ctx context.Context, p *Book) (res *Book, err error) {
+func (c *Client) CreateBook(ctx context.Context, p *BookResponse) (res *BookResponse, err error) {
 	var ires any
 	ires, err = c.CreateBookEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Book), nil
+	return ires.(*BookResponse), nil
 }
 
 // UpdateBook calls the "UpdateBook" endpoint of the "epub_index_creator"
 // service.
-func (c *Client) UpdateBook(ctx context.Context, p *UpdateBookPayload) (res *Book, err error) {
+func (c *Client) UpdateBook(ctx context.Context, p *BookRequest) (res *BookResponse, err error) {
 	var ires any
 	ires, err = c.UpdateBookEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Book), nil
+	return ires.(*BookResponse), nil
 }
 
 // DeleteBook calls the "DeleteBook" endpoint of the "epub_index_creator"
@@ -87,11 +87,11 @@ func (c *Client) DeleteBook(ctx context.Context, p *DeleteBookPayload) (err erro
 
 // CreatePage calls the "CreatePage" endpoint of the "epub_index_creator"
 // service.
-func (c *Client) CreatePage(ctx context.Context, p *CreatePagePayload) (res *Page, err error) {
+func (c *Client) CreatePage(ctx context.Context, p *CreatePagePayload) (res *PageResponse, err error) {
 	var ires any
 	ires, err = c.CreatePageEndpoint(ctx, p)
 	if err != nil {
 		return
 	}
-	return ires.(*Page), nil
+	return ires.(*PageResponse), nil
 }

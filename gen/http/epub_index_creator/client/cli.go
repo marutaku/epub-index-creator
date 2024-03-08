@@ -23,7 +23,7 @@ func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorListBooksBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 47,\n      \"offset\": 8534742228231063417\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 11,\n      \"offset\": 3696960733945795768\n   }'")
 		}
 	}
 	v := &epubindexcreator.ListBooksPayload{
@@ -49,32 +49,38 @@ func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcrea
 // BuildFindBookPayload builds the payload for the epub_index_creator FindBook
 // endpoint from CLI flags.
 func BuildFindBookPayload(epubIndexCreatorFindBookIsbn string) (*epubindexcreator.FindBookPayload, error) {
+	var err error
 	var isbn string
 	{
 		isbn = epubIndexCreatorFindBookIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
 	}
 	v := &epubindexcreator.FindBookPayload{}
-	v.Isbn = isbn
+	v.Isbn = epubindexcreator.ISBN(isbn)
 
 	return v, nil
 }
 
 // BuildCreateBookPayload builds the payload for the epub_index_creator
 // CreateBook endpoint from CLI flags.
-func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcreator.Book, error) {
+func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcreator.BookResponse, error) {
 	var err error
 	var body CreateBookRequestBody
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Magni tempora ducimus omnis qui.\",\n      \"isbn\": \"Ex asperiores aspernatur enim.\",\n      \"language\": \"Natus voluptatum voluptatem corporis.\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               }\n            ],\n            \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n         },\n         {\n            \"keywords\": [\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               },\n               {\n                  \"keyword\": \"Temporibus itaque nostrum.\"\n               }\n            ],\n            \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n         }\n      ],\n      \"publisher\": \"Dignissimos sed qui et consequatur aspernatur.\",\n      \"title\": \"Laboriosam omnis tenetur iusto animi mollitia.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Alan A. A. Donovan, Brian W. Kernighan\",\n      \"isbn\": \"171-16-075-1-0\",\n      \"language\": \"English\",\n      \"pages\": [\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         },\n         {\n            \"keywords\": [\n               \"Introduction\",\n               \"Chapter 1\",\n               \"Chapter 2\"\n            ],\n            \"title\": \"Introduction\"\n         }\n      ],\n      \"publisher\": \"Addison-Wesley\",\n      \"title\": \"The Go Programming Language\"\n   }'")
 		}
 		if body.Pages == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 		}
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
 		for _, e := range body.Pages {
 			if e != nil {
-				if err2 := ValidatePageRequestBody(e); err2 != nil {
+				if err2 := ValidatePageResponseRequestBody(e); err2 != nil {
 					err = goa.MergeErrors(err, err2)
 				}
 			}
@@ -83,20 +89,20 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 			return nil, err
 		}
 	}
-	v := &epubindexcreator.Book{
-		Isbn:      body.Isbn,
+	v := &epubindexcreator.BookResponse{
+		Isbn:      epubindexcreator.ISBN(body.Isbn),
 		Title:     body.Title,
 		Author:    body.Author,
 		Language:  body.Language,
 		Publisher: body.Publisher,
 	}
 	if body.Pages != nil {
-		v.Pages = make([]*epubindexcreator.Page, len(body.Pages))
+		v.Pages = make([]*epubindexcreator.PageResponse, len(body.Pages))
 		for i, val := range body.Pages {
-			v.Pages[i] = marshalPageRequestBodyToEpubindexcreatorPage(val)
+			v.Pages[i] = marshalPageResponseRequestBodyToEpubindexcreatorPageResponse(val)
 		}
 	} else {
-		v.Pages = []*epubindexcreator.Page{}
+		v.Pages = []*epubindexcreator.PageResponse{}
 	}
 
 	return v, nil
@@ -104,61 +110,48 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 
 // BuildUpdateBookPayload builds the payload for the epub_index_creator
 // UpdateBook endpoint from CLI flags.
-func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCreatorUpdateBookIsbn string) (*epubindexcreator.UpdateBookPayload, error) {
+func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCreatorUpdateBookIsbn string) (*epubindexcreator.BookRequest, error) {
 	var err error
 	var body UpdateBookRequestBody
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Magnam voluptatem occaecati possimus non facere.\",\n      \"language\": \"Non sit et eum officia doloribus.\",\n      \"publisher\": \"Ipsum deserunt incidunt non qui non.\",\n      \"title\": \"Suscipit facilis quasi qui ab.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Alias placeat dolor aliquam qui eligendi placeat.\",\n      \"language\": \"Nam quibusdam vero rem aliquam voluptatibus.\",\n      \"publisher\": \"Eligendi ipsa porro.\",\n      \"title\": \"Dolores quo sit dolores hic temporibus numquam.\"\n   }'")
 		}
 	}
 	var isbn string
 	{
 		isbn = epubIndexCreatorUpdateBookIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
 	}
-	v := &epubindexcreator.UpdateBookPayload{
+	v := &epubindexcreator.BookRequest{
 		Title:     body.Title,
 		Author:    body.Author,
 		Language:  body.Language,
 		Publisher: body.Publisher,
 	}
-	v.Isbn = isbn
+	v.Isbn = epubindexcreator.ISBN(isbn)
 
 	return v, nil
 }
 
 // BuildDeleteBookPayload builds the payload for the epub_index_creator
 // DeleteBook endpoint from CLI flags.
-func BuildDeleteBookPayload(epubIndexCreatorDeleteBookBody string, epubIndexCreatorDeleteBookIsbn string) (*epubindexcreator.DeleteBookPayload, error) {
+func BuildDeleteBookPayload(epubIndexCreatorDeleteBookIsbn string) (*epubindexcreator.DeleteBookPayload, error) {
 	var err error
-	var body DeleteBookRequestBody
+	var isbn string
 	{
-		err = json.Unmarshal([]byte(epubIndexCreatorDeleteBookBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"book\": {\n         \"author\": \"Atque deserunt sit dolores aspernatur quis error.\",\n         \"isbn\": \"Libero consectetur sunt.\",\n         \"language\": \"Earum ea nihil delectus repellat architecto.\",\n         \"pages\": [\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            },\n            {\n               \"keywords\": [\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  },\n                  {\n                     \"keyword\": \"Temporibus itaque nostrum.\"\n                  }\n               ],\n               \"title\": \"Nemo eaque aut et exercitationem placeat ad.\"\n            }\n         ],\n         \"publisher\": \"Totam officiis quibusdam nobis nemo iusto.\",\n         \"title\": \"Nesciunt nisi in enim.\"\n      }\n   }'")
-		}
-		if body.Book == nil {
-			err = goa.MergeErrors(err, goa.MissingFieldError("book", "body"))
-		}
-		if body.Book != nil {
-			if err2 := ValidateBookRequestBody(body.Book); err2 != nil {
-				err = goa.MergeErrors(err, err2)
-			}
-		}
+		isbn = epubIndexCreatorDeleteBookIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
 		if err != nil {
 			return nil, err
 		}
 	}
-	var isbn string
-	{
-		isbn = epubIndexCreatorDeleteBookIsbn
-	}
 	v := &epubindexcreator.DeleteBookPayload{}
-	if body.Book != nil {
-		v.Book = marshalBookRequestBodyToEpubindexcreatorBook(body.Book)
-	}
-	v.Isbn = isbn
+	v.Isbn = epubindexcreator.ISBN(isbn)
 
 	return v, nil
 }
@@ -171,7 +164,7 @@ func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreatePageBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"page\": {\n         \"keywords\": [\n            \"Et culpa.\",\n            \"Quia blanditiis dolor sint aut quia.\",\n            \"Eveniet doloremque consequatur dolores.\"\n         ],\n         \"title\": \"Dolor quis sed laborum quam aut reprehenderit.\"\n      }\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"page\": {\n         \"keywords\": [\n            \"Introduction\",\n            \"Chapter 1\",\n            \"Chapter 2\"\n         ],\n         \"title\": \"Introduction\"\n      }\n   }'")
 		}
 		if body.Page == nil {
 			err = goa.MergeErrors(err, goa.MissingFieldError("page", "body"))
@@ -183,12 +176,16 @@ func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCrea
 	var isbn string
 	{
 		isbn = epubIndexCreatorCreatePageIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		if err != nil {
+			return nil, err
+		}
 	}
 	v := &epubindexcreator.CreatePagePayload{}
 	if body.Page != nil {
 		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	}
-	v.Isbn = isbn
+	v.Isbn = epubindexcreator.ISBN(isbn)
 
 	return v, nil
 }
