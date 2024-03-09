@@ -11,7 +11,7 @@ var (
 	// BooksColumns holds the columns for the "books" table.
 	BooksColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
-		{Name: "isbn", Type: field.TypeString},
+		{Name: "isbn", Type: field.TypeString, Unique: true},
 		{Name: "title", Type: field.TypeString},
 		{Name: "language", Type: field.TypeString},
 		{Name: "author", Type: field.TypeString},

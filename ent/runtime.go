@@ -38,13 +38,13 @@ func init() {
 	keywordFields := schema.Keyword{}.Fields()
 	_ = keywordFields
 	// keywordDescKeyword is the schema descriptor for keyword field.
-	keywordDescKeyword := keywordFields[0].Descriptor()
+	keywordDescKeyword := keywordFields[1].Descriptor()
 	// keyword.KeywordValidator is a validator for the "keyword" field. It is called by the builders before save.
 	keyword.KeywordValidator = keywordDescKeyword.Validators[0].(func(string) error)
 	pageFields := schema.Page{}.Fields()
 	_ = pageFields
 	// pageDescTitle is the schema descriptor for title field.
-	pageDescTitle := pageFields[0].Descriptor()
+	pageDescTitle := pageFields[1].Descriptor()
 	// page.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	page.TitleValidator = pageDescTitle.Validators[0].(func(string) error)
 }

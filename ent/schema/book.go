@@ -14,7 +14,7 @@ type Book struct {
 // Fields of the Book.
 func (Book) Fields() []ent.Field {
 	return []ent.Field{
-		field.String("isbn").NotEmpty(),
+		field.String("isbn").NotEmpty().Unique(),
 		field.String("title").NotEmpty(),
 		field.String("language").NotEmpty(),
 		field.String("author").NotEmpty(),

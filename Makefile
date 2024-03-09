@@ -3,7 +3,7 @@
 goa_generate:
 	goa gen github.com/marutaku/epub-index-creator/design
 
-ent_create:
+create_model:
 	go run -mod=mod entgo.io/ent/cmd/ent new $(name)
 
 ent_generate:

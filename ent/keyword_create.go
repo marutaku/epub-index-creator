@@ -26,6 +26,12 @@ func (kc *KeywordCreate) SetKeyword(s string) *KeywordCreate {
 	return kc
 }
 
+// SetID sets the "id" field.
+func (kc *KeywordCreate) SetID(i int) *KeywordCreate {
+	kc.mutation.SetID(i)
+	return kc
+}
+
 // SetPageID sets the "page" edge to the Page entity by ID.
 func (kc *KeywordCreate) SetPageID(id int) *KeywordCreate {
 	kc.mutation.SetPageID(id)
@@ -101,8 +107,10 @@ func (kc *KeywordCreate) sqlSave(ctx context.Context) (*Keyword, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	kc.mutation.id = &_node.ID
 	kc.mutation.done = true
 	return _node, nil
@@ -113,6 +121,10 @@ func (kc *KeywordCreate) createSpec() (*Keyword, *sqlgraph.CreateSpec) {
 		_node = &Keyword{config: kc.config}
 		_spec = sqlgraph.NewCreateSpec(keyword.Table, sqlgraph.NewFieldSpec(keyword.FieldID, field.TypeInt))
 	)
+	if id, ok := kc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := kc.mutation.Keyword(); ok {
 		_spec.SetField(keyword.FieldKeyword, field.TypeString, value)
 		_node.Keyword = value
@@ -181,7 +193,7 @@ func (kcb *KeywordCreateBulk) Save(ctx context.Context) ([]*Keyword, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}

@@ -2,8 +2,10 @@ package usecase
 
 import (
 	"context"
+	"fmt"
 
 	"github.com/marutaku/epub-index-creator/domain"
+	"github.com/marutaku/epub-index-creator/ent"
 	"github.com/marutaku/epub-index-creator/infra/repository"
 )
 
@@ -41,8 +43,15 @@ func (*bookUsecase) FindBook(ctx context.Context, isbn string) (*domain.Book, er
 
 func (*bookUsecase) CreateBook(ctx context.Context, isbn string, title string, author string, language string, publisher string) (*domain.Book, error) {
 	bookRepo := repository.NewBookRepository()
+	_, err := bookRepo.FindByISBN(ctx, isbn)
+	if err == nil {
+		return nil, fmt.Errorf("book already exists: %s", isbn)
+	}
+	if !ent.IsNotFound(err) {
+		return nil, err
+	}
 	book := domain.NewBook(isbn, title, author, language, publisher, make([]*domain.Page, 0))
-	err := bookRepo.Save(ctx, book)
+	err = bookRepo.Save(ctx, book)
 	if err != nil {
 		return nil, err
 	}

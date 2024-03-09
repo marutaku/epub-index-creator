@@ -27,6 +27,12 @@ func (pc *PageCreate) SetTitle(s string) *PageCreate {
 	return pc
 }
 
+// SetID sets the "id" field.
+func (pc *PageCreate) SetID(i int) *PageCreate {
+	pc.mutation.SetID(i)
+	return pc
+}
+
 // SetBookID sets the "book" edge to the Book entity by ID.
 func (pc *PageCreate) SetBookID(id int) *PageCreate {
 	pc.mutation.SetBookID(id)
@@ -117,8 +123,10 @@ func (pc *PageCreate) sqlSave(ctx context.Context) (*Page, error) {
 		}
 		return nil, err
 	}
-	id := _spec.ID.Value.(int64)
-	_node.ID = int(id)
+	if _spec.ID.Value != _node.ID {
+		id := _spec.ID.Value.(int64)
+		_node.ID = int(id)
+	}
 	pc.mutation.id = &_node.ID
 	pc.mutation.done = true
 	return _node, nil
@@ -129,6 +137,10 @@ func (pc *PageCreate) createSpec() (*Page, *sqlgraph.CreateSpec) {
 		_node = &Page{config: pc.config}
 		_spec = sqlgraph.NewCreateSpec(page.Table, sqlgraph.NewFieldSpec(page.FieldID, field.TypeInt))
 	)
+	if id, ok := pc.mutation.ID(); ok {
+		_node.ID = id
+		_spec.ID.Value = id
+	}
 	if value, ok := pc.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
 		_node.Title = value
@@ -213,7 +225,7 @@ func (pcb *PageCreateBulk) Save(ctx context.Context) ([]*Page, error) {
 					return nil, err
 				}
 				mutation.id = &nodes[i].ID
-				if specs[i].ID.Value != nil {
+				if specs[i].ID.Value != nil && nodes[i].ID == 0 {
 					id := specs[i].ID.Value.(int64)
 					nodes[i].ID = int(id)
 				}
