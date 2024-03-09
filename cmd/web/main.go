@@ -79,7 +79,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	epubIndexCreatorEndpoints.Use(middleware.NewTransaction(ctx, entClient))
+
+	epubIndexCreatorEndpoints.Use(middleware.NewTransaction(ctx, entClient.Debug()))
 
 	// Start the servers and send errors (if any) to the error channel.
 	switch *hostF {
