@@ -10,6 +10,7 @@ package client
 import (
 	"encoding/json"
 	"fmt"
+	"strconv"
 
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 	goa "goa.design/goa/v3/pkg"
@@ -17,31 +18,48 @@ import (
 
 // BuildListBooksPayload builds the payload for the epub_index_creator
 // ListBooks endpoint from CLI flags.
-func BuildListBooksPayload(epubIndexCreatorListBooksBody string) (*epubindexcreator.ListBooksPayload, error) {
+func BuildListBooksPayload(epubIndexCreatorListBooksLimit string, epubIndexCreatorListBooksOffset string) (*epubindexcreator.ListBooksPayload, error) {
 	var err error
-	var body ListBooksRequestBody
+	var limit int
 	{
-		err = json.Unmarshal([]byte(epubIndexCreatorListBooksBody), &body)
-		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"limit\": 11,\n      \"offset\": 3696960733945795768\n   }'")
+		if epubIndexCreatorListBooksLimit != "" {
+			var v int64
+			v, err = strconv.ParseInt(epubIndexCreatorListBooksLimit, 10, strconv.IntSize)
+			limit = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for limit, must be INT")
+			}
+			if limit < 1 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 1, true))
+			}
+			if limit > 100 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 100, false))
+			}
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
-	v := &epubindexcreator.ListBooksPayload{
-		Limit:  body.Limit,
-		Offset: body.Offset,
-	}
+	var offset int
 	{
-		var zero int
-		if v.Limit == zero {
-			v.Limit = 100
+		if epubIndexCreatorListBooksOffset != "" {
+			var v int64
+			v, err = strconv.ParseInt(epubIndexCreatorListBooksOffset, 10, strconv.IntSize)
+			offset = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for offset, must be INT")
+			}
+			if offset < 0 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("offset", offset, 0, true))
+			}
+			if err != nil {
+				return nil, err
+			}
 		}
 	}
-	{
-		var zero int
-		if v.Offset == zero {
-			v.Offset = 0
-		}
-	}
+	v := &epubindexcreator.ListBooksPayload{}
+	v.Limit = limit
+	v.Offset = offset
 
 	return v, nil
 }
@@ -72,7 +90,7 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"940-79908-7-75-7\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"088-81-3-3-2\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
 		}
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
 		if err != nil {

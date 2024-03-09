@@ -31,6 +31,8 @@ var _ = Service("epub_index_creator", func() {
 
 		HTTP(func() {
 			GET("/books")
+			Param("limit")
+			Param("offset")
 		})
 	})
 	Method("FindBook", func() {
@@ -43,6 +45,8 @@ var _ = Service("epub_index_creator", func() {
 
 		HTTP(func() {
 			GET("/books/{isbn}")
+			Response(StatusOK)
+			Response(StatusNotFound)
 		})
 	})
 
@@ -53,6 +57,8 @@ var _ = Service("epub_index_creator", func() {
 
 		HTTP(func() {
 			POST("/books")
+			Response(StatusOK)
+			Response(StatusBadRequest)
 		})
 	})
 
@@ -61,6 +67,8 @@ var _ = Service("epub_index_creator", func() {
 		Result(BookResponse)
 		HTTP(func() {
 			PUT("/books/{isbn}")
+			Response(StatusOK)
+			Response(StatusNotFound)
 		})
 	})
 
@@ -72,6 +80,8 @@ var _ = Service("epub_index_creator", func() {
 		Result(Empty)
 		HTTP(func() {
 			DELETE("/books/{isbn}")
+			Response(StatusOK)
+			Response(StatusNotFound)
 		})
 	})
 
@@ -84,6 +94,8 @@ var _ = Service("epub_index_creator", func() {
 		Result(PageResponse)
 		HTTP(func() {
 			POST("/books/{isbn}/pages")
+			Response(StatusOK)
+			Response(StatusNotFound)
 		})
 	})
 

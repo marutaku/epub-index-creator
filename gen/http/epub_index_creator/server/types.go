@@ -12,15 +12,6 @@ import (
 	goa "goa.design/goa/v3/pkg"
 )
 
-// ListBooksRequestBody is the type of the "epub_index_creator" service
-// "ListBooks" endpoint HTTP request body.
-type ListBooksRequestBody struct {
-	// Maximum number of books to return
-	Limit *int `form:"limit,omitempty" json:"limit,omitempty" xml:"limit,omitempty"`
-	// Field to paginate books
-	Offset *int `form:"offset,omitempty" json:"offset,omitempty" xml:"offset,omitempty"`
-}
-
 // CreateBookRequestBody is the type of the "epub_index_creator" service
 // "CreateBook" endpoint HTTP request body.
 type CreateBookRequestBody struct {
@@ -59,9 +50,9 @@ type CreatePageRequestBody struct {
 // "ListBooks" endpoint HTTP response body.
 type ListBooksResponseBody []*BookResponseResponse
 
-// FindBookResponseBody is the type of the "epub_index_creator" service
+// FindBookOKResponseBody is the type of the "epub_index_creator" service
 // "FindBook" endpoint HTTP response body.
-type FindBookResponseBody struct {
+type FindBookOKResponseBody struct {
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
 	Title string `form:"title" json:"title" xml:"title"`
@@ -75,9 +66,9 @@ type FindBookResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
 
-// CreateBookResponseBody is the type of the "epub_index_creator" service
+// CreateBookOKResponseBody is the type of the "epub_index_creator" service
 // "CreateBook" endpoint HTTP response body.
-type CreateBookResponseBody struct {
+type CreateBookOKResponseBody struct {
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
 	Title string `form:"title" json:"title" xml:"title"`
@@ -91,9 +82,9 @@ type CreateBookResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
 
-// UpdateBookResponseBody is the type of the "epub_index_creator" service
+// UpdateBookOKResponseBody is the type of the "epub_index_creator" service
 // "UpdateBook" endpoint HTTP response body.
-type UpdateBookResponseBody struct {
+type UpdateBookOKResponseBody struct {
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
 	// Title of the book
 	Title string `form:"title" json:"title" xml:"title"`
@@ -107,9 +98,9 @@ type UpdateBookResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
 
-// CreatePageResponseBody is the type of the "epub_index_creator" service
+// CreatePageOKResponseBody is the type of the "epub_index_creator" service
 // "CreatePage" endpoint HTTP response body.
-type CreatePageResponseBody struct {
+type CreatePageOKResponseBody struct {
 	// Title of the page
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
@@ -165,10 +156,10 @@ func NewListBooksResponseBody(res []*epubindexcreator.BookResponse) ListBooksRes
 	return body
 }
 
-// NewFindBookResponseBody builds the HTTP response body from the result of the
-// "FindBook" endpoint of the "epub_index_creator" service.
-func NewFindBookResponseBody(res *epubindexcreator.BookResponse) *FindBookResponseBody {
-	body := &FindBookResponseBody{
+// NewFindBookOKResponseBody builds the HTTP response body from the result of
+// the "FindBook" endpoint of the "epub_index_creator" service.
+func NewFindBookOKResponseBody(res *epubindexcreator.BookResponse) *FindBookOKResponseBody {
+	body := &FindBookOKResponseBody{
 		Isbn:      string(res.Isbn),
 		Title:     res.Title,
 		Author:    res.Author,
@@ -186,10 +177,10 @@ func NewFindBookResponseBody(res *epubindexcreator.BookResponse) *FindBookRespon
 	return body
 }
 
-// NewCreateBookResponseBody builds the HTTP response body from the result of
+// NewCreateBookOKResponseBody builds the HTTP response body from the result of
 // the "CreateBook" endpoint of the "epub_index_creator" service.
-func NewCreateBookResponseBody(res *epubindexcreator.BookResponse) *CreateBookResponseBody {
-	body := &CreateBookResponseBody{
+func NewCreateBookOKResponseBody(res *epubindexcreator.BookResponse) *CreateBookOKResponseBody {
+	body := &CreateBookOKResponseBody{
 		Isbn:      string(res.Isbn),
 		Title:     res.Title,
 		Author:    res.Author,
@@ -207,10 +198,10 @@ func NewCreateBookResponseBody(res *epubindexcreator.BookResponse) *CreateBookRe
 	return body
 }
 
-// NewUpdateBookResponseBody builds the HTTP response body from the result of
+// NewUpdateBookOKResponseBody builds the HTTP response body from the result of
 // the "UpdateBook" endpoint of the "epub_index_creator" service.
-func NewUpdateBookResponseBody(res *epubindexcreator.BookResponse) *UpdateBookResponseBody {
-	body := &UpdateBookResponseBody{
+func NewUpdateBookOKResponseBody(res *epubindexcreator.BookResponse) *UpdateBookOKResponseBody {
+	body := &UpdateBookOKResponseBody{
 		Isbn:      string(res.Isbn),
 		Title:     res.Title,
 		Author:    res.Author,
@@ -228,10 +219,10 @@ func NewUpdateBookResponseBody(res *epubindexcreator.BookResponse) *UpdateBookRe
 	return body
 }
 
-// NewCreatePageResponseBody builds the HTTP response body from the result of
+// NewCreatePageOKResponseBody builds the HTTP response body from the result of
 // the "CreatePage" endpoint of the "epub_index_creator" service.
-func NewCreatePageResponseBody(res *epubindexcreator.PageResponse) *CreatePageResponseBody {
-	body := &CreatePageResponseBody{
+func NewCreatePageOKResponseBody(res *epubindexcreator.PageResponse) *CreatePageOKResponseBody {
+	body := &CreatePageOKResponseBody{
 		Title: res.Title,
 	}
 	if res.Keywords != nil {
@@ -247,20 +238,10 @@ func NewCreatePageResponseBody(res *epubindexcreator.PageResponse) *CreatePageRe
 
 // NewListBooksPayload builds a epub_index_creator service ListBooks endpoint
 // payload.
-func NewListBooksPayload(body *ListBooksRequestBody) *epubindexcreator.ListBooksPayload {
+func NewListBooksPayload(limit int, offset int) *epubindexcreator.ListBooksPayload {
 	v := &epubindexcreator.ListBooksPayload{}
-	if body.Limit != nil {
-		v.Limit = *body.Limit
-	}
-	if body.Offset != nil {
-		v.Offset = *body.Offset
-	}
-	if body.Limit == nil {
-		v.Limit = 100
-	}
-	if body.Offset == nil {
-		v.Offset = 0
-	}
+	v.Limit = limit
+	v.Offset = offset
 
 	return v
 }
@@ -319,27 +300,6 @@ func NewCreatePagePayload(body *CreatePageRequestBody, isbn string) *epubindexcr
 	v.Isbn = epubindexcreator.ISBN(isbn)
 
 	return v
-}
-
-// ValidateListBooksRequestBody runs the validations defined on
-// ListBooksRequestBody
-func ValidateListBooksRequestBody(body *ListBooksRequestBody) (err error) {
-	if body.Limit != nil {
-		if *body.Limit < 1 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError("body.limit", *body.Limit, 1, true))
-		}
-	}
-	if body.Limit != nil {
-		if *body.Limit > 100 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError("body.limit", *body.Limit, 100, false))
-		}
-	}
-	if body.Offset != nil {
-		if *body.Offset < 0 {
-			err = goa.MergeErrors(err, goa.InvalidRangeError("body.offset", *body.Offset, 0, true))
-		}
-	}
-	return
 }
 
 // ValidateCreateBookRequestBody runs the validations defined on

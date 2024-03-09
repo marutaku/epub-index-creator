@@ -4,7 +4,7 @@ import (
 	"context"
 	"log"
 
-	"github.com/marutaku/epub-index-creator/domain"
+	"github.com/marutaku/epub-index-creator/controller/presenter"
 	epubIndexCreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 	"github.com/marutaku/epub-index-creator/usecase"
 )
@@ -21,24 +21,13 @@ func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
 	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase()}
 }
 
-func convertBookToResponse(book *domain.Book) *epubIndexCreator.BookResponse {
-	return &epubIndexCreator.BookResponse{
-		Isbn:      epubIndexCreator.ISBN(book.ISBN),
-		Title:     book.Title,
-		Author:    book.Author,
-		Language:  book.Language,
-		Publisher: book.Publisher,
-		Pages:     make([]*epubIndexCreator.PageResponse, 0), // TODO: Implement
-	}
-}
-
 // List implements List.
 func (s *epubIndexCreatorsrvc) ListBooks(ctx context.Context, p *epubIndexCreator.ListBooksPayload) (res []*epubIndexCreator.BookResponse, err error) {
 	res = []*epubIndexCreator.BookResponse{}
 	s.logger.Print("epubIndexCreator.ListBooks")
 	books, err := s.bookUsecase.ListBooks(ctx, p.Limit, p.Offset)
 	for _, book := range books {
-		res = append(res, convertBookToResponse(book))
+		res = append(res, presenter.ConvertBookToResponse(book))
 	}
 	return
 }
@@ -50,7 +39,7 @@ func (s *epubIndexCreatorsrvc) FindBook(ctx context.Context, p *epubIndexCreator
 	if err != nil {
 		return nil, err
 	}
-	res = convertBookToResponse(book)
+	res = presenter.ConvertBookToResponse(book)
 	return
 }
 
@@ -60,7 +49,7 @@ func (s *epubIndexCreatorsrvc) CreateBook(ctx context.Context, p *epubIndexCreat
 	if err != nil {
 		return nil, err
 	}
-	res = convertBookToResponse(book)
+	res = presenter.ConvertBookToResponse(book)
 	return
 }
 
@@ -71,7 +60,7 @@ func (s *epubIndexCreatorsrvc) UpdateBook(ctx context.Context, p *epubIndexCreat
 	if err != nil {
 		return nil, err
 	}
-	res = convertBookToResponse(book)
+	res = presenter.ConvertBookToResponse(book)
 	return
 }
 

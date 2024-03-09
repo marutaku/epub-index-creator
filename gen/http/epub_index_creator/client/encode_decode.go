@@ -10,6 +10,7 @@ package client
 import (
 	"bytes"
 	"context"
+	"fmt"
 	"io"
 	"net/http"
 	"net/url"
@@ -42,10 +43,10 @@ func EncodeListBooksRequest(encoder func(*http.Request) goahttp.Encoder) func(*h
 		if !ok {
 			return goahttp.ErrInvalidType("epub_index_creator", "ListBooks", "*epubindexcreator.ListBooksPayload", v)
 		}
-		body := NewListBooksRequestBody(p)
-		if err := encoder(req).Encode(&body); err != nil {
-			return goahttp.ErrEncodingError("epub_index_creator", "ListBooks", err)
-		}
+		values := req.URL.Query()
+		values.Add("limit", fmt.Sprintf("%v", p.Limit))
+		values.Add("offset", fmt.Sprintf("%v", p.Offset))
+		req.URL.RawQuery = values.Encode()
 		return nil
 	}
 }
@@ -141,14 +142,14 @@ func DecodeFindBookResponse(decoder func(*http.Response) goahttp.Decoder, restor
 		switch resp.StatusCode {
 		case http.StatusOK:
 			var (
-				body FindBookResponseBody
+				body FindBookOKResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("epub_index_creator", "FindBook", err)
 			}
-			err = ValidateFindBookResponseBody(&body)
+			err = ValidateFindBookOKResponseBody(&body)
 			if err != nil {
 				return nil, goahttp.ErrValidationError("epub_index_creator", "FindBook", err)
 			}
@@ -212,14 +213,14 @@ func DecodeCreateBookResponse(decoder func(*http.Response) goahttp.Decoder, rest
 		switch resp.StatusCode {
 		case http.StatusOK:
 			var (
-				body CreateBookResponseBody
+				body CreateBookOKResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("epub_index_creator", "CreateBook", err)
 			}
-			err = ValidateCreateBookResponseBody(&body)
+			err = ValidateCreateBookOKResponseBody(&body)
 			if err != nil {
 				return nil, goahttp.ErrValidationError("epub_index_creator", "CreateBook", err)
 			}
@@ -293,14 +294,14 @@ func DecodeUpdateBookResponse(decoder func(*http.Response) goahttp.Decoder, rest
 		switch resp.StatusCode {
 		case http.StatusOK:
 			var (
-				body UpdateBookResponseBody
+				body UpdateBookOKResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("epub_index_creator", "UpdateBook", err)
 			}
-			err = ValidateUpdateBookResponseBody(&body)
+			err = ValidateUpdateBookOKResponseBody(&body)
 			if err != nil {
 				return nil, goahttp.ErrValidationError("epub_index_creator", "UpdateBook", err)
 			}
@@ -356,7 +357,7 @@ func DecodeDeleteBookResponse(decoder func(*http.Response) goahttp.Decoder, rest
 			defer resp.Body.Close()
 		}
 		switch resp.StatusCode {
-		case http.StatusNoContent:
+		case http.StatusOK:
 			return nil, nil
 		default:
 			body, _ := io.ReadAll(resp.Body)
@@ -426,14 +427,14 @@ func DecodeCreatePageResponse(decoder func(*http.Response) goahttp.Decoder, rest
 		switch resp.StatusCode {
 		case http.StatusOK:
 			var (
-				body CreatePageResponseBody
+				body CreatePageOKResponseBody
 				err  error
 			)
 			err = decoder(resp).Decode(&body)
 			if err != nil {
 				return nil, goahttp.ErrDecodingError("epub_index_creator", "CreatePage", err)
 			}
-			err = ValidateCreatePageResponseBody(&body)
+			err = ValidateCreatePageOKResponseBody(&body)
 			if err != nil {
 				return nil, goahttp.ErrValidationError("epub_index_creator", "CreatePage", err)
 			}

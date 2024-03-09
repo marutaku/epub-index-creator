@@ -11,15 +11,32 @@ paths:
                 - epub_index_creator
             summary: ListBooks epub_index_creator
             operationId: epub_index_creator#ListBooks
-            requestBody:
-                required: true
-                content:
-                    application/json:
-                        schema:
-                            $ref: '#/components/schemas/ListBooksRequestBody'
-                        example:
-                            limit: 11
-                            offset: 3696960733945795768
+            parameters:
+                - name: limit
+                  in: query
+                  description: Maximum number of books to return
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: Maximum number of books to return
+                    default: 100
+                    example: 5
+                    format: int64
+                    minimum: 1
+                    maximum: 100
+                  example: 97
+                - name: offset
+                  in: query
+                  description: Field to paginate books
+                  allowEmptyValue: true
+                  schema:
+                    type: integer
+                    description: Field to paginate books
+                    default: 0
+                    example: 2599220186295935598
+                    format: int64
+                    minimum: 0
+                  example: 1953076886355914497
             responses:
                 "200":
                     description: OK response.
@@ -31,7 +48,7 @@ paths:
                                     $ref: '#/components/schemas/BookResponse'
                                 example:
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 482-4-12-7-0
+                                      isbn: 628-9-9-1-5
                                       language: English
                                       pages:
                                         - keywords:
@@ -52,7 +69,28 @@ paths:
                                       publisher: Addison-Wesley
                                       title: The Go Programming Language
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 482-4-12-7-0
+                                      isbn: 628-9-9-1-5
+                                      language: English
+                                      pages:
+                                        - keywords:
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
+                                        - keywords:
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
+                                        - keywords:
+                                            - Introduction
+                                            - Chapter 1
+                                            - Chapter 2
+                                          title: Introduction
+                                      publisher: Addison-Wesley
+                                      title: The Go Programming Language
+                                    - author: Alan A. A. Donovan, Brian W. Kernighan
+                                      isbn: 628-9-9-1-5
                                       language: English
                                       pages:
                                         - keywords:
@@ -74,7 +112,7 @@ paths:
                                       title: The Go Programming Language
                             example:
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 482-4-12-7-0
+                                  isbn: 628-9-9-1-5
                                   language: English
                                   pages:
                                     - keywords:
@@ -95,49 +133,7 @@ paths:
                                   publisher: Addison-Wesley
                                   title: The Go Programming Language
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 482-4-12-7-0
-                                  language: English
-                                  pages:
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                  publisher: Addison-Wesley
-                                  title: The Go Programming Language
-                                - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 482-4-12-7-0
-                                  language: English
-                                  pages:
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                    - keywords:
-                                        - Introduction
-                                        - Chapter 1
-                                        - Chapter 2
-                                      title: Introduction
-                                  publisher: Addison-Wesley
-                                  title: The Go Programming Language
-                                - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 482-4-12-7-0
+                                  isbn: 628-9-9-1-5
                                   language: English
                                   pages:
                                     - keywords:
@@ -170,7 +166,7 @@ paths:
                             $ref: '#/components/schemas/CreateBookRequestBody'
                         example:
                             author: Hic temporibus numquam distinctio alias.
-                            isbn: 940-79908-7-75-7
+                            isbn: 088-81-3-3-2
                             language: Dolor aliquam.
                             publisher: Eligendi placeat.
                             title: Cum omnis dolores quo sit.
@@ -183,7 +179,30 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 414-7-8-843-1
+                                isbn: 264-45-810-8-1
+                                language: English
+                                pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
+                "400":
+                    description: Bad Request response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BookResponse'
+                            example:
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 542-114-2060-8-6
                                 language: English
                                 pages:
                                     - keywords:
@@ -215,8 +234,10 @@ paths:
                     pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
                   example: 978-3-16-148410-0
             responses:
-                "204":
-                    description: No Content response.
+                "200":
+                    description: OK response.
+                "404":
+                    description: Not Found response.
         get:
             tags:
                 - epub_index_creator
@@ -241,9 +262,37 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 740-3-335-7-1
+                                isbn: 452-612-9-7-1
                                 language: English
                                 pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
+                "404":
+                    description: Not Found response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BookResponse'
+                            example:
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 427-93-9-22-7
+                                language: English
+                                pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
                                         - Introduction
                                         - Chapter 1
@@ -292,9 +341,37 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 576-5-500735-915-7
+                                isbn: 300-51-0-358-3
                                 language: English
                                 pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
+                                publisher: Addison-Wesley
+                                title: The Go Programming Language
+                "404":
+                    description: Not Found response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/BookResponse'
+                            example:
+                                author: Alan A. A. Donovan, Brian W. Kernighan
+                                isbn: 726-84-75-15-7
+                                language: English
+                                pages:
+                                    - keywords:
+                                        - Introduction
+                                        - Chapter 1
+                                        - Chapter 2
+                                      title: Introduction
                                     - keywords:
                                         - Introduction
                                         - Chapter 1
@@ -349,12 +426,34 @@ paths:
                                     - Chapter 1
                                     - Chapter 2
                                 title: Introduction
+                "404":
+                    description: Not Found response.
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PageResponse'
+                            example:
+                                keywords:
+                                    - Introduction
+                                    - Chapter 1
+                                    - Chapter 2
+                                title: Introduction
     /openapi.json:
         get:
             tags:
                 - epub_index_creator
             summary: Download ./gen/http/openapi.json
             operationId: epub_index_creator#/openapi.json
+            responses:
+                "200":
+                    description: File downloaded
+    /swagger/swagger.json:
+        get:
+            tags:
+                - swagger
+            summary: Download gen/http/openapi.json
+            description: JSON document containing the API swagger definition
+            operationId: swagger#/swagger/swagger.json
             responses:
                 "200":
                     description: File downloaded
@@ -369,7 +468,7 @@ components:
                     example: Alan A. A. Donovan, Brian W. Kernighan
                 isbn:
                     type: string
-                    example: 268-77-3-3-0
+                    example: 289-1-93-05-9
                     pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
                 language:
                     type: string
@@ -396,6 +495,11 @@ components:
                             - Chapter 1
                             - Chapter 2
                           title: Introduction
+                        - keywords:
+                            - Introduction
+                            - Chapter 1
+                            - Chapter 2
+                          title: Introduction
                 publisher:
                     type: string
                     description: Publisher of the book
@@ -406,7 +510,7 @@ components:
                     example: The Go Programming Language
             example:
                 author: Alan A. A. Donovan, Brian W. Kernighan
-                isbn: 748-2-47-1-6
+                isbn: 051-7-0-2-4
                 language: English
                 pages:
                     - keywords:
@@ -439,30 +543,30 @@ components:
                 author:
                     type: string
                     description: Author of the book
-                    example: Ex asperiores aspernatur enim.
+                    example: Est ex asperiores aspernatur enim mollitia laboriosam.
                 isbn:
                     type: string
                     description: ISBN of the book
-                    example: 802-447-3-6203-1
+                    example: 021-4-9-19-2
                     pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
                 language:
                     type: string
                     description: Language of the book
-                    example: Laboriosam omnis tenetur iusto animi mollitia.
+                    example: Tenetur iusto animi mollitia eius magni.
                 publisher:
                     type: string
                     description: Publisher of the book
-                    example: Magni tempora ducimus omnis qui.
+                    example: Ducimus omnis qui necessitatibus natus voluptatum voluptatem.
                 title:
                     type: string
                     description: Title of the book
-                    example: Animi assumenda.
+                    example: Autem animi.
             example:
-                author: Dignissimos sed qui et consequatur aspernatur.
-                isbn: 416-6-23-9-3
-                language: Quam nemo eaque aut.
-                publisher: Exercitationem placeat ad.
-                title: Natus voluptatum voluptatem corporis.
+                author: Aspernatur sint quam nemo eaque aut.
+                isbn: 598-74-07-6609-3
+                language: Exercitationem placeat ad.
+                publisher: Eos temporibus itaque nostrum magni.
+                title: Ex dignissimos sed qui et.
             required:
                 - isbn
                 - title
@@ -476,7 +580,7 @@ components:
                     type: array
                     items:
                         type: string
-                        example: Possimus non.
+                        example: Laudantium non sit et eum officia.
                     description: Keywords of the page
                     example:
                         - Introduction
@@ -508,27 +612,6 @@ components:
                     title: Introduction
             required:
                 - page
-        ListBooksRequestBody:
-            type: object
-            properties:
-                limit:
-                    type: integer
-                    description: Maximum number of books to return
-                    default: 100
-                    example: 31
-                    format: int64
-                    minimum: 1
-                    maximum: 100
-                offset:
-                    type: integer
-                    description: Field to paginate books
-                    default: 0
-                    example: 5746565918375458786
-                    format: int64
-                    minimum: 0
-            example:
-                limit: 77
-                offset: 6294500639283040272
         PageResponse:
             type: object
             properties:
@@ -536,7 +619,7 @@ components:
                     type: array
                     items:
                         type: string
-                        example: Quia neque.
+                        example: Dolorem et iste sit quia.
                     description: Keywords of the page
                     example:
                         - Introduction
@@ -561,28 +644,30 @@ components:
                 author:
                     type: string
                     description: Author of the book
-                    example: Expedita dolor natus.
+                    example: Dolore modi.
                 language:
                     type: string
                     description: Language of the book
-                    example: Dolore modi.
+                    example: Non ducimus officia saepe quos.
                 publisher:
                     type: string
                     description: Publisher of the book
-                    example: Non ducimus officia saepe quos.
+                    example: Totam voluptatibus excepturi dignissimos placeat nam.
                 title:
                     type: string
                     description: Title of the book
-                    example: Eos temporibus itaque nostrum magni.
+                    example: Expedita dolor natus.
             example:
-                author: Esse rerum veniam assumenda quae dolores cum.
-                language: At quis sequi voluptas provident ducimus.
-                publisher: Facilis quasi qui ab beatae magnam voluptatem.
-                title: Totam voluptatibus excepturi dignissimos placeat nam.
+                author: At quis sequi voluptas provident ducimus.
+                language: Facilis quasi qui ab beatae magnam voluptatem.
+                publisher: Possimus non.
+                title: Esse rerum veniam assumenda quae dolores cum.
             required:
                 - title
                 - author
                 - language
                 - publisher
 tags:
+    - name: swagger
+      description: The swagger service serves the API swagger definition.
     - name: epub_index_creator

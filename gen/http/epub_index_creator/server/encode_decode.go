@@ -11,6 +11,7 @@ import (
 	"context"
 	"io"
 	"net/http"
+	"strconv"
 
 	epubindexcreator "github.com/marutaku/epub-index-creator/gen/epub_index_creator"
 	goahttp "goa.design/goa/v3/http"
@@ -34,21 +35,45 @@ func EncodeListBooksResponse(encoder func(context.Context, http.ResponseWriter) 
 func DecodeListBooksRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
 	return func(r *http.Request) (any, error) {
 		var (
-			body ListBooksRequestBody
-			err  error
+			limit  int
+			offset int
+			err    error
 		)
-		err = decoder(r).Decode(&body)
-		if err != nil {
-			if err == io.EOF {
-				return nil, goa.MissingPayloadError()
+		{
+			limitRaw := r.URL.Query().Get("limit")
+			if limitRaw == "" {
+				limit = 100
+			} else {
+				v, err2 := strconv.ParseInt(limitRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("limit", limitRaw, "integer"))
+				}
+				limit = int(v)
 			}
-			return nil, goa.DecodePayloadError(err.Error())
 		}
-		err = ValidateListBooksRequestBody(&body)
+		if limit < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 1, true))
+		}
+		if limit > 100 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 100, false))
+		}
+		{
+			offsetRaw := r.URL.Query().Get("offset")
+			if offsetRaw != "" {
+				v, err2 := strconv.ParseInt(offsetRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("offset", offsetRaw, "integer"))
+				}
+				offset = int(v)
+			}
+		}
+		if offset < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("offset", offset, 0, true))
+		}
 		if err != nil {
 			return nil, err
 		}
-		payload := NewListBooksPayload(&body)
+		payload := NewListBooksPayload(limit, offset)
 
 		return payload, nil
 	}
@@ -60,7 +85,7 @@ func EncodeFindBookResponse(encoder func(context.Context, http.ResponseWriter) g
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
 		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
-		body := NewFindBookResponseBody(res)
+		body := NewFindBookOKResponseBody(res)
 		w.WriteHeader(http.StatusOK)
 		return enc.Encode(body)
 	}
@@ -93,7 +118,7 @@ func EncodeCreateBookResponse(encoder func(context.Context, http.ResponseWriter)
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
 		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
-		body := NewCreateBookResponseBody(res)
+		body := NewCreateBookOKResponseBody(res)
 		w.WriteHeader(http.StatusOK)
 		return enc.Encode(body)
 	}
@@ -130,7 +155,7 @@ func EncodeUpdateBookResponse(encoder func(context.Context, http.ResponseWriter)
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
 		res, _ := v.(*epubindexcreator.BookResponse)
 		enc := encoder(ctx, w)
-		body := NewUpdateBookResponseBody(res)
+		body := NewUpdateBookOKResponseBody(res)
 		w.WriteHeader(http.StatusOK)
 		return enc.Encode(body)
 	}
@@ -176,7 +201,7 @@ func DecodeUpdateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 // epub_index_creator DeleteBook endpoint.
 func EncodeDeleteBookResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
-		w.WriteHeader(http.StatusNoContent)
+		w.WriteHeader(http.StatusOK)
 		return nil
 	}
 }
@@ -208,7 +233,7 @@ func EncodeCreatePageResponse(encoder func(context.Context, http.ResponseWriter)
 	return func(ctx context.Context, w http.ResponseWriter, v any) error {
 		res, _ := v.(*epubindexcreator.PageResponse)
 		enc := encoder(ctx, w)
-		body := NewCreatePageResponseBody(res)
+		body := NewCreatePageOKResponseBody(res)
 		w.WriteHeader(http.StatusOK)
 		return enc.Encode(body)
 	}

@@ -28,10 +28,7 @@ func UsageCommands() string {
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` epub-index-creator list-books --body '{
-      "limit": 11,
-      "offset": 3696960733945795768
-   }'` + "\n" +
+	return os.Args[0] + ` epub-index-creator list-books --limit 11 --offset 3696960733945795768` + "\n" +
 		""
 }
 
@@ -47,8 +44,9 @@ func ParseEndpoint(
 	var (
 		epubIndexCreatorFlags = flag.NewFlagSet("epub-index-creator", flag.ContinueOnError)
 
-		epubIndexCreatorListBooksFlags    = flag.NewFlagSet("list-books", flag.ExitOnError)
-		epubIndexCreatorListBooksBodyFlag = epubIndexCreatorListBooksFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorListBooksFlags      = flag.NewFlagSet("list-books", flag.ExitOnError)
+		epubIndexCreatorListBooksLimitFlag  = epubIndexCreatorListBooksFlags.String("limit", "100", "")
+		epubIndexCreatorListBooksOffsetFlag = epubIndexCreatorListBooksFlags.String("offset", "", "")
 
 		epubIndexCreatorFindBookFlags    = flag.NewFlagSet("find-book", flag.ExitOnError)
 		epubIndexCreatorFindBookIsbnFlag = epubIndexCreatorFindBookFlags.String("isbn", "REQUIRED", "")
@@ -154,7 +152,7 @@ func ParseEndpoint(
 			switch epn {
 			case "list-books":
 				endpoint = c.ListBooks()
-				data, err = epubindexcreatorc.BuildListBooksPayload(*epubIndexCreatorListBooksBodyFlag)
+				data, err = epubindexcreatorc.BuildListBooksPayload(*epubIndexCreatorListBooksLimitFlag, *epubIndexCreatorListBooksOffsetFlag)
 			case "find-book":
 				endpoint = c.FindBook()
 				data, err = epubindexcreatorc.BuildFindBookPayload(*epubIndexCreatorFindBookIsbnFlag)
@@ -200,16 +198,14 @@ Additional help:
 `, os.Args[0])
 }
 func epubIndexCreatorListBooksUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator list-books -body JSON
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator list-books -limit INT -offset INT
 
 ListBooks implements ListBooks.
-    -body JSON: 
+    -limit INT: 
+    -offset INT: 
 
 Example:
-    %[1]s epub-index-creator list-books --body '{
-      "limit": 11,
-      "offset": 3696960733945795768
-   }'
+    %[1]s epub-index-creator list-books --limit 11 --offset 3696960733945795768
 `, os.Args[0])
 }
 
@@ -220,7 +216,7 @@ FindBook implements FindBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "387-9-8-98-2"
+    %[1]s epub-index-creator find-book --isbn "761-2-1785-6-2"
 `, os.Args[0])
 }
 
@@ -233,7 +229,7 @@ CreateBook implements CreateBook.
 Example:
     %[1]s epub-index-creator create-book --body '{
       "author": "Hic temporibus numquam distinctio alias.",
-      "isbn": "940-79908-7-75-7",
+      "isbn": "088-81-3-3-2",
       "language": "Dolor aliquam.",
       "publisher": "Eligendi placeat.",
       "title": "Cum omnis dolores quo sit."
@@ -254,7 +250,7 @@ Example:
       "language": "Qui in omnis quaerat odit.",
       "publisher": "Ut repudiandae beatae et non consequatur dolore.",
       "title": "Quibusdam vero rem aliquam voluptatibus."
-   }' --isbn "109-712-1-70-9"
+   }' --isbn "614-1-3-0-2"
 `, os.Args[0])
 }
 
@@ -265,7 +261,7 @@ DeleteBook implements DeleteBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --isbn "353-8-2-15-7"
+    %[1]s epub-index-creator delete-book --isbn "991-9-2-3-2"
 `, os.Args[0])
 }
 
@@ -286,6 +282,6 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "628-9-9231182-8581032-7"
+   }' --isbn "653-6-6-2-8"
 `, os.Args[0])
 }
