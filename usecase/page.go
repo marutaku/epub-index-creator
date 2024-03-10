@@ -41,8 +41,7 @@ func (*pageUsecase) FindPage(ctx context.Context, id int) (*domain.Page, error) 
 
 func (*pageUsecase) CreatePage(ctx context.Context, path string) (*domain.Page, error) {
 	pageRepo := repository.NewPageRepository()
-	page := domain.NewPage(path)
-	err := pageRepo.Save(ctx, page)
+	page, err := pageRepo.Save(ctx, path)
 	if err != nil {
 		return nil, err
 	}
@@ -56,11 +55,11 @@ func (*pageUsecase) UpdatePage(ctx context.Context, id int, path string) (*domai
 		return nil, err
 	}
 	page.Path = path
-	err = pageRepo.Save(ctx, page)
+	newPage, err := pageRepo.Update(ctx, page.Id, page)
 	if err != nil {
 		return nil, err
 	}
-	return page, nil
+	return newPage, nil
 }
 
 func (*pageUsecase) DeletePage(ctx context.Context, id int) error {

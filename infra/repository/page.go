@@ -11,8 +11,8 @@ import (
 type PageRepository interface {
 	FindAll(ctx context.Context, limit, offset int) ([]*domain.Page, error)
 	FindByID(ctx context.Context, id int) (*domain.Page, error)
-	Save(ctx context.Context, page *domain.Page) error
-	Update(ctx context.Context, id int, page *domain.Page) error
+	Save(ctx context.Context, path string) (*domain.Page, error)
+	Update(ctx context.Context, id int, page *domain.Page) (*domain.Page, error)
 	Delete(ctx context.Context, id int) error
 }
 
@@ -50,22 +50,28 @@ func (r *PageRepositoryImpl) FindByID(ctx context.Context, id int) (*domain.Page
 	return domain.NewPageFromEnt(page), nil
 }
 
-func (r *PageRepositoryImpl) Save(ctx context.Context, page *domain.Page) error {
+func (r *PageRepositoryImpl) Save(ctx context.Context, path string) (*domain.Page, error) {
 	tx := ent.TxFromContext(ctx)
 	if tx == nil {
-		return fmt.Errorf("ent.TxFromContext(ctx) is nil")
+		return nil, fmt.Errorf("ent.TxFromContext(ctx) is nil")
 	}
-	_, err := tx.Page.Create().SetID(page.Id).SetPath(page.Path).Save(ctx)
-	return err
+	page, err := tx.Page.Create().SetPath(path).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return domain.NewPageFromEnt(page), nil
 }
 
-func (r *PageRepositoryImpl) Update(ctx context.Context, id int, page *domain.Page) error {
+func (r *PageRepositoryImpl) Update(ctx context.Context, id int, page *domain.Page) (*domain.Page, error) {
 	tx := ent.TxFromContext(ctx)
 	if tx == nil {
-		return fmt.Errorf("ent.TxFromContext(ctx) is nil")
+		return nil, fmt.Errorf("ent.TxFromContext(ctx) is nil")
 	}
-	_, err := tx.Page.UpdateOneID(id).SetPath(page.Path).Save(ctx)
-	return err
+	newEntPage, err := tx.Page.UpdateOneID(id).SetPath(page.Path).Save(ctx)
+	if err != nil {
+		return nil, err
+	}
+	return domain.NewPageFromEnt(newEntPage), nil
 }
 
 func (r *PageRepositoryImpl) Delete(ctx context.Context, id int) error {
