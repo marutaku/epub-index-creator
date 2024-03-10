@@ -321,7 +321,7 @@ func ValidateCreateBookRequestBody(body *CreateBookRequestBody) (err error) {
 		err = goa.MergeErrors(err, goa.MissingFieldError("publisher", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	return
 }

@@ -71,7 +71,7 @@ func BuildFindBookPayload(epubIndexCreatorFindBookIsbn string) (*epubindexcreato
 	var isbn string
 	{
 		isbn = epubIndexCreatorFindBookIsbn
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -90,9 +90,9 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"088-81-3-3-2\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"3586492097158\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
 		}
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -122,7 +122,7 @@ func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCrea
 	var isbn string
 	{
 		isbn = epubIndexCreatorUpdateBookIsbn
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -145,7 +145,7 @@ func BuildDeleteBookPayload(epubIndexCreatorDeleteBookIsbn string) (*epubindexcr
 	var isbn string
 	{
 		isbn = epubIndexCreatorDeleteBookIsbn
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -176,7 +176,7 @@ func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCrea
 	var isbn string
 	{
 		isbn = epubIndexCreatorCreatePageIsbn
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}

@@ -216,7 +216,7 @@ FindBook implements FindBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "761-2-1785-6-2"
+    %[1]s epub-index-creator find-book --isbn "4404456641737"
 `, os.Args[0])
 }
 
@@ -229,7 +229,7 @@ CreateBook implements CreateBook.
 Example:
     %[1]s epub-index-creator create-book --body '{
       "author": "Hic temporibus numquam distinctio alias.",
-      "isbn": "088-81-3-3-2",
+      "isbn": "3586492097158",
       "language": "Dolor aliquam.",
       "publisher": "Eligendi placeat.",
       "title": "Cum omnis dolores quo sit."
@@ -250,7 +250,7 @@ Example:
       "language": "Qui in omnis quaerat odit.",
       "publisher": "Ut repudiandae beatae et non consequatur dolore.",
       "title": "Quibusdam vero rem aliquam voluptatibus."
-   }' --isbn "614-1-3-0-2"
+   }' --isbn "0562441296369"
 `, os.Args[0])
 }
 
@@ -261,7 +261,7 @@ DeleteBook implements DeleteBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --isbn "991-9-2-3-2"
+    %[1]s epub-index-creator delete-book --isbn "4321261947122"
 `, os.Args[0])
 }
 
@@ -282,6 +282,6 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "653-6-6-2-8"
+   }' --isbn "6073901477040"
 `, os.Args[0])
 }

@@ -102,7 +102,7 @@ func DecodeFindBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goahtt
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -187,7 +187,7 @@ func DecodeUpdateBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -217,7 +217,7 @@ func DecodeDeleteBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}
@@ -265,7 +265,7 @@ func DecodeCreatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
-		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
 		if err != nil {
 			return nil, err
 		}

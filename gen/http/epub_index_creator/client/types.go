@@ -338,7 +338,7 @@ func ValidateFindBookOKResponseBody(body *FindBookOKResponseBody) (err error) {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -372,7 +372,7 @@ func ValidateCreateBookOKResponseBody(body *CreateBookOKResponseBody) (err error
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -406,7 +406,7 @@ func ValidateUpdateBookOKResponseBody(body *UpdateBookOKResponseBody) (err error
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -452,7 +452,7 @@ func ValidateBookResponseResponse(body *BookResponseResponse) (err error) {
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -510,7 +510,7 @@ func ValidateFindBookNotFoundResponseBody(body *FindBookNotFoundResponseBody) (e
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -544,7 +544,7 @@ func ValidateCreateBookBadRequestResponseBody(body *CreateBookBadRequestResponse
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {
@@ -578,7 +578,7 @@ func ValidateUpdateBookNotFoundResponseBody(body *UpdateBookNotFoundResponseBody
 		err = goa.MergeErrors(err, goa.MissingFieldError("pages", "body"))
 	}
 	if body.Isbn != nil {
-		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$"))
+		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", *body.Isbn, "^[0-9]{13}$"))
 	}
 	for _, e := range body.Pages {
 		if e != nil {

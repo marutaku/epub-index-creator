@@ -260,8 +260,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 809-69120-353-0-2
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "0646831448367"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -302,7 +302,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 370-0-20-3-5
+            isbn: "3393406889635"
             language: English
             pages:
                 - keywords:
@@ -370,8 +370,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 519-7-9-37-1
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "6948828369036"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -407,7 +407,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 951-04-85-088-3
+            isbn: "2888856049175"
             language: English
             pages:
                 - keywords:
@@ -444,8 +444,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 740-4-4423-31-7
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "4284249105171"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -486,7 +486,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 455-92-5-592-0
+            isbn: "4026214822156"
             language: English
             pages:
                 - keywords:
@@ -529,8 +529,8 @@ definitions:
             isbn:
                 type: string
                 description: ISBN of the book
-                example: 037-85-2-4-6
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "0166297506443"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -545,7 +545,7 @@ definitions:
                 example: Veniam est aut occaecati odio corrupti quis.
         example:
             author: Quae consequatur.
-            isbn: 243-8-6-3314-9
+            isbn: "8423529780790"
             language: Autem facilis.
             publisher: Ab dolor provident nulla corporis.
             title: Et atque labore ad ut.
@@ -634,8 +634,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 941-9-752-661-1
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "5549153693818"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -676,7 +676,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 439-76182-4-5-1
+            isbn: "3860526850055"
             language: English
             pages:
                 - keywords:
@@ -718,8 +718,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 915-19-534-2-0
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "2793796253876"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -755,7 +755,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 143-7-7959258-279-7
+            isbn: "9309788710807"
             language: English
             pages:
                 - keywords:
@@ -792,8 +792,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 790-0-52-8-8
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "0472681318280"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -829,7 +829,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 768-20-7-52-2
+            isbn: "7470637644213"
             language: English
             pages:
                 - keywords:
@@ -871,8 +871,8 @@ definitions:
                 example: Alan A. A. Donovan, Brian W. Kernighan
             isbn:
                 type: string
-                example: 887-5-31-68-8
-                pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                example: "0967153784020"
+                pattern: ^[0-9]{13}$
             language:
                 type: string
                 description: Language of the book
@@ -903,7 +903,7 @@ definitions:
                 example: The Go Programming Language
         example:
             author: Alan A. A. Donovan, Brian W. Kernighan
-            isbn: 963-00-0957-8-6
+            isbn: "0549446254304"
             language: English
             pages:
                 - keywords:

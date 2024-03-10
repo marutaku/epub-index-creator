@@ -48,7 +48,7 @@ paths:
                                     $ref: '#/components/schemas/BookResponse'
                                 example:
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 628-9-9-1-5
+                                      isbn: "5083610652565"
                                       language: English
                                       pages:
                                         - keywords:
@@ -69,7 +69,7 @@ paths:
                                       publisher: Addison-Wesley
                                       title: The Go Programming Language
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 628-9-9-1-5
+                                      isbn: "5083610652565"
                                       language: English
                                       pages:
                                         - keywords:
@@ -90,7 +90,7 @@ paths:
                                       publisher: Addison-Wesley
                                       title: The Go Programming Language
                                     - author: Alan A. A. Donovan, Brian W. Kernighan
-                                      isbn: 628-9-9-1-5
+                                      isbn: "5083610652565"
                                       language: English
                                       pages:
                                         - keywords:
@@ -112,7 +112,7 @@ paths:
                                       title: The Go Programming Language
                             example:
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 628-9-9-1-5
+                                  isbn: "5083610652565"
                                   language: English
                                   pages:
                                     - keywords:
@@ -133,7 +133,7 @@ paths:
                                   publisher: Addison-Wesley
                                   title: The Go Programming Language
                                 - author: Alan A. A. Donovan, Brian W. Kernighan
-                                  isbn: 628-9-9-1-5
+                                  isbn: "5083610652565"
                                   language: English
                                   pages:
                                     - keywords:
@@ -166,7 +166,7 @@ paths:
                             $ref: '#/components/schemas/CreateBookRequestBody'
                         example:
                             author: Hic temporibus numquam distinctio alias.
-                            isbn: 088-81-3-3-2
+                            isbn: "3586492097158"
                             language: Dolor aliquam.
                             publisher: Eligendi placeat.
                             title: Cum omnis dolores quo sit.
@@ -179,7 +179,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 264-45-810-8-1
+                                isbn: "8487100201849"
                                 language: English
                                 pages:
                                     - keywords:
@@ -202,7 +202,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 542-114-2060-8-6
+                                isbn: "3963836690827"
                                 language: English
                                 pages:
                                     - keywords:
@@ -230,9 +230,9 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: 978-3-16-148410-0
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
-                  example: 978-3-16-148410-0
+                    example: "9783161484100"
+                    pattern: ^[0-9]{13}$
+                  example: "9783161484100"
             responses:
                 "200":
                     description: OK response.
@@ -250,9 +250,9 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: 978-3-16-148410-0
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
-                  example: 978-3-16-148410-0
+                    example: "9783161484100"
+                    pattern: ^[0-9]{13}$
+                  example: "9783161484100"
             responses:
                 "200":
                     description: OK response.
@@ -262,7 +262,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 452-612-9-7-1
+                                isbn: "6246047333499"
                                 language: English
                                 pages:
                                     - keywords:
@@ -285,7 +285,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 427-93-9-22-7
+                                isbn: "2685350016208"
                                 language: English
                                 pages:
                                     - keywords:
@@ -318,9 +318,9 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: 978-3-16-148410-0
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
-                  example: 978-3-16-148410-0
+                    example: "9783161484100"
+                    pattern: ^[0-9]{13}$
+                  example: "9783161484100"
             requestBody:
                 required: true
                 content:
@@ -341,7 +341,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 300-51-0-358-3
+                                isbn: "6251939044654"
                                 language: English
                                 pages:
                                     - keywords:
@@ -364,7 +364,7 @@ paths:
                                 $ref: '#/components/schemas/BookResponse'
                             example:
                                 author: Alan A. A. Donovan, Brian W. Kernighan
-                                isbn: 726-84-75-15-7
+                                isbn: "5912587811591"
                                 language: English
                                 pages:
                                     - keywords:
@@ -397,9 +397,9 @@ paths:
                   schema:
                     type: string
                     description: ISBN of the book
-                    example: 978-3-16-148410-0
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
-                  example: 978-3-16-148410-0
+                    example: "9783161484100"
+                    pattern: ^[0-9]{13}$
+                  example: "9783161484100"
             requestBody:
                 required: true
                 content:
@@ -468,8 +468,8 @@ components:
                     example: Alan A. A. Donovan, Brian W. Kernighan
                 isbn:
                     type: string
-                    example: 289-1-93-05-9
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                    example: "2667626358713"
+                    pattern: ^[0-9]{13}$
                 language:
                     type: string
                     description: Language of the book
@@ -510,7 +510,7 @@ components:
                     example: The Go Programming Language
             example:
                 author: Alan A. A. Donovan, Brian W. Kernighan
-                isbn: 051-7-0-2-4
+                isbn: "4459976402600"
                 language: English
                 pages:
                     - keywords:
@@ -547,8 +547,8 @@ components:
                 isbn:
                     type: string
                     description: ISBN of the book
-                    example: 021-4-9-19-2
-                    pattern: ^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$
+                    example: "5337425070373"
+                    pattern: ^[0-9]{13}$
                 language:
                     type: string
                     description: Language of the book
@@ -563,7 +563,7 @@ components:
                     example: Autem animi.
             example:
                 author: Aspernatur sint quam nemo eaque aut.
-                isbn: 598-74-07-6609-3
+                isbn: "7327214937594"
                 language: Exercitationem placeat ad.
                 publisher: Eos temporibus itaque nostrum magni.
                 title: Ex dignissimos sed qui et.

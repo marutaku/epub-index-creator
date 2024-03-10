@@ -6,8 +6,8 @@ import (
 
 var ISBN = Type("ISBN", String, func() {
 	Description("ISBN of the book")
-	Pattern("^[0-9]{3}-[0-9]{1,5}-[0-9]{1,7}-[0-9]{1,7}-[0-9]$")
-	Example("978-3-16-148410-0")
+	Pattern("^[0-9]{13}$")
+	Example("9783161484100")
 })
 
 var BookRequest = Type("BookRequest", func() {
