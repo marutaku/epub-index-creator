@@ -20,19 +20,27 @@ type Client struct {
 	CreateBookEndpoint goa.Endpoint
 	UpdateBookEndpoint goa.Endpoint
 	DeleteBookEndpoint goa.Endpoint
+	ListPagesEndpoint  goa.Endpoint
+	FindPageEndpoint   goa.Endpoint
 	CreatePageEndpoint goa.Endpoint
+	UpdatePageEndpoint goa.Endpoint
+	DeletePageEndpoint goa.Endpoint
 }
 
 // NewClient initializes a "epub_index_creator" service client given the
 // endpoints.
-func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, createPage goa.Endpoint) *Client {
+func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, listPages, findPage, createPage, updatePage, deletePage goa.Endpoint) *Client {
 	return &Client{
 		ListBooksEndpoint:  listBooks,
 		FindBookEndpoint:   findBook,
 		CreateBookEndpoint: createBook,
 		UpdateBookEndpoint: updateBook,
 		DeleteBookEndpoint: deleteBook,
+		ListPagesEndpoint:  listPages,
+		FindPageEndpoint:   findPage,
 		CreatePageEndpoint: createPage,
+		UpdatePageEndpoint: updatePage,
+		DeletePageEndpoint: deletePage,
 	}
 }
 
@@ -85,6 +93,26 @@ func (c *Client) DeleteBook(ctx context.Context, p *DeleteBookPayload) (err erro
 	return
 }
 
+// ListPages calls the "ListPages" endpoint of the "epub_index_creator" service.
+func (c *Client) ListPages(ctx context.Context, p *ListPagesPayload) (res []*PageResponse, err error) {
+	var ires any
+	ires, err = c.ListPagesEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.([]*PageResponse), nil
+}
+
+// FindPage calls the "FindPage" endpoint of the "epub_index_creator" service.
+func (c *Client) FindPage(ctx context.Context, p *FindPagePayload) (res *PageResponse, err error) {
+	var ires any
+	ires, err = c.FindPageEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*PageResponse), nil
+}
+
 // CreatePage calls the "CreatePage" endpoint of the "epub_index_creator"
 // service.
 func (c *Client) CreatePage(ctx context.Context, p *CreatePagePayload) (res *PageResponse, err error) {
@@ -94,4 +122,22 @@ func (c *Client) CreatePage(ctx context.Context, p *CreatePagePayload) (res *Pag
 		return
 	}
 	return ires.(*PageResponse), nil
+}
+
+// UpdatePage calls the "UpdatePage" endpoint of the "epub_index_creator"
+// service.
+func (c *Client) UpdatePage(ctx context.Context, p *UpdatePagePayload) (res *PageResponse, err error) {
+	var ires any
+	ires, err = c.UpdatePageEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.(*PageResponse), nil
+}
+
+// DeletePage calls the "DeletePage" endpoint of the "epub_index_creator"
+// service.
+func (c *Client) DeletePage(ctx context.Context, p *DeletePagePayload) (err error) {
+	_, err = c.DeletePageEndpoint(ctx, p)
+	return
 }

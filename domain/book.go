@@ -35,10 +35,9 @@ func NewBookFromOPF(filepath string) (*Book, error) {
 	publisher := xmlquery.FindOne(doc, "//package/metadata/dc:publisher").InnerText()
 	items := xmlquery.Find(doc, "//package/manifest/item[@media-type='application/xhtml+xml']")
 	pages := make([]*Page, 0, len(items))
-	for _, item := range items {
-		id := item.SelectAttr("id")
+	for index, item := range items {
 		pagePath := item.SelectAttr("href")
-		pages = append(pages, NewPage(id, path.Join(baseDir, pagePath)))
+		pages = append(pages, NewPage(index+1, path.Join(baseDir, pagePath)))
 	}
 	return NewBook(isbn, title, language, author, publisher, pages), nil
 }

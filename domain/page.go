@@ -5,14 +5,16 @@ import (
 	"os"
 	"regexp"
 	"strings"
+
+	"github.com/marutaku/epub-index-creator/ent"
 )
 
 type Page struct {
-	Id   string
+	Id   int
 	Path string
 }
 
-func NewPage(id, path string) *Page {
+func NewPage(id int, path string) *Page {
 	return &Page{
 		Id:   id,
 		Path: path,
@@ -60,4 +62,8 @@ func (p *Page) ExtractKeywords() ([]string, error) {
 		keywords = append(keywords, res[0][2])
 	}
 	return keywords, nil
+}
+
+func NewPageFromEnt(entPage *ent.Page) *Page {
+	return NewPage(entPage.ID, entPage.Path)
 }

@@ -19,6 +19,8 @@ type Page struct {
 	ID int `json:"id,omitempty"`
 	// Title holds the value of the "title" field.
 	Title string `json:"title,omitempty"`
+	// Path holds the value of the "path" field.
+	Path string `json:"path,omitempty"`
 	// Edges holds the relations/edges for other nodes in the graph.
 	// The values are being populated by the PageQuery when eager-loading is set.
 	Edges        PageEdges `json:"edges"`
@@ -66,7 +68,7 @@ func (*Page) scanValues(columns []string) ([]any, error) {
 		switch columns[i] {
 		case page.FieldID:
 			values[i] = new(sql.NullInt64)
-		case page.FieldTitle:
+		case page.FieldTitle, page.FieldPath:
 			values[i] = new(sql.NullString)
 		case page.ForeignKeys[0]: // book_pages
 			values[i] = new(sql.NullInt64)
@@ -96,6 +98,12 @@ func (pa *Page) assignValues(columns []string, values []any) error {
 				return fmt.Errorf("unexpected type %T for field title", values[i])
 			} else if value.Valid {
 				pa.Title = value.String
+			}
+		case page.FieldPath:
+			if value, ok := values[i].(*sql.NullString); !ok {
+				return fmt.Errorf("unexpected type %T for field path", values[i])
+			} else if value.Valid {
+				pa.Path = value.String
 			}
 		case page.ForeignKeys[0]:
 			if value, ok := values[i].(*sql.NullInt64); !ok {
@@ -152,6 +160,9 @@ func (pa *Page) String() string {
 	builder.WriteString(fmt.Sprintf("id=%v, ", pa.ID))
 	builder.WriteString("title=")
 	builder.WriteString(pa.Title)
+	builder.WriteString(", ")
+	builder.WriteString("path=")
+	builder.WriteString(pa.Path)
 	builder.WriteByte(')')
 	return builder.String()
 }

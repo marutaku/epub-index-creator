@@ -227,6 +227,114 @@ func DecodeDeleteBookRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 	}
 }
 
+// EncodeListPagesResponse returns an encoder for responses returned by the
+// epub_index_creator ListPages endpoint.
+func EncodeListPagesResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.([]*epubindexcreator.PageResponse)
+		enc := encoder(ctx, w)
+		body := NewListPagesResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeListPagesRequest returns a decoder for requests sent to the
+// epub_index_creator ListPages endpoint.
+func DecodeListPagesRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			isbn   string
+			limit  int
+			offset int
+			err    error
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		{
+			limitRaw := r.URL.Query().Get("limit")
+			if limitRaw == "" {
+				limit = 100
+			} else {
+				v, err2 := strconv.ParseInt(limitRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("limit", limitRaw, "integer"))
+				}
+				limit = int(v)
+			}
+		}
+		if limit < 1 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 1, true))
+		}
+		if limit > 100 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 100, false))
+		}
+		{
+			offsetRaw := r.URL.Query().Get("offset")
+			if offsetRaw != "" {
+				v, err2 := strconv.ParseInt(offsetRaw, 10, strconv.IntSize)
+				if err2 != nil {
+					err = goa.MergeErrors(err, goa.InvalidFieldTypeError("offset", offsetRaw, "integer"))
+				}
+				offset = int(v)
+			}
+		}
+		if offset < 0 {
+			err = goa.MergeErrors(err, goa.InvalidRangeError("offset", offset, 0, true))
+		}
+		if err != nil {
+			return nil, err
+		}
+		payload := NewListPagesPayload(isbn, limit, offset)
+
+		return payload, nil
+	}
+}
+
+// EncodeFindPageResponse returns an encoder for responses returned by the
+// epub_index_creator FindPage endpoint.
+func EncodeFindPageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.(*epubindexcreator.PageResponse)
+		enc := encoder(ctx, w)
+		body := NewFindPageOKResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeFindPageRequest returns a decoder for requests sent to the
+// epub_index_creator FindPage endpoint.
+func DecodeFindPageRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			isbn   string
+			pageID int
+			err    error
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		{
+			pageIDRaw := params["pageId"]
+			v, err2 := strconv.ParseInt(pageIDRaw, 10, strconv.IntSize)
+			if err2 != nil {
+				err = goa.MergeErrors(err, goa.InvalidFieldTypeError("pageId", pageIDRaw, "integer"))
+			}
+			pageID = int(v)
+		}
+		if err != nil {
+			return nil, err
+		}
+		payload := NewFindPagePayload(isbn, pageID)
+
+		return payload, nil
+	}
+}
+
 // EncodeCreatePageResponse returns an encoder for responses returned by the
 // epub_index_creator CreatePage endpoint.
 func EncodeCreatePageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
@@ -275,6 +383,92 @@ func DecodeCreatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 	}
 }
 
+// EncodeUpdatePageResponse returns an encoder for responses returned by the
+// epub_index_creator UpdatePage endpoint.
+func EncodeUpdatePageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.(*epubindexcreator.PageResponse)
+		enc := encoder(ctx, w)
+		body := NewUpdatePageOKResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeUpdatePageRequest returns a decoder for requests sent to the
+// epub_index_creator UpdatePage endpoint.
+func DecodeUpdatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			body UpdatePageRequestBody
+			err  error
+		)
+		err = decoder(r).Decode(&body)
+		if err != nil {
+			if err == io.EOF {
+				return nil, goa.MissingPayloadError()
+			}
+			return nil, goa.DecodePayloadError(err.Error())
+		}
+		err = ValidateUpdatePageRequestBody(&body)
+		if err != nil {
+			return nil, err
+		}
+
+		var (
+			isbn string
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		if err != nil {
+			return nil, err
+		}
+		payload := NewUpdatePagePayload(&body, isbn)
+
+		return payload, nil
+	}
+}
+
+// EncodeDeletePageResponse returns an encoder for responses returned by the
+// epub_index_creator DeletePage endpoint.
+func EncodeDeletePageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		w.WriteHeader(http.StatusOK)
+		return nil
+	}
+}
+
+// DecodeDeletePageRequest returns a decoder for requests sent to the
+// epub_index_creator DeletePage endpoint.
+func DecodeDeletePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			isbn   string
+			pageID int
+			err    error
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		{
+			pageIDRaw := params["pageId"]
+			v, err2 := strconv.ParseInt(pageIDRaw, 10, strconv.IntSize)
+			if err2 != nil {
+				err = goa.MergeErrors(err, goa.InvalidFieldTypeError("pageId", pageIDRaw, "integer"))
+			}
+			pageID = int(v)
+		}
+		if err != nil {
+			return nil, err
+		}
+		payload := NewDeletePagePayload(isbn, pageID)
+
+		return payload, nil
+	}
+}
+
 // marshalEpubindexcreatorBookResponseToBookResponseResponse builds a value of
 // type *BookResponseResponse from a value of type
 // *epubindexcreator.BookResponse.
@@ -303,6 +497,7 @@ func marshalEpubindexcreatorBookResponseToBookResponseResponse(v *epubindexcreat
 // *epubindexcreator.PageResponse.
 func marshalEpubindexcreatorPageResponseToPageResponseResponse(v *epubindexcreator.PageResponse) *PageResponseResponse {
 	res := &PageResponseResponse{
+		ID:    v.ID,
 		Title: v.Title,
 	}
 	if v.Keywords != nil {
@@ -322,6 +517,7 @@ func marshalEpubindexcreatorPageResponseToPageResponseResponse(v *epubindexcreat
 // *epubindexcreator.PageResponse.
 func marshalEpubindexcreatorPageResponseToPageResponseResponseBody(v *epubindexcreator.PageResponse) *PageResponseResponseBody {
 	res := &PageResponseResponseBody{
+		ID:    v.ID,
 		Title: v.Title,
 	}
 	if v.Keywords != nil {

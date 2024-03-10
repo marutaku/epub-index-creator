@@ -47,4 +47,8 @@ func init() {
 	pageDescTitle := pageFields[1].Descriptor()
 	// page.TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	page.TitleValidator = pageDescTitle.Validators[0].(func(string) error)
+	// pageDescPath is the schema descriptor for path field.
+	pageDescPath := pageFields[2].Descriptor()
+	// page.PathValidator is a validator for the "path" field. It is called by the builders before save.
+	page.PathValidator = pageDescPath.Validators[0].(func(string) error)
 }

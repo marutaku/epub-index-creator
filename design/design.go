@@ -85,6 +85,44 @@ var _ = Service("epub_index_creator", func() {
 		})
 	})
 
+	Method("ListPages", func() {
+		Payload(func() {
+			Attribute("isbn", ISBN)
+			Attribute("limit", Int, "Maximum number of pages to return", func() {
+				Minimum(1)
+				Maximum(100)
+				Default(100)
+			})
+			Attribute("offset", Int, "Field to paginate pages", func() {
+				Minimum(0)
+				Default(0)
+			})
+			Required("isbn")
+		})
+		Result(ArrayOf(PageResponse))
+		HTTP(func() {
+			GET("/books/{isbn}/pages")
+			Param("limit")
+			Param("offset")
+			Response(StatusOK)
+			Response(StatusNotFound)
+		})
+	})
+
+	Method("FindPage", func() {
+		Payload(func() {
+			Attribute("pageId", Int)
+			Attribute("isbn", ISBN)
+			Required("isbn", "pageId")
+		})
+		Result(PageResponse)
+		HTTP(func() {
+			GET("/books/{isbn}/pages/{pageId}")
+			Response(StatusOK)
+			Response(StatusNotFound)
+		})
+	})
+
 	Method("CreatePage", func() {
 		Payload(func() {
 			Attribute("isbn", ISBN)
@@ -94,6 +132,34 @@ var _ = Service("epub_index_creator", func() {
 		Result(PageResponse)
 		HTTP(func() {
 			POST("/books/{isbn}/pages")
+			Response(StatusOK)
+			Response(StatusNotFound)
+		})
+	})
+
+	Method("UpdatePage", func() {
+		Payload(func() {
+			Attribute("isbn", ISBN)
+			Attribute("page", PageRequest)
+			Required("isbn", "page")
+		})
+		Result(PageResponse)
+		HTTP(func() {
+			PUT("/books/{isbn}/pages")
+			Response(StatusOK)
+			Response(StatusNotFound)
+		})
+	})
+
+	Method("DeletePage", func() {
+		Payload(func() {
+			Attribute("pageId", Int)
+			Attribute("isbn", String)
+			Required("isbn", "pageId")
+		})
+		Result(Empty)
+		HTTP(func() {
+			DELETE("/books/{isbn}/pages/{pageId}/")
 			Response(StatusOK)
 			Response(StatusNotFound)
 		})

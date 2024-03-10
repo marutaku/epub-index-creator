@@ -1,4 +1,4 @@
-.PHONY: migrate ent_create gen_migration migrate goa_generate run
+.PHONY: migrate ent_create gen_migration migrate goa_generate run test
 
 goa_generate:
 	goa gen github.com/marutaku/epub-index-creator/design
@@ -17,3 +17,6 @@ migrate:
 
 dev:
 	air -c .air.toml
+
+test:
+	go test -v ./...

@@ -24,7 +24,11 @@ type Server struct {
 	CreateBook         http.Handler
 	UpdateBook         http.Handler
 	DeleteBook         http.Handler
+	ListPages          http.Handler
+	FindPage           http.Handler
 	CreatePage         http.Handler
+	UpdatePage         http.Handler
+	DeletePage         http.Handler
 	GenHTTPOpenapiJSON http.Handler
 }
 
@@ -64,7 +68,11 @@ func New(
 			{"CreateBook", "POST", "/books"},
 			{"UpdateBook", "PUT", "/books/{isbn}"},
 			{"DeleteBook", "DELETE", "/books/{isbn}"},
+			{"ListPages", "GET", "/books/{isbn}/pages"},
+			{"FindPage", "GET", "/books/{isbn}/pages/{pageId}"},
 			{"CreatePage", "POST", "/books/{isbn}/pages"},
+			{"UpdatePage", "PUT", "/books/{isbn}/pages"},
+			{"DeletePage", "DELETE", "/books/{isbn}/pages/{pageId}/"},
 			{"./gen/http/openapi.json", "GET", "/openapi.json"},
 		},
 		ListBooks:          NewListBooksHandler(e.ListBooks, mux, decoder, encoder, errhandler, formatter),
@@ -72,7 +80,11 @@ func New(
 		CreateBook:         NewCreateBookHandler(e.CreateBook, mux, decoder, encoder, errhandler, formatter),
 		UpdateBook:         NewUpdateBookHandler(e.UpdateBook, mux, decoder, encoder, errhandler, formatter),
 		DeleteBook:         NewDeleteBookHandler(e.DeleteBook, mux, decoder, encoder, errhandler, formatter),
+		ListPages:          NewListPagesHandler(e.ListPages, mux, decoder, encoder, errhandler, formatter),
+		FindPage:           NewFindPageHandler(e.FindPage, mux, decoder, encoder, errhandler, formatter),
 		CreatePage:         NewCreatePageHandler(e.CreatePage, mux, decoder, encoder, errhandler, formatter),
+		UpdatePage:         NewUpdatePageHandler(e.UpdatePage, mux, decoder, encoder, errhandler, formatter),
+		DeletePage:         NewDeletePageHandler(e.DeletePage, mux, decoder, encoder, errhandler, formatter),
 		GenHTTPOpenapiJSON: http.FileServer(fileSystemGenHTTPOpenapiJSON),
 	}
 }
@@ -87,7 +99,11 @@ func (s *Server) Use(m func(http.Handler) http.Handler) {
 	s.CreateBook = m(s.CreateBook)
 	s.UpdateBook = m(s.UpdateBook)
 	s.DeleteBook = m(s.DeleteBook)
+	s.ListPages = m(s.ListPages)
+	s.FindPage = m(s.FindPage)
 	s.CreatePage = m(s.CreatePage)
+	s.UpdatePage = m(s.UpdatePage)
+	s.DeletePage = m(s.DeletePage)
 }
 
 // MethodNames returns the methods served.
@@ -100,7 +116,11 @@ func Mount(mux goahttp.Muxer, h *Server) {
 	MountCreateBookHandler(mux, h.CreateBook)
 	MountUpdateBookHandler(mux, h.UpdateBook)
 	MountDeleteBookHandler(mux, h.DeleteBook)
+	MountListPagesHandler(mux, h.ListPages)
+	MountFindPageHandler(mux, h.FindPage)
 	MountCreatePageHandler(mux, h.CreatePage)
+	MountUpdatePageHandler(mux, h.UpdatePage)
+	MountDeletePageHandler(mux, h.DeletePage)
 	MountGenHTTPOpenapiJSON(mux, goahttp.Replace("", "/./gen/http/openapi.json", h.GenHTTPOpenapiJSON))
 }
 
@@ -364,6 +384,108 @@ func NewDeleteBookHandler(
 	})
 }
 
+// MountListPagesHandler configures the mux to serve the "epub_index_creator"
+// service "ListPages" endpoint.
+func MountListPagesHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/books/{isbn}/pages", f)
+}
+
+// NewListPagesHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "ListPages" endpoint.
+func NewListPagesHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeListPagesRequest(mux, decoder)
+		encodeResponse = EncodeListPagesResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "ListPages")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountFindPageHandler configures the mux to serve the "epub_index_creator"
+// service "FindPage" endpoint.
+func MountFindPageHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/books/{isbn}/pages/{pageId}", f)
+}
+
+// NewFindPageHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "FindPage" endpoint.
+func NewFindPageHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeFindPageRequest(mux, decoder)
+		encodeResponse = EncodeFindPageResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "FindPage")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
 // MountCreatePageHandler configures the mux to serve the "epub_index_creator"
 // service "CreatePage" endpoint.
 func MountCreatePageHandler(mux goahttp.Muxer, h http.Handler) {
@@ -394,6 +516,108 @@ func NewCreatePageHandler(
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
 		ctx = context.WithValue(ctx, goa.MethodKey, "CreatePage")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountUpdatePageHandler configures the mux to serve the "epub_index_creator"
+// service "UpdatePage" endpoint.
+func MountUpdatePageHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("PUT", "/books/{isbn}/pages", f)
+}
+
+// NewUpdatePageHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "UpdatePage" endpoint.
+func NewUpdatePageHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeUpdatePageRequest(mux, decoder)
+		encodeResponse = EncodeUpdatePageResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "UpdatePage")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountDeletePageHandler configures the mux to serve the "epub_index_creator"
+// service "DeletePage" endpoint.
+func MountDeletePageHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("DELETE", "/books/{isbn}/pages/{pageId}/", f)
+}
+
+// NewDeletePageHandler creates a HTTP handler which loads the HTTP request and
+// calls the "epub_index_creator" service "DeletePage" endpoint.
+func NewDeletePageHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeDeletePageRequest(mux, decoder)
+		encodeResponse = EncodeDeletePageResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "DeletePage")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
 		payload, err := decodeRequest(r)
 		if err != nil {

@@ -56,19 +56,27 @@ var PageRequest = Type("CreatePageRequest", func() {
 })
 
 var PageResponse = Type("PageResponse", func() {
-	Field(1, "title", String, func() {
+	Field(1, "id", Int, func() {
+		Description("ID of the page")
+		Example(1)
+	})
+	Field(2, "title", String, func() {
 		Description("Title of the page")
 		Example("Introduction")
 	})
-	Field(2, "keywords", ArrayOf(String), func() {
+	Field(3, "keywords", ArrayOf(String), func() {
 		Description("Keywords of the page")
 		Example([]string{"Introduction", "Chapter 1", "Chapter 2"})
 	})
-	Required("title", "keywords")
+	Required("id", "title", "keywords")
 })
 
 var KeywordResponse = Type("Keyword", func() {
-	Field(1, "keyword", String, func() {
+	Field(1, "id", Int, func() {
+		Description("ID of the keyword")
+		Example(1)
+	})
+	Field(2, "keyword", String, func() {
 		Description("Keyword of the page")
 		Example("Introduction")
 	})

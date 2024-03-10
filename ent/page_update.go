@@ -43,6 +43,20 @@ func (pu *PageUpdate) SetNillableTitle(s *string) *PageUpdate {
 	return pu
 }
 
+// SetPath sets the "path" field.
+func (pu *PageUpdate) SetPath(s string) *PageUpdate {
+	pu.mutation.SetPath(s)
+	return pu
+}
+
+// SetNillablePath sets the "path" field if the given value is not nil.
+func (pu *PageUpdate) SetNillablePath(s *string) *PageUpdate {
+	if s != nil {
+		pu.SetPath(*s)
+	}
+	return pu
+}
+
 // SetBookID sets the "book" edge to the Book entity by ID.
 func (pu *PageUpdate) SetBookID(id int) *PageUpdate {
 	pu.mutation.SetBookID(id)
@@ -143,6 +157,11 @@ func (pu *PageUpdate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Page.title": %w`, err)}
 		}
 	}
+	if v, ok := pu.mutation.Path(); ok {
+		if err := page.PathValidator(v); err != nil {
+			return &ValidationError{Name: "path", err: fmt.Errorf(`ent: validator failed for field "Page.path": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -160,6 +179,9 @@ func (pu *PageUpdate) sqlSave(ctx context.Context) (n int, err error) {
 	}
 	if value, ok := pu.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := pu.mutation.Path(); ok {
+		_spec.SetField(page.FieldPath, field.TypeString, value)
 	}
 	if pu.mutation.BookCleared() {
 		edge := &sqlgraph.EdgeSpec{
@@ -265,6 +287,20 @@ func (puo *PageUpdateOne) SetTitle(s string) *PageUpdateOne {
 func (puo *PageUpdateOne) SetNillableTitle(s *string) *PageUpdateOne {
 	if s != nil {
 		puo.SetTitle(*s)
+	}
+	return puo
+}
+
+// SetPath sets the "path" field.
+func (puo *PageUpdateOne) SetPath(s string) *PageUpdateOne {
+	puo.mutation.SetPath(s)
+	return puo
+}
+
+// SetNillablePath sets the "path" field if the given value is not nil.
+func (puo *PageUpdateOne) SetNillablePath(s *string) *PageUpdateOne {
+	if s != nil {
+		puo.SetPath(*s)
 	}
 	return puo
 }
@@ -382,6 +418,11 @@ func (puo *PageUpdateOne) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Page.title": %w`, err)}
 		}
 	}
+	if v, ok := puo.mutation.Path(); ok {
+		if err := page.PathValidator(v); err != nil {
+			return &ValidationError{Name: "path", err: fmt.Errorf(`ent: validator failed for field "Page.path": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -416,6 +457,9 @@ func (puo *PageUpdateOne) sqlSave(ctx context.Context) (_node *Page, err error) 
 	}
 	if value, ok := puo.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
+	}
+	if value, ok := puo.mutation.Path(); ok {
+		_spec.SetField(page.FieldPath, field.TypeString, value)
 	}
 	if puo.mutation.BookCleared() {
 		edge := &sqlgraph.EdgeSpec{

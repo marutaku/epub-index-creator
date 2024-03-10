@@ -46,6 +46,12 @@ type CreatePageRequestBody struct {
 	Page *CreatePageRequestRequestBody `form:"page,omitempty" json:"page,omitempty" xml:"page,omitempty"`
 }
 
+// UpdatePageRequestBody is the type of the "epub_index_creator" service
+// "UpdatePage" endpoint HTTP request body.
+type UpdatePageRequestBody struct {
+	Page *CreatePageRequestRequestBody `form:"page,omitempty" json:"page,omitempty" xml:"page,omitempty"`
+}
+
 // ListBooksResponseBody is the type of the "epub_index_creator" service
 // "ListBooks" endpoint HTTP response body.
 type ListBooksResponseBody []*BookResponseResponse
@@ -98,9 +104,37 @@ type UpdateBookOKResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages" json:"pages" xml:"pages"`
 }
 
+// ListPagesResponseBody is the type of the "epub_index_creator" service
+// "ListPages" endpoint HTTP response body.
+type ListPagesResponseBody []*PageResponseResponse
+
+// FindPageOKResponseBody is the type of the "epub_index_creator" service
+// "FindPage" endpoint HTTP response body.
+type FindPageOKResponseBody struct {
+	// ID of the page
+	ID int `form:"id" json:"id" xml:"id"`
+	// Title of the page
+	Title string `form:"title" json:"title" xml:"title"`
+	// Keywords of the page
+	Keywords []string `form:"keywords" json:"keywords" xml:"keywords"`
+}
+
 // CreatePageOKResponseBody is the type of the "epub_index_creator" service
 // "CreatePage" endpoint HTTP response body.
 type CreatePageOKResponseBody struct {
+	// ID of the page
+	ID int `form:"id" json:"id" xml:"id"`
+	// Title of the page
+	Title string `form:"title" json:"title" xml:"title"`
+	// Keywords of the page
+	Keywords []string `form:"keywords" json:"keywords" xml:"keywords"`
+}
+
+// UpdatePageOKResponseBody is the type of the "epub_index_creator" service
+// "UpdatePage" endpoint HTTP response body.
+type UpdatePageOKResponseBody struct {
+	// ID of the page
+	ID int `form:"id" json:"id" xml:"id"`
 	// Title of the page
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
@@ -124,6 +158,8 @@ type BookResponseResponse struct {
 
 // PageResponseResponse is used to define fields on response body types.
 type PageResponseResponse struct {
+	// ID of the page
+	ID int `form:"id" json:"id" xml:"id"`
 	// Title of the page
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
@@ -132,6 +168,8 @@ type PageResponseResponse struct {
 
 // PageResponseResponseBody is used to define fields on response body types.
 type PageResponseResponseBody struct {
+	// ID of the page
+	ID int `form:"id" json:"id" xml:"id"`
 	// Title of the page
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
@@ -219,10 +257,57 @@ func NewUpdateBookOKResponseBody(res *epubindexcreator.BookResponse) *UpdateBook
 	return body
 }
 
+// NewListPagesResponseBody builds the HTTP response body from the result of
+// the "ListPages" endpoint of the "epub_index_creator" service.
+func NewListPagesResponseBody(res []*epubindexcreator.PageResponse) ListPagesResponseBody {
+	body := make([]*PageResponseResponse, len(res))
+	for i, val := range res {
+		body[i] = marshalEpubindexcreatorPageResponseToPageResponseResponse(val)
+	}
+	return body
+}
+
+// NewFindPageOKResponseBody builds the HTTP response body from the result of
+// the "FindPage" endpoint of the "epub_index_creator" service.
+func NewFindPageOKResponseBody(res *epubindexcreator.PageResponse) *FindPageOKResponseBody {
+	body := &FindPageOKResponseBody{
+		ID:    res.ID,
+		Title: res.Title,
+	}
+	if res.Keywords != nil {
+		body.Keywords = make([]string, len(res.Keywords))
+		for i, val := range res.Keywords {
+			body.Keywords[i] = val
+		}
+	} else {
+		body.Keywords = []string{}
+	}
+	return body
+}
+
 // NewCreatePageOKResponseBody builds the HTTP response body from the result of
 // the "CreatePage" endpoint of the "epub_index_creator" service.
 func NewCreatePageOKResponseBody(res *epubindexcreator.PageResponse) *CreatePageOKResponseBody {
 	body := &CreatePageOKResponseBody{
+		ID:    res.ID,
+		Title: res.Title,
+	}
+	if res.Keywords != nil {
+		body.Keywords = make([]string, len(res.Keywords))
+		for i, val := range res.Keywords {
+			body.Keywords[i] = val
+		}
+	} else {
+		body.Keywords = []string{}
+	}
+	return body
+}
+
+// NewUpdatePageOKResponseBody builds the HTTP response body from the result of
+// the "UpdatePage" endpoint of the "epub_index_creator" service.
+func NewUpdatePageOKResponseBody(res *epubindexcreator.PageResponse) *UpdatePageOKResponseBody {
+	body := &UpdatePageOKResponseBody{
+		ID:    res.ID,
 		Title: res.Title,
 	}
 	if res.Keywords != nil {
@@ -292,12 +377,53 @@ func NewDeleteBookPayload(isbn string) *epubindexcreator.DeleteBookPayload {
 	return v
 }
 
+// NewListPagesPayload builds a epub_index_creator service ListPages endpoint
+// payload.
+func NewListPagesPayload(isbn string, limit int, offset int) *epubindexcreator.ListPagesPayload {
+	v := &epubindexcreator.ListPagesPayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.Limit = limit
+	v.Offset = offset
+
+	return v
+}
+
+// NewFindPagePayload builds a epub_index_creator service FindPage endpoint
+// payload.
+func NewFindPagePayload(isbn string, pageID int) *epubindexcreator.FindPagePayload {
+	v := &epubindexcreator.FindPagePayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
+
+	return v
+}
+
 // NewCreatePagePayload builds a epub_index_creator service CreatePage endpoint
 // payload.
 func NewCreatePagePayload(body *CreatePageRequestBody, isbn string) *epubindexcreator.CreatePagePayload {
 	v := &epubindexcreator.CreatePagePayload{}
 	v.Page = unmarshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	v.Isbn = epubindexcreator.ISBN(isbn)
+
+	return v
+}
+
+// NewUpdatePagePayload builds a epub_index_creator service UpdatePage endpoint
+// payload.
+func NewUpdatePagePayload(body *UpdatePageRequestBody, isbn string) *epubindexcreator.UpdatePagePayload {
+	v := &epubindexcreator.UpdatePagePayload{}
+	v.Page = unmarshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
+	v.Isbn = epubindexcreator.ISBN(isbn)
+
+	return v
+}
+
+// NewDeletePagePayload builds a epub_index_creator service DeletePage endpoint
+// payload.
+func NewDeletePagePayload(isbn string, pageID int) *epubindexcreator.DeletePagePayload {
+	v := &epubindexcreator.DeletePagePayload{}
+	v.Isbn = isbn
+	v.PageID = pageID
 
 	return v
 }
@@ -347,6 +473,20 @@ func ValidateUpdateBookRequestBody(body *UpdateBookRequestBody) (err error) {
 // ValidateCreatePageRequestBody runs the validations defined on
 // CreatePageRequestBody
 func ValidateCreatePageRequestBody(body *CreatePageRequestBody) (err error) {
+	if body.Page == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("page", "body"))
+	}
+	if body.Page != nil {
+		if err2 := ValidateCreatePageRequestRequestBody(body.Page); err2 != nil {
+			err = goa.MergeErrors(err, err2)
+		}
+	}
+	return
+}
+
+// ValidateUpdatePageRequestBody runs the validations defined on
+// UpdatePageRequestBody
+func ValidateUpdatePageRequestBody(body *UpdatePageRequestBody) (err error) {
 	if body.Page == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("page", "body"))
 	}

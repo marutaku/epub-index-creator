@@ -23,8 +23,16 @@ type Service interface {
 	UpdateBook(context.Context, *BookRequest) (res *BookResponse, err error)
 	// DeleteBook implements DeleteBook.
 	DeleteBook(context.Context, *DeleteBookPayload) (err error)
+	// ListPages implements ListPages.
+	ListPages(context.Context, *ListPagesPayload) (res []*PageResponse, err error)
+	// FindPage implements FindPage.
+	FindPage(context.Context, *FindPagePayload) (res *PageResponse, err error)
 	// CreatePage implements CreatePage.
 	CreatePage(context.Context, *CreatePagePayload) (res *PageResponse, err error)
+	// UpdatePage implements UpdatePage.
+	UpdatePage(context.Context, *UpdatePagePayload) (res *PageResponse, err error)
+	// DeletePage implements DeletePage.
+	DeletePage(context.Context, *DeletePagePayload) (err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -41,7 +49,7 @@ const ServiceName = "epub_index_creator"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [6]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "CreatePage"}
+var MethodNames = [10]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "ListPages", "FindPage", "CreatePage", "UpdatePage", "DeletePage"}
 
 // BookRequest is the payload type of the epub_index_creator service CreateBook
 // method.
@@ -94,10 +102,24 @@ type DeleteBookPayload struct {
 	Isbn ISBN
 }
 
+// DeletePagePayload is the payload type of the epub_index_creator service
+// DeletePage method.
+type DeletePagePayload struct {
+	PageID int
+	Isbn   string
+}
+
 // FindBookPayload is the payload type of the epub_index_creator service
 // FindBook method.
 type FindBookPayload struct {
 	Isbn ISBN
+}
+
+// FindPagePayload is the payload type of the epub_index_creator service
+// FindPage method.
+type FindPagePayload struct {
+	PageID int
+	Isbn   ISBN
 }
 
 // ISBN of the book
@@ -112,11 +134,30 @@ type ListBooksPayload struct {
 	Offset int
 }
 
-// PageResponse is the result type of the epub_index_creator service CreatePage
+// ListPagesPayload is the payload type of the epub_index_creator service
+// ListPages method.
+type ListPagesPayload struct {
+	Isbn ISBN
+	// Maximum number of pages to return
+	Limit int
+	// Field to paginate pages
+	Offset int
+}
+
+// PageResponse is the result type of the epub_index_creator service FindPage
 // method.
 type PageResponse struct {
+	// ID of the page
+	ID int
 	// Title of the page
 	Title string
 	// Keywords of the page
 	Keywords []string
+}
+
+// UpdatePagePayload is the payload type of the epub_index_creator service
+// UpdatePage method.
+type UpdatePagePayload struct {
+	Isbn ISBN
+	Page *CreatePageRequest
 }

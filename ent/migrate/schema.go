@@ -47,6 +47,7 @@ var (
 	PagesColumns = []*schema.Column{
 		{Name: "id", Type: field.TypeInt, Increment: true},
 		{Name: "title", Type: field.TypeString},
+		{Name: "path", Type: field.TypeString},
 		{Name: "book_pages", Type: field.TypeInt, Nullable: true},
 	}
 	// PagesTable holds the schema information for the "pages" table.
@@ -57,7 +58,7 @@ var (
 		ForeignKeys: []*schema.ForeignKey{
 			{
 				Symbol:     "pages_books_pages",
-				Columns:    []*schema.Column{PagesColumns[2]},
+				Columns:    []*schema.Column{PagesColumns[3]},
 				RefColumns: []*schema.Column{BooksColumns[0]},
 				OnDelete:   schema.SetNull,
 			},

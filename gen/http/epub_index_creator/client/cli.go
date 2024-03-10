@@ -90,7 +90,7 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Hic temporibus numquam distinctio alias.\",\n      \"isbn\": \"3586492097158\",\n      \"language\": \"Dolor aliquam.\",\n      \"publisher\": \"Eligendi placeat.\",\n      \"title\": \"Cum omnis dolores quo sit.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Qui eligendi placeat corrupti nam.\",\n      \"isbn\": \"3255858942261\",\n      \"language\": \"Vero rem aliquam voluptatibus consequuntur.\",\n      \"publisher\": \"Ipsa porro rerum qui in omnis.\",\n      \"title\": \"Placeat dolor.\"\n   }'")
 		}
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{13}$"))
 		if err != nil {
@@ -116,7 +116,7 @@ func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Eligendi ipsa porro.\",\n      \"language\": \"Qui in omnis quaerat odit.\",\n      \"publisher\": \"Ut repudiandae beatae et non consequatur dolore.\",\n      \"title\": \"Quibusdam vero rem aliquam voluptatibus.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Non consequatur dolore ad tempore aut.\",\n      \"language\": \"Adipisci consectetur.\",\n      \"publisher\": \"Repudiandae dolorem est eligendi sit velit.\",\n      \"title\": \"Numquam ut repudiandae beatae.\"\n   }'")
 		}
 	}
 	var isbn string
@@ -156,6 +156,91 @@ func BuildDeleteBookPayload(epubIndexCreatorDeleteBookIsbn string) (*epubindexcr
 	return v, nil
 }
 
+// BuildListPagesPayload builds the payload for the epub_index_creator
+// ListPages endpoint from CLI flags.
+func BuildListPagesPayload(epubIndexCreatorListPagesIsbn string, epubIndexCreatorListPagesLimit string, epubIndexCreatorListPagesOffset string) (*epubindexcreator.ListPagesPayload, error) {
+	var err error
+	var isbn string
+	{
+		isbn = epubIndexCreatorListPagesIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	var limit int
+	{
+		if epubIndexCreatorListPagesLimit != "" {
+			var v int64
+			v, err = strconv.ParseInt(epubIndexCreatorListPagesLimit, 10, strconv.IntSize)
+			limit = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for limit, must be INT")
+			}
+			if limit < 1 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 1, true))
+			}
+			if limit > 100 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("limit", limit, 100, false))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	var offset int
+	{
+		if epubIndexCreatorListPagesOffset != "" {
+			var v int64
+			v, err = strconv.ParseInt(epubIndexCreatorListPagesOffset, 10, strconv.IntSize)
+			offset = int(v)
+			if err != nil {
+				return nil, fmt.Errorf("invalid value for offset, must be INT")
+			}
+			if offset < 0 {
+				err = goa.MergeErrors(err, goa.InvalidRangeError("offset", offset, 0, true))
+			}
+			if err != nil {
+				return nil, err
+			}
+		}
+	}
+	v := &epubindexcreator.ListPagesPayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.Limit = limit
+	v.Offset = offset
+
+	return v, nil
+}
+
+// BuildFindPagePayload builds the payload for the epub_index_creator FindPage
+// endpoint from CLI flags.
+func BuildFindPagePayload(epubIndexCreatorFindPageIsbn string, epubIndexCreatorFindPagePageID string) (*epubindexcreator.FindPagePayload, error) {
+	var err error
+	var isbn string
+	{
+		isbn = epubIndexCreatorFindPageIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	var pageID int
+	{
+		var v int64
+		v, err = strconv.ParseInt(epubIndexCreatorFindPagePageID, 10, strconv.IntSize)
+		pageID = int(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid value for pageID, must be INT")
+		}
+	}
+	v := &epubindexcreator.FindPagePayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
+
+	return v, nil
+}
+
 // BuildCreatePagePayload builds the payload for the epub_index_creator
 // CreatePage endpoint from CLI flags.
 func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCreatorCreatePageIsbn string) (*epubindexcreator.CreatePagePayload, error) {
@@ -186,6 +271,64 @@ func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCrea
 		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	}
 	v.Isbn = epubindexcreator.ISBN(isbn)
+
+	return v, nil
+}
+
+// BuildUpdatePagePayload builds the payload for the epub_index_creator
+// UpdatePage endpoint from CLI flags.
+func BuildUpdatePagePayload(epubIndexCreatorUpdatePageBody string, epubIndexCreatorUpdatePageIsbn string) (*epubindexcreator.UpdatePagePayload, error) {
+	var err error
+	var body UpdatePageRequestBody
+	{
+		err = json.Unmarshal([]byte(epubIndexCreatorUpdatePageBody), &body)
+		if err != nil {
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"page\": {\n         \"keywords\": [\n            \"Introduction\",\n            \"Chapter 1\",\n            \"Chapter 2\"\n         ],\n         \"title\": \"Introduction\"\n      }\n   }'")
+		}
+		if body.Page == nil {
+			err = goa.MergeErrors(err, goa.MissingFieldError("page", "body"))
+		}
+		if err != nil {
+			return nil, err
+		}
+	}
+	var isbn string
+	{
+		isbn = epubIndexCreatorUpdatePageIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	v := &epubindexcreator.UpdatePagePayload{}
+	if body.Page != nil {
+		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
+	}
+	v.Isbn = epubindexcreator.ISBN(isbn)
+
+	return v, nil
+}
+
+// BuildDeletePagePayload builds the payload for the epub_index_creator
+// DeletePage endpoint from CLI flags.
+func BuildDeletePagePayload(epubIndexCreatorDeletePageIsbn string, epubIndexCreatorDeletePagePageID string) (*epubindexcreator.DeletePagePayload, error) {
+	var err error
+	var isbn string
+	{
+		isbn = epubIndexCreatorDeletePageIsbn
+	}
+	var pageID int
+	{
+		var v int64
+		v, err = strconv.ParseInt(epubIndexCreatorDeletePagePageID, 10, strconv.IntSize)
+		pageID = int(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid value for pageID, must be INT")
+		}
+	}
+	v := &epubindexcreator.DeletePagePayload{}
+	v.Isbn = isbn
+	v.PageID = pageID
 
 	return v, nil
 }

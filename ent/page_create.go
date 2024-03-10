@@ -27,6 +27,12 @@ func (pc *PageCreate) SetTitle(s string) *PageCreate {
 	return pc
 }
 
+// SetPath sets the "path" field.
+func (pc *PageCreate) SetPath(s string) *PageCreate {
+	pc.mutation.SetPath(s)
+	return pc
+}
+
 // SetID sets the "id" field.
 func (pc *PageCreate) SetID(i int) *PageCreate {
 	pc.mutation.SetID(i)
@@ -109,6 +115,14 @@ func (pc *PageCreate) check() error {
 			return &ValidationError{Name: "title", err: fmt.Errorf(`ent: validator failed for field "Page.title": %w`, err)}
 		}
 	}
+	if _, ok := pc.mutation.Path(); !ok {
+		return &ValidationError{Name: "path", err: errors.New(`ent: missing required field "Page.path"`)}
+	}
+	if v, ok := pc.mutation.Path(); ok {
+		if err := page.PathValidator(v); err != nil {
+			return &ValidationError{Name: "path", err: fmt.Errorf(`ent: validator failed for field "Page.path": %w`, err)}
+		}
+	}
 	return nil
 }
 
@@ -144,6 +158,10 @@ func (pc *PageCreate) createSpec() (*Page, *sqlgraph.CreateSpec) {
 	if value, ok := pc.mutation.Title(); ok {
 		_spec.SetField(page.FieldTitle, field.TypeString, value)
 		_node.Title = value
+	}
+	if value, ok := pc.mutation.Path(); ok {
+		_spec.SetField(page.FieldPath, field.TypeString, value)
+		_node.Path = value
 	}
 	if nodes := pc.mutation.BookIDs(); len(nodes) > 0 {
 		edge := &sqlgraph.EdgeSpec{

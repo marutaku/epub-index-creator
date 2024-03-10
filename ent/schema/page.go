@@ -16,6 +16,7 @@ func (Page) Fields() []ent.Field {
 	return []ent.Field{
 		field.Int("id").Unique().Immutable(),
 		field.String("title").NotEmpty(),
+		field.String("path").NotEmpty(),
 	}
 }
 

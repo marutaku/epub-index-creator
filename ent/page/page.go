@@ -14,6 +14,8 @@ const (
 	FieldID = "id"
 	// FieldTitle holds the string denoting the title field in the database.
 	FieldTitle = "title"
+	// FieldPath holds the string denoting the path field in the database.
+	FieldPath = "path"
 	// EdgeBook holds the string denoting the book edge name in mutations.
 	EdgeBook = "book"
 	// EdgeKeywords holds the string denoting the keywords edge name in mutations.
@@ -40,6 +42,7 @@ const (
 var Columns = []string{
 	FieldID,
 	FieldTitle,
+	FieldPath,
 }
 
 // ForeignKeys holds the SQL foreign-keys that are owned by the "pages"
@@ -66,6 +69,8 @@ func ValidColumn(column string) bool {
 var (
 	// TitleValidator is a validator for the "title" field. It is called by the builders before save.
 	TitleValidator func(string) error
+	// PathValidator is a validator for the "path" field. It is called by the builders before save.
+	PathValidator func(string) error
 )
 
 // OrderOption defines the ordering options for the Page queries.
@@ -79,6 +84,11 @@ func ByID(opts ...sql.OrderTermOption) OrderOption {
 // ByTitle orders the results by the title field.
 func ByTitle(opts ...sql.OrderTermOption) OrderOption {
 	return sql.OrderByField(FieldTitle, opts...).ToFunc()
+}
+
+// ByPath orders the results by the path field.
+func ByPath(opts ...sql.OrderTermOption) OrderOption {
+	return sql.OrderByField(FieldPath, opts...).ToFunc()
 }
 
 // ByBookField orders the results by book field.

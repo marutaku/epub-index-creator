@@ -58,6 +58,11 @@ func Title(v string) predicate.Page {
 	return predicate.Page(sql.FieldEQ(FieldTitle, v))
 }
 
+// Path applies equality check predicate on the "path" field. It's identical to PathEQ.
+func Path(v string) predicate.Page {
+	return predicate.Page(sql.FieldEQ(FieldPath, v))
+}
+
 // TitleEQ applies the EQ predicate on the "title" field.
 func TitleEQ(v string) predicate.Page {
 	return predicate.Page(sql.FieldEQ(FieldTitle, v))
@@ -121,6 +126,71 @@ func TitleEqualFold(v string) predicate.Page {
 // TitleContainsFold applies the ContainsFold predicate on the "title" field.
 func TitleContainsFold(v string) predicate.Page {
 	return predicate.Page(sql.FieldContainsFold(FieldTitle, v))
+}
+
+// PathEQ applies the EQ predicate on the "path" field.
+func PathEQ(v string) predicate.Page {
+	return predicate.Page(sql.FieldEQ(FieldPath, v))
+}
+
+// PathNEQ applies the NEQ predicate on the "path" field.
+func PathNEQ(v string) predicate.Page {
+	return predicate.Page(sql.FieldNEQ(FieldPath, v))
+}
+
+// PathIn applies the In predicate on the "path" field.
+func PathIn(vs ...string) predicate.Page {
+	return predicate.Page(sql.FieldIn(FieldPath, vs...))
+}
+
+// PathNotIn applies the NotIn predicate on the "path" field.
+func PathNotIn(vs ...string) predicate.Page {
+	return predicate.Page(sql.FieldNotIn(FieldPath, vs...))
+}
+
+// PathGT applies the GT predicate on the "path" field.
+func PathGT(v string) predicate.Page {
+	return predicate.Page(sql.FieldGT(FieldPath, v))
+}
+
+// PathGTE applies the GTE predicate on the "path" field.
+func PathGTE(v string) predicate.Page {
+	return predicate.Page(sql.FieldGTE(FieldPath, v))
+}
+
+// PathLT applies the LT predicate on the "path" field.
+func PathLT(v string) predicate.Page {
+	return predicate.Page(sql.FieldLT(FieldPath, v))
+}
+
+// PathLTE applies the LTE predicate on the "path" field.
+func PathLTE(v string) predicate.Page {
+	return predicate.Page(sql.FieldLTE(FieldPath, v))
+}
+
+// PathContains applies the Contains predicate on the "path" field.
+func PathContains(v string) predicate.Page {
+	return predicate.Page(sql.FieldContains(FieldPath, v))
+}
+
+// PathHasPrefix applies the HasPrefix predicate on the "path" field.
+func PathHasPrefix(v string) predicate.Page {
+	return predicate.Page(sql.FieldHasPrefix(FieldPath, v))
+}
+
+// PathHasSuffix applies the HasSuffix predicate on the "path" field.
+func PathHasSuffix(v string) predicate.Page {
+	return predicate.Page(sql.FieldHasSuffix(FieldPath, v))
+}
+
+// PathEqualFold applies the EqualFold predicate on the "path" field.
+func PathEqualFold(v string) predicate.Page {
+	return predicate.Page(sql.FieldEqualFold(FieldPath, v))
+}
+
+// PathContainsFold applies the ContainsFold predicate on the "path" field.
+func PathContainsFold(v string) predicate.Page {
+	return predicate.Page(sql.FieldContainsFold(FieldPath, v))
 }
 
 // HasBook applies the HasEdge predicate on the "book" edge.

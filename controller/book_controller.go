@@ -73,8 +73,31 @@ func (s *epubIndexCreatorsrvc) DeleteBook(ctx context.Context, p *epubIndexCreat
 	return
 }
 
+func (s *epubIndexCreatorsrvc) ListPages(ctx context.Context, p *epubIndexCreator.ListPagesPayload) (res []*epubIndexCreator.PageResponse, err error) {
+	res = []*epubIndexCreator.PageResponse{}
+	s.logger.Print("epubIndexCreator.ListPages")
+	return
+}
+
+func (s *epubIndexCreatorsrvc) FindPage(ctx context.Context, p *epubIndexCreator.FindPagePayload) (res *epubIndexCreator.PageResponse, err error) {
+	res = &epubIndexCreator.PageResponse{}
+	s.logger.Print("epubIndexCreator.FindPage")
+	return
+}
+
 func (s *epubIndexCreatorsrvc) CreatePage(ctx context.Context, p *epubIndexCreator.CreatePagePayload) (res *epubIndexCreator.PageResponse, err error) {
 	res = &epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.CreatePage")
+	return
+}
+
+func (s *epubIndexCreatorsrvc) UpdatePage(ctx context.Context, p *epubIndexCreator.UpdatePagePayload) (res *epubIndexCreator.PageResponse, err error) {
+	res = &epubIndexCreator.PageResponse{}
+	s.logger.Print("epubIndexCreator.UpdatePage")
+	return
+}
+
+func (s *epubIndexCreatorsrvc) DeletePage(ctx context.Context, p *epubIndexCreator.DeletePagePayload) (err error) {
+	s.logger.Print("epubIndexCreator.DeletePage")
 	return
 }

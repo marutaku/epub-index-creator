@@ -46,6 +46,12 @@ type CreatePageRequestBody struct {
 	Page *CreatePageRequestRequestBody `form:"page" json:"page" xml:"page"`
 }
 
+// UpdatePageRequestBody is the type of the "epub_index_creator" service
+// "UpdatePage" endpoint HTTP request body.
+type UpdatePageRequestBody struct {
+	Page *CreatePageRequestRequestBody `form:"page" json:"page" xml:"page"`
+}
+
 // ListBooksResponseBody is the type of the "epub_index_creator" service
 // "ListBooks" endpoint HTTP response body.
 type ListBooksResponseBody []*BookResponseResponse
@@ -98,9 +104,37 @@ type UpdateBookOKResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
+// ListPagesResponseBody is the type of the "epub_index_creator" service
+// "ListPages" endpoint HTTP response body.
+type ListPagesResponseBody []*PageResponseResponse
+
+// FindPageOKResponseBody is the type of the "epub_index_creator" service
+// "FindPage" endpoint HTTP response body.
+type FindPageOKResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
 // CreatePageOKResponseBody is the type of the "epub_index_creator" service
 // "CreatePage" endpoint HTTP response body.
 type CreatePageOKResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
+// UpdatePageOKResponseBody is the type of the "epub_index_creator" service
+// "UpdatePage" endpoint HTTP response body.
+type UpdatePageOKResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
@@ -124,6 +158,8 @@ type BookResponseResponse struct {
 
 // PageResponseResponse is used to define fields on response body types.
 type PageResponseResponse struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
@@ -132,6 +168,8 @@ type PageResponseResponse struct {
 
 // PageResponseResponseBody is used to define fields on response body types.
 type PageResponseResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
@@ -185,6 +223,16 @@ type UpdateBookNotFoundResponseBody struct {
 	Pages []*PageResponseResponseBody `form:"pages,omitempty" json:"pages,omitempty" xml:"pages,omitempty"`
 }
 
+// FindPageNotFoundResponseBody is used to define fields on response body types.
+type FindPageNotFoundResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
 // CreatePageRequestRequestBody is used to define fields on request body types.
 type CreatePageRequestRequestBody struct {
 	// Title of the page
@@ -196,6 +244,19 @@ type CreatePageRequestRequestBody struct {
 // CreatePageNotFoundResponseBody is used to define fields on response body
 // types.
 type CreatePageNotFoundResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Title of the page
+	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
+	// Keywords of the page
+	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
+// UpdatePageNotFoundResponseBody is used to define fields on response body
+// types.
+type UpdatePageNotFoundResponseBody struct {
+	// ID of the page
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
 	// Title of the page
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
@@ -231,6 +292,16 @@ func NewUpdateBookRequestBody(p *epubindexcreator.BookRequest) *UpdateBookReques
 // the "CreatePage" endpoint of the "epub_index_creator" service.
 func NewCreatePageRequestBody(p *epubindexcreator.CreatePagePayload) *CreatePageRequestBody {
 	body := &CreatePageRequestBody{}
+	if p.Page != nil {
+		body.Page = marshalEpubindexcreatorCreatePageRequestToCreatePageRequestRequestBody(p.Page)
+	}
+	return body
+}
+
+// NewUpdatePageRequestBody builds the HTTP request body from the payload of
+// the "UpdatePage" endpoint of the "epub_index_creator" service.
+func NewUpdatePageRequestBody(p *epubindexcreator.UpdatePagePayload) *UpdatePageRequestBody {
+	body := &UpdatePageRequestBody{}
 	if p.Page != nil {
 		body.Page = marshalEpubindexcreatorCreatePageRequestToCreatePageRequestRequestBody(p.Page)
 	}
@@ -302,10 +373,52 @@ func NewUpdateBookBookResponseOK(body *UpdateBookOKResponseBody) *epubindexcreat
 	return v
 }
 
+// NewListPagesPageResponseOK builds a "epub_index_creator" service "ListPages"
+// endpoint result from a HTTP "OK" response.
+func NewListPagesPageResponseOK(body []*PageResponseResponse) []*epubindexcreator.PageResponse {
+	v := make([]*epubindexcreator.PageResponse, len(body))
+	for i, val := range body {
+		v[i] = unmarshalPageResponseResponseToEpubindexcreatorPageResponse(val)
+	}
+
+	return v
+}
+
+// NewFindPagePageResponseOK builds a "epub_index_creator" service "FindPage"
+// endpoint result from a HTTP "OK" response.
+func NewFindPagePageResponseOK(body *FindPageOKResponseBody) *epubindexcreator.PageResponse {
+	v := &epubindexcreator.PageResponse{
+		ID:    *body.ID,
+		Title: *body.Title,
+	}
+	v.Keywords = make([]string, len(body.Keywords))
+	for i, val := range body.Keywords {
+		v.Keywords[i] = val
+	}
+
+	return v
+}
+
 // NewCreatePagePageResponseOK builds a "epub_index_creator" service
 // "CreatePage" endpoint result from a HTTP "OK" response.
 func NewCreatePagePageResponseOK(body *CreatePageOKResponseBody) *epubindexcreator.PageResponse {
 	v := &epubindexcreator.PageResponse{
+		ID:    *body.ID,
+		Title: *body.Title,
+	}
+	v.Keywords = make([]string, len(body.Keywords))
+	for i, val := range body.Keywords {
+		v.Keywords[i] = val
+	}
+
+	return v
+}
+
+// NewUpdatePagePageResponseOK builds a "epub_index_creator" service
+// "UpdatePage" endpoint result from a HTTP "OK" response.
+func NewUpdatePagePageResponseOK(body *UpdatePageOKResponseBody) *epubindexcreator.PageResponse {
+	v := &epubindexcreator.PageResponse{
+		ID:    *body.ID,
 		Title: *body.Title,
 	}
 	v.Keywords = make([]string, len(body.Keywords))
@@ -418,9 +531,42 @@ func ValidateUpdateBookOKResponseBody(body *UpdateBookOKResponseBody) (err error
 	return
 }
 
+// ValidateFindPageOKResponseBody runs the validations defined on
+// FindPageOKResponseBody
+func ValidateFindPageOKResponseBody(body *FindPageOKResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	return
+}
+
 // ValidateCreatePageOKResponseBody runs the validations defined on
 // CreatePageOKResponseBody
 func ValidateCreatePageOKResponseBody(body *CreatePageOKResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	return
+}
+
+// ValidateUpdatePageOKResponseBody runs the validations defined on
+// UpdatePageOKResponseBody
+func ValidateUpdatePageOKResponseBody(body *UpdatePageOKResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}
@@ -467,6 +613,9 @@ func ValidateBookResponseResponse(body *BookResponseResponse) (err error) {
 // ValidatePageResponseResponse runs the validations defined on
 // PageResponseResponse
 func ValidatePageResponseResponse(body *PageResponseResponse) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}
@@ -479,6 +628,9 @@ func ValidatePageResponseResponse(body *PageResponseResponse) (err error) {
 // ValidatePageResponseResponseBody runs the validations defined on
 // PageResponseResponseBody
 func ValidatePageResponseResponseBody(body *PageResponseResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}
@@ -590,9 +742,42 @@ func ValidateUpdateBookNotFoundResponseBody(body *UpdateBookNotFoundResponseBody
 	return
 }
 
+// ValidateFindPageNotFoundResponseBody runs the validations defined on
+// FindPageNot FoundResponseBody
+func ValidateFindPageNotFoundResponseBody(body *FindPageNotFoundResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	return
+}
+
 // ValidateCreatePageNotFoundResponseBody runs the validations defined on
 // CreatePageNot FoundResponseBody
 func ValidateCreatePageNotFoundResponseBody(body *CreatePageNotFoundResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Title == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
+	}
+	if body.Keywords == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	return
+}
+
+// ValidateUpdatePageNotFoundResponseBody runs the validations defined on
+// UpdatePageNot FoundResponseBody
+func ValidateUpdatePageNotFoundResponseBody(body *UpdatePageNotFoundResponseBody) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
 	if body.Title == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("title", "body"))
 	}

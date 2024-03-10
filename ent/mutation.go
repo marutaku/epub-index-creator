@@ -1071,6 +1071,7 @@ type PageMutation struct {
 	typ             string
 	id              *int
 	title           *string
+	_path           *string
 	clearedFields   map[string]struct{}
 	book            *int
 	clearedbook     bool
@@ -1222,6 +1223,42 @@ func (m *PageMutation) ResetTitle() {
 	m.title = nil
 }
 
+// SetPath sets the "path" field.
+func (m *PageMutation) SetPath(s string) {
+	m._path = &s
+}
+
+// Path returns the value of the "path" field in the mutation.
+func (m *PageMutation) Path() (r string, exists bool) {
+	v := m._path
+	if v == nil {
+		return
+	}
+	return *v, true
+}
+
+// OldPath returns the old "path" field's value of the Page entity.
+// If the Page object wasn't provided to the builder, the object is fetched from the database.
+// An error is returned if the mutation operation is not UpdateOne, or the database query fails.
+func (m *PageMutation) OldPath(ctx context.Context) (v string, err error) {
+	if !m.op.Is(OpUpdateOne) {
+		return v, errors.New("OldPath is only allowed on UpdateOne operations")
+	}
+	if m.id == nil || m.oldValue == nil {
+		return v, errors.New("OldPath requires an ID field in the mutation")
+	}
+	oldValue, err := m.oldValue(ctx)
+	if err != nil {
+		return v, fmt.Errorf("querying old value for OldPath: %w", err)
+	}
+	return oldValue.Path, nil
+}
+
+// ResetPath resets all changes to the "path" field.
+func (m *PageMutation) ResetPath() {
+	m._path = nil
+}
+
 // SetBookID sets the "book" edge to the Book entity by id.
 func (m *PageMutation) SetBookID(id int) {
 	m.book = &id
@@ -1349,9 +1386,12 @@ func (m *PageMutation) Type() string {
 // order to get all numeric fields that were incremented/decremented, call
 // AddedFields().
 func (m *PageMutation) Fields() []string {
-	fields := make([]string, 0, 1)
+	fields := make([]string, 0, 2)
 	if m.title != nil {
 		fields = append(fields, page.FieldTitle)
+	}
+	if m._path != nil {
+		fields = append(fields, page.FieldPath)
 	}
 	return fields
 }
@@ -1363,6 +1403,8 @@ func (m *PageMutation) Field(name string) (ent.Value, bool) {
 	switch name {
 	case page.FieldTitle:
 		return m.Title()
+	case page.FieldPath:
+		return m.Path()
 	}
 	return nil, false
 }
@@ -1374,6 +1416,8 @@ func (m *PageMutation) OldField(ctx context.Context, name string) (ent.Value, er
 	switch name {
 	case page.FieldTitle:
 		return m.OldTitle(ctx)
+	case page.FieldPath:
+		return m.OldPath(ctx)
 	}
 	return nil, fmt.Errorf("unknown Page field %s", name)
 }
@@ -1389,6 +1433,13 @@ func (m *PageMutation) SetField(name string, value ent.Value) error {
 			return fmt.Errorf("unexpected type %T for field %s", value, name)
 		}
 		m.SetTitle(v)
+		return nil
+	case page.FieldPath:
+		v, ok := value.(string)
+		if !ok {
+			return fmt.Errorf("unexpected type %T for field %s", value, name)
+		}
+		m.SetPath(v)
 		return nil
 	}
 	return fmt.Errorf("unknown Page field %s", name)
@@ -1441,6 +1492,9 @@ func (m *PageMutation) ResetField(name string) error {
 	switch name {
 	case page.FieldTitle:
 		m.ResetTitle()
+		return nil
+	case page.FieldPath:
+		m.ResetPath()
 		return nil
 	}
 	return fmt.Errorf("unknown Page field %s", name)

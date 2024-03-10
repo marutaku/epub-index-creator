@@ -37,9 +37,25 @@ type Client struct {
 	// endpoint.
 	DeleteBookDoer goahttp.Doer
 
+	// ListPages Doer is the HTTP client used to make requests to the ListPages
+	// endpoint.
+	ListPagesDoer goahttp.Doer
+
+	// FindPage Doer is the HTTP client used to make requests to the FindPage
+	// endpoint.
+	FindPageDoer goahttp.Doer
+
 	// CreatePage Doer is the HTTP client used to make requests to the CreatePage
 	// endpoint.
 	CreatePageDoer goahttp.Doer
+
+	// UpdatePage Doer is the HTTP client used to make requests to the UpdatePage
+	// endpoint.
+	UpdatePageDoer goahttp.Doer
+
+	// DeletePage Doer is the HTTP client used to make requests to the DeletePage
+	// endpoint.
+	DeletePageDoer goahttp.Doer
 
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
@@ -67,7 +83,11 @@ func NewClient(
 		CreateBookDoer:      doer,
 		UpdateBookDoer:      doer,
 		DeleteBookDoer:      doer,
+		ListPagesDoer:       doer,
+		FindPageDoer:        doer,
 		CreatePageDoer:      doer,
+		UpdatePageDoer:      doer,
+		DeletePageDoer:      doer,
 		RestoreResponseBody: restoreBody,
 		scheme:              scheme,
 		host:                host,
@@ -186,6 +206,49 @@ func (c *Client) DeleteBook() goa.Endpoint {
 	}
 }
 
+// ListPages returns an endpoint that makes HTTP requests to the
+// epub_index_creator service ListPages server.
+func (c *Client) ListPages() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeListPagesRequest(c.encoder)
+		decodeResponse = DecodeListPagesResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildListPagesRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.ListPagesDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "ListPages", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// FindPage returns an endpoint that makes HTTP requests to the
+// epub_index_creator service FindPage server.
+func (c *Client) FindPage() goa.Endpoint {
+	var (
+		decodeResponse = DecodeFindPageResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildFindPageRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.FindPageDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "FindPage", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
 // CreatePage returns an endpoint that makes HTTP requests to the
 // epub_index_creator service CreatePage server.
 func (c *Client) CreatePage() goa.Endpoint {
@@ -205,6 +268,49 @@ func (c *Client) CreatePage() goa.Endpoint {
 		resp, err := c.CreatePageDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("epub_index_creator", "CreatePage", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// UpdatePage returns an endpoint that makes HTTP requests to the
+// epub_index_creator service UpdatePage server.
+func (c *Client) UpdatePage() goa.Endpoint {
+	var (
+		encodeRequest  = EncodeUpdatePageRequest(c.encoder)
+		decodeResponse = DecodeUpdatePageResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildUpdatePageRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		err = encodeRequest(req, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.UpdatePageDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "UpdatePage", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// DeletePage returns an endpoint that makes HTTP requests to the
+// epub_index_creator service DeletePage server.
+func (c *Client) DeletePage() goa.Endpoint {
+	var (
+		decodeResponse = DecodeDeletePageResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildDeletePageRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.DeletePageDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "DeletePage", err)
 		}
 		return decodeResponse(resp)
 	}

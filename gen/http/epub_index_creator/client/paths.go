@@ -36,7 +36,27 @@ func DeleteBookEpubIndexCreatorPath(isbn string) string {
 	return fmt.Sprintf("/books/%v", isbn)
 }
 
+// ListPagesEpubIndexCreatorPath returns the URL path to the epub_index_creator service ListPages HTTP endpoint.
+func ListPagesEpubIndexCreatorPath(isbn string) string {
+	return fmt.Sprintf("/books/%v/pages", isbn)
+}
+
+// FindPageEpubIndexCreatorPath returns the URL path to the epub_index_creator service FindPage HTTP endpoint.
+func FindPageEpubIndexCreatorPath(isbn string, pageID int) string {
+	return fmt.Sprintf("/books/%v/pages/%v", isbn, pageID)
+}
+
 // CreatePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service CreatePage HTTP endpoint.
 func CreatePageEpubIndexCreatorPath(isbn string) string {
 	return fmt.Sprintf("/books/%v/pages", isbn)
+}
+
+// UpdatePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service UpdatePage HTTP endpoint.
+func UpdatePageEpubIndexCreatorPath(isbn string) string {
+	return fmt.Sprintf("/books/%v/pages", isbn)
+}
+
+// DeletePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service DeletePage HTTP endpoint.
+func DeletePageEpubIndexCreatorPath(isbn string, pageID int) string {
+	return fmt.Sprintf("/books/%v/pages/%v/", isbn, pageID)
 }
