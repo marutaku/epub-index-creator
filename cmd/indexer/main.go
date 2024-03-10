@@ -7,11 +7,10 @@ import (
 
 	"github.com/marutaku/epub-index-creator/batch/database"
 	"github.com/marutaku/epub-index-creator/batch/indexer"
-	"github.com/marutaku/epub-index-creator/domain"
 	"github.com/urfave/cli/v2"
 )
 
-func createBookFromEpubFile(epubFilePath string) (*domain.Book, error) {
+func createBookFromEpubFile(epubFilePath string) (*indexer.HTMLBook, error) {
 	fmt.Printf("epubFilePath: %s\n", epubFilePath)
 	tempDir, err := indexer.UnzipEPub(epubFilePath)
 	if err != nil {
@@ -23,7 +22,7 @@ func createBookFromEpubFile(epubFilePath string) (*domain.Book, error) {
 		return nil, err
 	}
 	fmt.Printf("opfFilePath: %s\n", opfFilePath)
-	book, err := domain.NewBookFromOPF(opfFilePath)
+	book, err := indexer.NewHTMLBookFromOPF(opfFilePath)
 	if err != nil {
 		return nil, err
 	}
@@ -42,13 +41,17 @@ func main() {
 			if err != nil {
 				return err
 			}
-			bookDB.Save(cCtx.Context, *book)
-			for _, page := range book.Pages {
-				err := pageDB.Save(cCtx.Context, book, page)
+			bookDomain, err := book.ToDomain()
+			if err != nil {
+				return err
+			}
+			bookDB.Save(cCtx.Context, *bookDomain)
+			for index, page := range bookDomain.Pages {
+				err := pageDB.Save(cCtx.Context, bookDomain, page.Title)
 				if err != nil {
 					return err
 				}
-				keywords, err := page.ExtractKeywords()
+				keywords, err := book.Pages[index].ExtractKeywords()
 				if err != nil {
 					return err
 				}

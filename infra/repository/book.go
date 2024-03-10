@@ -61,13 +61,10 @@ func (r *BookRepositoryImpl) Save(ctx context.Context, book *domain.Book) error 
 		return err
 	}
 	for _, page := range book.Pages {
-		title, err := page.Title()
-		if err != nil {
-			return err
-		}
 		_, err = tx.Page.Create().
 			SetBook(entBook).
-			SetTitle(title).
+			SetTitle(page.Title).
+			SetPath(page.Path).
 			Save(ctx)
 		if err != nil {
 			return err

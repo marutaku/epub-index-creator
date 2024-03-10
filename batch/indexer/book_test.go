@@ -1,11 +1,11 @@
-package domain
+package indexer
 
 import (
 	"testing"
 )
 
-func TestNewBookFromOPF(t *testing.T) {
-	metadata, err := NewBookFromOPF("testdata/testdata.opf")
+func TestNewHTMLBookFromOPF(t *testing.T) {
+	metadata, err := NewHTMLBookFromOPF("testdata/testdata.opf")
 	if err != nil {
 		t.Errorf("Error parsing testdata.xml: %v", err)
 	}

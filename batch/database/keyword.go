@@ -9,25 +9,21 @@ import (
 	_ "github.com/mattn/go-sqlite3"
 )
 
-type KeywordDatabase struct {
+type Database struct {
 	client *ent.Client
 }
 
-func NewKeywordDatabase(sqliteDBPath string) *KeywordDatabase {
+func NewKeywordDatabase(sqliteDBPath string) *Database {
 	client, err := ent.Open("sqlite3", sqliteDBPath)
 	if err != nil {
 		panic(err)
 	}
-	return &KeywordDatabase{client: client}
+	return &Database{client: client}
 }
 
 // Save saves a keyword to the database.
-func (db *KeywordDatabase) Save(ctx context.Context, page *domain.Page, keyword string) error {
-	title, err := page.Title()
-	if err != nil {
-		return err
-	}
-	pageEntity, err := db.client.Page.Query().Where(pageDB.Title(title)).Only(ctx)
+func (db *Database) Save(ctx context.Context, page *domain.Page, keyword string) error {
+	pageEntity, err := db.client.Page.Query().Where(pageDB.Title(page.Title)).Only(ctx)
 	if err != nil {
 		return err
 	}
