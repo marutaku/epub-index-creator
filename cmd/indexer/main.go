@@ -47,7 +47,7 @@ func main() {
 			}
 			bookDB.Save(cCtx.Context, *bookDomain)
 			for index, page := range bookDomain.Pages {
-				err := pageDB.Save(cCtx.Context, bookDomain, page.Title)
+				err := pageDB.Save(cCtx.Context, bookDomain, page.Title, page.Path)
 				if err != nil {
 					return err
 				}

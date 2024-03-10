@@ -21,7 +21,7 @@ func NewPageDatabase(sqliteDBPath string) *PageDatabase {
 	return &PageDatabase{client: client}
 }
 
-func (db *PageDatabase) Save(ctx context.Context, book *domain.Book, pageTitle string) error {
+func (db *PageDatabase) Save(ctx context.Context, book *domain.Book, pageTitle, pagePath string) error {
 	bookEntity, err := db.client.Book.Query().Where(bookDB.Isbn(book.ISBN)).Only(ctx)
 	if err != nil {
 		return err
@@ -29,6 +29,7 @@ func (db *PageDatabase) Save(ctx context.Context, book *domain.Book, pageTitle s
 	_, err = db.client.Page.Create().
 		SetBook(bookEntity).
 		SetTitle(pageTitle).
+		SetPath(pagePath).
 		Save(ctx)
 	if err != nil {
 		return err
