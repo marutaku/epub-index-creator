@@ -14,11 +14,12 @@ import (
 type epubIndexCreatorsrvc struct {
 	logger      *log.Logger
 	bookUsecase usecase.BookUsecaseInterface
+	pageUsecase usecase.PageUsecaseInterface
 }
 
 // NewEpubIndexCreator returns the epub_index_creator service implementation.
 func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
-	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase()}
+	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase(), pageUsecase: usecase.NewPageUsecase()}
 }
 
 // List implements List.
@@ -76,18 +77,32 @@ func (s *epubIndexCreatorsrvc) DeleteBook(ctx context.Context, p *epubIndexCreat
 func (s *epubIndexCreatorsrvc) ListPages(ctx context.Context, p *epubIndexCreator.ListPagesPayload) (res []*epubIndexCreator.PageResponse, err error) {
 	res = []*epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.ListPages")
+	pages, err := s.pageUsecase.ListPages(ctx, p.Limit, p.Offset)
+	for _, page := range pages {
+		res = append(res, presenter.ConvertPageToResponse(page))
+	}
 	return
 }
 
 func (s *epubIndexCreatorsrvc) FindPage(ctx context.Context, p *epubIndexCreator.FindPagePayload) (res *epubIndexCreator.PageResponse, err error) {
 	res = &epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.FindPage")
+	page, err := s.pageUsecase.FindPage(ctx, p.PageID)
+	if err != nil {
+		return nil, err
+	}
+	res = presenter.ConvertPageToResponse(page)
 	return
 }
 
 func (s *epubIndexCreatorsrvc) CreatePage(ctx context.Context, p *epubIndexCreator.CreatePagePayload) (res *epubIndexCreator.PageResponse, err error) {
 	res = &epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.CreatePage")
+	page, err := s.pageUsecase.CreatePage(ctx, p.Page.Title)
+	if err != nil {
+		return nil, err
+	}
+	res = presenter.ConvertPageToResponse(page)
 	return
 }
 
