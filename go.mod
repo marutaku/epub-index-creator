@@ -7,7 +7,6 @@ require (
 	github.com/antchfx/xmlquery v1.3.18
 	github.com/mattn/go-sqlite3 v1.14.22
 	github.com/urfave/cli/v2 v2.27.1
-	goa.design/goa v2.2.5+incompatible
 	goa.design/goa/v3 v3.15.0
 )
 
