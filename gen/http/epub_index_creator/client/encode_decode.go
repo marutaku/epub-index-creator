@@ -524,7 +524,8 @@ func DecodeFindPageResponse(decoder func(*http.Response) goahttp.Decoder, restor
 // path set to call the "epub_index_creator" service "CreatePage" endpoint
 func (c *Client) BuildCreatePageRequest(ctx context.Context, v any) (*http.Request, error) {
 	var (
-		isbn string
+		isbn   string
+		pageID int
 	)
 	{
 		p, ok := v.(*epubindexcreator.CreatePagePayload)
@@ -532,8 +533,9 @@ func (c *Client) BuildCreatePageRequest(ctx context.Context, v any) (*http.Reque
 			return nil, goahttp.ErrInvalidType("epub_index_creator", "CreatePage", "*epubindexcreator.CreatePagePayload", v)
 		}
 		isbn = string(p.Isbn)
+		pageID = p.PageID
 	}
-	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: CreatePageEpubIndexCreatorPath(isbn)}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: CreatePageEpubIndexCreatorPath(isbn, pageID)}
 	req, err := http.NewRequest("POST", u.String(), nil)
 	if err != nil {
 		return nil, goahttp.ErrInvalidURL("epub_index_creator", "CreatePage", u.String(), err)
@@ -605,7 +607,8 @@ func DecodeCreatePageResponse(decoder func(*http.Response) goahttp.Decoder, rest
 // path set to call the "epub_index_creator" service "UpdatePage" endpoint
 func (c *Client) BuildUpdatePageRequest(ctx context.Context, v any) (*http.Request, error) {
 	var (
-		isbn string
+		isbn   string
+		pageID int
 	)
 	{
 		p, ok := v.(*epubindexcreator.UpdatePagePayload)
@@ -613,8 +616,9 @@ func (c *Client) BuildUpdatePageRequest(ctx context.Context, v any) (*http.Reque
 			return nil, goahttp.ErrInvalidType("epub_index_creator", "UpdatePage", "*epubindexcreator.UpdatePagePayload", v)
 		}
 		isbn = string(p.Isbn)
+		pageID = p.PageID
 	}
-	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: UpdatePageEpubIndexCreatorPath(isbn)}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: UpdatePageEpubIndexCreatorPath(isbn, pageID)}
 	req, err := http.NewRequest("PUT", u.String(), nil)
 	if err != nil {
 		return nil, goahttp.ErrInvalidURL("epub_index_creator", "UpdatePage", u.String(), err)

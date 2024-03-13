@@ -109,10 +109,19 @@ func (s *epubIndexCreatorsrvc) CreatePage(ctx context.Context, p *epubIndexCreat
 func (s *epubIndexCreatorsrvc) UpdatePage(ctx context.Context, p *epubIndexCreator.UpdatePagePayload) (res *epubIndexCreator.PageResponse, err error) {
 	res = &epubIndexCreator.PageResponse{}
 	s.logger.Print("epubIndexCreator.UpdatePage")
+	page, err := s.pageUsecase.UpdatePage(ctx, p.PageID, p.Page.Title)
+	if err != nil {
+		return nil, err
+	}
+	res = presenter.ConvertPageToResponse(page)
 	return
 }
 
 func (s *epubIndexCreatorsrvc) DeletePage(ctx context.Context, p *epubIndexCreator.DeletePagePayload) (err error) {
 	s.logger.Print("epubIndexCreator.DeletePage")
+	err = s.pageUsecase.DeletePage(ctx, p.PageID)
+	if err != nil {
+		return err
+	}
 	return
 }

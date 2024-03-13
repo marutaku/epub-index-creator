@@ -47,13 +47,13 @@ func FindPageEpubIndexCreatorPath(isbn string, pageID int) string {
 }
 
 // CreatePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service CreatePage HTTP endpoint.
-func CreatePageEpubIndexCreatorPath(isbn string) string {
-	return fmt.Sprintf("/books/%v/pages", isbn)
+func CreatePageEpubIndexCreatorPath(isbn string, pageID int) string {
+	return fmt.Sprintf("/books/%v/pages/%v", isbn, pageID)
 }
 
 // UpdatePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service UpdatePage HTTP endpoint.
-func UpdatePageEpubIndexCreatorPath(isbn string) string {
-	return fmt.Sprintf("/books/%v/pages", isbn)
+func UpdatePageEpubIndexCreatorPath(isbn string, pageID int) string {
+	return fmt.Sprintf("/books/%v/pages/%v", isbn, pageID)
 }
 
 // DeletePageEpubIndexCreatorPath returns the URL path to the epub_index_creator service DeletePage HTTP endpoint.

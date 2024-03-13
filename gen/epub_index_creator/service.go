@@ -85,8 +85,9 @@ type BookResponse struct {
 // CreatePagePayload is the payload type of the epub_index_creator service
 // CreatePage method.
 type CreatePagePayload struct {
-	Isbn ISBN
-	Page *CreatePageRequest
+	Isbn   ISBN
+	PageID int
+	Page   *CreatePageRequest
 }
 
 type CreatePageRequest struct {
@@ -158,6 +159,7 @@ type PageResponse struct {
 // UpdatePagePayload is the payload type of the epub_index_creator service
 // UpdatePage method.
 type UpdatePagePayload struct {
-	Isbn ISBN
-	Page *CreatePageRequest
+	Isbn   ISBN
+	PageID int
+	Page   *CreatePageRequest
 }

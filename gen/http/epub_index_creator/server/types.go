@@ -400,20 +400,22 @@ func NewFindPagePayload(isbn string, pageID int) *epubindexcreator.FindPagePaylo
 
 // NewCreatePagePayload builds a epub_index_creator service CreatePage endpoint
 // payload.
-func NewCreatePagePayload(body *CreatePageRequestBody, isbn string) *epubindexcreator.CreatePagePayload {
+func NewCreatePagePayload(body *CreatePageRequestBody, isbn string, pageID int) *epubindexcreator.CreatePagePayload {
 	v := &epubindexcreator.CreatePagePayload{}
 	v.Page = unmarshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
 
 	return v
 }
 
 // NewUpdatePagePayload builds a epub_index_creator service UpdatePage endpoint
 // payload.
-func NewUpdatePagePayload(body *UpdatePageRequestBody, isbn string) *epubindexcreator.UpdatePagePayload {
+func NewUpdatePagePayload(body *UpdatePageRequestBody, isbn string, pageID int) *epubindexcreator.UpdatePagePayload {
 	v := &epubindexcreator.UpdatePagePayload{}
 	v.Page = unmarshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
 
 	return v
 }

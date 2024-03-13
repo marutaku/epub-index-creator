@@ -90,7 +90,7 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Qui eligendi placeat corrupti nam.\",\n      \"isbn\": \"3255858942261\",\n      \"language\": \"Vero rem aliquam voluptatibus consequuntur.\",\n      \"publisher\": \"Ipsa porro rerum qui in omnis.\",\n      \"title\": \"Placeat dolor.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Nam quibusdam vero rem aliquam voluptatibus.\",\n      \"isbn\": \"2863647203269\",\n      \"language\": \"Eligendi ipsa porro.\",\n      \"publisher\": \"Qui in omnis quaerat odit.\",\n      \"title\": \"Aliquam qui eligendi placeat.\"\n   }'")
 		}
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{13}$"))
 		if err != nil {
@@ -116,7 +116,7 @@ func BuildUpdateBookPayload(epubIndexCreatorUpdateBookBody string, epubIndexCrea
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorUpdateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Non consequatur dolore ad tempore aut.\",\n      \"language\": \"Adipisci consectetur.\",\n      \"publisher\": \"Repudiandae dolorem est eligendi sit velit.\",\n      \"title\": \"Numquam ut repudiandae beatae.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Aut incidunt adipisci consectetur.\",\n      \"language\": \"Repudiandae dolorem est eligendi sit velit.\",\n      \"publisher\": \"Reiciendis est est ut nihil.\",\n      \"title\": \"Repudiandae beatae et non consequatur dolore ad.\"\n   }'")
 		}
 	}
 	var isbn string
@@ -243,7 +243,7 @@ func BuildFindPagePayload(epubIndexCreatorFindPageIsbn string, epubIndexCreatorF
 
 // BuildCreatePagePayload builds the payload for the epub_index_creator
 // CreatePage endpoint from CLI flags.
-func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCreatorCreatePageIsbn string) (*epubindexcreator.CreatePagePayload, error) {
+func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCreatorCreatePageIsbn string, epubIndexCreatorCreatePagePageID string) (*epubindexcreator.CreatePagePayload, error) {
 	var err error
 	var body CreatePageRequestBody
 	{
@@ -266,18 +266,28 @@ func BuildCreatePagePayload(epubIndexCreatorCreatePageBody string, epubIndexCrea
 			return nil, err
 		}
 	}
+	var pageID int
+	{
+		var v int64
+		v, err = strconv.ParseInt(epubIndexCreatorCreatePagePageID, 10, strconv.IntSize)
+		pageID = int(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid value for pageID, must be INT")
+		}
+	}
 	v := &epubindexcreator.CreatePagePayload{}
 	if body.Page != nil {
 		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	}
 	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
 
 	return v, nil
 }
 
 // BuildUpdatePagePayload builds the payload for the epub_index_creator
 // UpdatePage endpoint from CLI flags.
-func BuildUpdatePagePayload(epubIndexCreatorUpdatePageBody string, epubIndexCreatorUpdatePageIsbn string) (*epubindexcreator.UpdatePagePayload, error) {
+func BuildUpdatePagePayload(epubIndexCreatorUpdatePageBody string, epubIndexCreatorUpdatePageIsbn string, epubIndexCreatorUpdatePagePageID string) (*epubindexcreator.UpdatePagePayload, error) {
 	var err error
 	var body UpdatePageRequestBody
 	{
@@ -300,11 +310,21 @@ func BuildUpdatePagePayload(epubIndexCreatorUpdatePageBody string, epubIndexCrea
 			return nil, err
 		}
 	}
+	var pageID int
+	{
+		var v int64
+		v, err = strconv.ParseInt(epubIndexCreatorUpdatePagePageID, 10, strconv.IntSize)
+		pageID = int(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid value for pageID, must be INT")
+		}
+	}
 	v := &epubindexcreator.UpdatePagePayload{}
 	if body.Page != nil {
 		v.Page = marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(body.Page)
 	}
 	v.Isbn = epubindexcreator.ISBN(isbn)
+	v.PageID = pageID
 
 	return v, nil
 }

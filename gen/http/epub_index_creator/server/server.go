@@ -70,8 +70,8 @@ func New(
 			{"DeleteBook", "DELETE", "/books/{isbn}"},
 			{"ListPages", "GET", "/books/{isbn}/pages"},
 			{"FindPage", "GET", "/books/{isbn}/pages/{pageId}"},
-			{"CreatePage", "POST", "/books/{isbn}/pages"},
-			{"UpdatePage", "PUT", "/books/{isbn}/pages"},
+			{"CreatePage", "POST", "/books/{isbn}/pages/{pageId}"},
+			{"UpdatePage", "PUT", "/books/{isbn}/pages/{pageId}"},
 			{"DeletePage", "DELETE", "/books/{isbn}/pages/{pageId}/"},
 			{"./gen/http/openapi.json", "GET", "/openapi.json"},
 		},
@@ -495,7 +495,7 @@ func MountCreatePageHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("POST", "/books/{isbn}/pages", f)
+	mux.Handle("POST", "/books/{isbn}/pages/{pageId}", f)
 }
 
 // NewCreatePageHandler creates a HTTP handler which loads the HTTP request and
@@ -546,7 +546,7 @@ func MountUpdatePageHandler(mux goahttp.Muxer, h http.Handler) {
 			h.ServeHTTP(w, r)
 		}
 	}
-	mux.Handle("PUT", "/books/{isbn}/pages", f)
+	mux.Handle("PUT", "/books/{isbn}/pages/{pageId}", f)
 }
 
 // NewUpdatePageHandler creates a HTTP handler which loads the HTTP request and

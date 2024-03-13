@@ -368,16 +368,25 @@ func DecodeCreatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 		}
 
 		var (
-			isbn string
+			isbn   string
+			pageID int
 
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
 		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		{
+			pageIDRaw := params["pageId"]
+			v, err2 := strconv.ParseInt(pageIDRaw, 10, strconv.IntSize)
+			if err2 != nil {
+				err = goa.MergeErrors(err, goa.InvalidFieldTypeError("pageId", pageIDRaw, "integer"))
+			}
+			pageID = int(v)
+		}
 		if err != nil {
 			return nil, err
 		}
-		payload := NewCreatePagePayload(&body, isbn)
+		payload := NewCreatePagePayload(&body, isbn, pageID)
 
 		return payload, nil
 	}
@@ -416,16 +425,25 @@ func DecodeUpdatePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 		}
 
 		var (
-			isbn string
+			isbn   string
+			pageID int
 
 			params = mux.Vars(r)
 		)
 		isbn = params["isbn"]
 		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		{
+			pageIDRaw := params["pageId"]
+			v, err2 := strconv.ParseInt(pageIDRaw, 10, strconv.IntSize)
+			if err2 != nil {
+				err = goa.MergeErrors(err, goa.InvalidFieldTypeError("pageId", pageIDRaw, "integer"))
+			}
+			pageID = int(v)
+		}
 		if err != nil {
 			return nil, err
 		}
-		payload := NewUpdatePagePayload(&body, isbn)
+		payload := NewUpdatePagePayload(&body, isbn, pageID)
 
 		return payload, nil
 	}

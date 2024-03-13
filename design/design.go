@@ -126,12 +126,13 @@ var _ = Service("epub_index_creator", func() {
 	Method("CreatePage", func() {
 		Payload(func() {
 			Attribute("isbn", ISBN)
+			Attribute("pageId", Int)
 			Attribute("page", PageRequest)
-			Required("isbn", "page")
+			Required("isbn", "page", "pageId")
 		})
 		Result(PageResponse)
 		HTTP(func() {
-			POST("/books/{isbn}/pages")
+			POST("/books/{isbn}/pages/{pageId}")
 			Response(StatusOK)
 			Response(StatusNotFound)
 		})
@@ -140,12 +141,13 @@ var _ = Service("epub_index_creator", func() {
 	Method("UpdatePage", func() {
 		Payload(func() {
 			Attribute("isbn", ISBN)
+			Attribute("pageId", Int)
 			Attribute("page", PageRequest)
-			Required("isbn", "page")
+			Required("isbn", "page", "pageId")
 		})
 		Result(PageResponse)
 		HTTP(func() {
-			PUT("/books/{isbn}/pages")
+			PUT("/books/{isbn}/pages/{pageId}")
 			Response(StatusOK)
 			Response(StatusNotFound)
 		})

@@ -28,7 +28,7 @@ func UsageCommands() string {
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` epub-index-creator list-books --limit 49 --offset 4365153766248322792` + "\n" +
+	return os.Args[0] + ` epub-index-creator list-books --limit 79 --offset 6047331571442638131` + "\n" +
 		""
 }
 
@@ -70,13 +70,15 @@ func ParseEndpoint(
 		epubIndexCreatorFindPageIsbnFlag   = epubIndexCreatorFindPageFlags.String("isbn", "REQUIRED", "")
 		epubIndexCreatorFindPagePageIDFlag = epubIndexCreatorFindPageFlags.String("page-id", "REQUIRED", "")
 
-		epubIndexCreatorCreatePageFlags    = flag.NewFlagSet("create-page", flag.ExitOnError)
-		epubIndexCreatorCreatePageBodyFlag = epubIndexCreatorCreatePageFlags.String("body", "REQUIRED", "")
-		epubIndexCreatorCreatePageIsbnFlag = epubIndexCreatorCreatePageFlags.String("isbn", "REQUIRED", "")
+		epubIndexCreatorCreatePageFlags      = flag.NewFlagSet("create-page", flag.ExitOnError)
+		epubIndexCreatorCreatePageBodyFlag   = epubIndexCreatorCreatePageFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorCreatePageIsbnFlag   = epubIndexCreatorCreatePageFlags.String("isbn", "REQUIRED", "")
+		epubIndexCreatorCreatePagePageIDFlag = epubIndexCreatorCreatePageFlags.String("page-id", "REQUIRED", "")
 
-		epubIndexCreatorUpdatePageFlags    = flag.NewFlagSet("update-page", flag.ExitOnError)
-		epubIndexCreatorUpdatePageBodyFlag = epubIndexCreatorUpdatePageFlags.String("body", "REQUIRED", "")
-		epubIndexCreatorUpdatePageIsbnFlag = epubIndexCreatorUpdatePageFlags.String("isbn", "REQUIRED", "")
+		epubIndexCreatorUpdatePageFlags      = flag.NewFlagSet("update-page", flag.ExitOnError)
+		epubIndexCreatorUpdatePageBodyFlag   = epubIndexCreatorUpdatePageFlags.String("body", "REQUIRED", "")
+		epubIndexCreatorUpdatePageIsbnFlag   = epubIndexCreatorUpdatePageFlags.String("isbn", "REQUIRED", "")
+		epubIndexCreatorUpdatePagePageIDFlag = epubIndexCreatorUpdatePageFlags.String("page-id", "REQUIRED", "")
 
 		epubIndexCreatorDeletePageFlags      = flag.NewFlagSet("delete-page", flag.ExitOnError)
 		epubIndexCreatorDeletePageIsbnFlag   = epubIndexCreatorDeletePageFlags.String("isbn", "REQUIRED", "")
@@ -206,10 +208,10 @@ func ParseEndpoint(
 				data, err = epubindexcreatorc.BuildFindPagePayload(*epubIndexCreatorFindPageIsbnFlag, *epubIndexCreatorFindPagePageIDFlag)
 			case "create-page":
 				endpoint = c.CreatePage()
-				data, err = epubindexcreatorc.BuildCreatePagePayload(*epubIndexCreatorCreatePageBodyFlag, *epubIndexCreatorCreatePageIsbnFlag)
+				data, err = epubindexcreatorc.BuildCreatePagePayload(*epubIndexCreatorCreatePageBodyFlag, *epubIndexCreatorCreatePageIsbnFlag, *epubIndexCreatorCreatePagePageIDFlag)
 			case "update-page":
 				endpoint = c.UpdatePage()
-				data, err = epubindexcreatorc.BuildUpdatePagePayload(*epubIndexCreatorUpdatePageBodyFlag, *epubIndexCreatorUpdatePageIsbnFlag)
+				data, err = epubindexcreatorc.BuildUpdatePagePayload(*epubIndexCreatorUpdatePageBodyFlag, *epubIndexCreatorUpdatePageIsbnFlag, *epubIndexCreatorUpdatePagePageIDFlag)
 			case "delete-page":
 				endpoint = c.DeletePage()
 				data, err = epubindexcreatorc.BuildDeletePagePayload(*epubIndexCreatorDeletePageIsbnFlag, *epubIndexCreatorDeletePagePageIDFlag)
@@ -254,7 +256,7 @@ ListBooks implements ListBooks.
     -offset INT: 
 
 Example:
-    %[1]s epub-index-creator list-books --limit 49 --offset 4365153766248322792
+    %[1]s epub-index-creator list-books --limit 79 --offset 6047331571442638131
 `, os.Args[0])
 }
 
@@ -265,7 +267,7 @@ FindBook implements FindBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "6975080696692"
+    %[1]s epub-index-creator find-book --isbn "0962203742472"
 `, os.Args[0])
 }
 
@@ -277,11 +279,11 @@ CreateBook implements CreateBook.
 
 Example:
     %[1]s epub-index-creator create-book --body '{
-      "author": "Qui eligendi placeat corrupti nam.",
-      "isbn": "3255858942261",
-      "language": "Vero rem aliquam voluptatibus consequuntur.",
-      "publisher": "Ipsa porro rerum qui in omnis.",
-      "title": "Placeat dolor."
+      "author": "Nam quibusdam vero rem aliquam voluptatibus.",
+      "isbn": "2863647203269",
+      "language": "Eligendi ipsa porro.",
+      "publisher": "Qui in omnis quaerat odit.",
+      "title": "Aliquam qui eligendi placeat."
    }'
 `, os.Args[0])
 }
@@ -295,11 +297,11 @@ UpdateBook implements UpdateBook.
 
 Example:
     %[1]s epub-index-creator update-book --body '{
-      "author": "Non consequatur dolore ad tempore aut.",
-      "language": "Adipisci consectetur.",
-      "publisher": "Repudiandae dolorem est eligendi sit velit.",
-      "title": "Numquam ut repudiandae beatae."
-   }' --isbn "0617930896271"
+      "author": "Aut incidunt adipisci consectetur.",
+      "language": "Repudiandae dolorem est eligendi sit velit.",
+      "publisher": "Reiciendis est est ut nihil.",
+      "title": "Repudiandae beatae et non consequatur dolore ad."
+   }' --isbn "2603567760659"
 `, os.Args[0])
 }
 
@@ -310,7 +312,7 @@ DeleteBook implements DeleteBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --isbn "7603227559634"
+    %[1]s epub-index-creator delete-book --isbn "2730224534962"
 `, os.Args[0])
 }
 
@@ -323,7 +325,7 @@ ListPages implements ListPages.
     -offset INT: 
 
 Example:
-    %[1]s epub-index-creator list-pages --isbn "3889535953498" --limit 87 --offset 940552509277821521
+    %[1]s epub-index-creator list-pages --isbn "5624906144709" --limit 72 --offset 296639033918209475
 `, os.Args[0])
 }
 
@@ -335,16 +337,17 @@ FindPage implements FindPage.
     -page-id INT: 
 
 Example:
-    %[1]s epub-index-creator find-page --isbn "8134918893704" --page-id 8471353147568148887
+    %[1]s epub-index-creator find-page --isbn "1416679118421" --page-id 6033189840785181948
 `, os.Args[0])
 }
 
 func epubIndexCreatorCreatePageUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator create-page -body JSON -isbn STRING
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator create-page -body JSON -isbn STRING -page-id INT
 
 CreatePage implements CreatePage.
     -body JSON: 
     -isbn STRING: 
+    -page-id INT: 
 
 Example:
     %[1]s epub-index-creator create-page --body '{
@@ -356,16 +359,17 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "0555544079939"
+   }' --isbn "5033005110206" --page-id 6074730612648124555
 `, os.Args[0])
 }
 
 func epubIndexCreatorUpdatePageUsage() {
-	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator update-page -body JSON -isbn STRING
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator update-page -body JSON -isbn STRING -page-id INT
 
 UpdatePage implements UpdatePage.
     -body JSON: 
     -isbn STRING: 
+    -page-id INT: 
 
 Example:
     %[1]s epub-index-creator update-page --body '{
@@ -377,7 +381,7 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "6583784554540"
+   }' --isbn "2990736362555" --page-id 1462980330098305913
 `, os.Args[0])
 }
 
@@ -389,6 +393,6 @@ DeletePage implements DeletePage.
     -page-id INT: 
 
 Example:
-    %[1]s epub-index-creator delete-page --isbn "Aut occaecati." --page-id 5934105482276364050
+    %[1]s epub-index-creator delete-page --isbn "Nesciunt amet unde recusandae saepe velit." --page-id 8044889701868089044
 `, os.Args[0])
 }
