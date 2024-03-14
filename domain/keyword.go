@@ -1,7 +1,15 @@
 package domain
 
-type Keyword string
+import "github.com/marutaku/epub-index-creator/ent"
 
-func (k Keyword) String() string {
-	return string(k)
+type Keyword struct {
+	ID      int
+	Keyword string
+}
+
+func NewKeywordFromEnt(entKeyword *ent.Keyword) *Keyword {
+	return &Keyword{
+		ID:      entKeyword.ID,
+		Keyword: entKeyword.Keyword,
+	}
 }
