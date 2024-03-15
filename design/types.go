@@ -71,7 +71,7 @@ var PageResponse = Type("PageResponse", func() {
 	Required("id", "title", "keywords")
 })
 
-var KeywordResponse = Type("Keyword", func() {
+var KeywordResponse = Type("KeywordResponse", func() {
 	Field(1, "id", Int, func() {
 		Description("ID of the keyword")
 		Example(1)
@@ -80,5 +80,5 @@ var KeywordResponse = Type("Keyword", func() {
 		Description("Keyword of the page")
 		Example("Introduction")
 	})
-	Required("keyword")
+	Required("id", "keyword")
 })
