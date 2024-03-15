@@ -167,5 +167,19 @@ var _ = Service("epub_index_creator", func() {
 		})
 	})
 
+	Method("ListKeywordsInPage", func() {
+		Payload(func() {
+			Attribute("isbn", ISBN)
+			Attribute("pageId", Int)
+			Required("isbn", "pageId")
+		})
+		Result(ArrayOf(KeywordResponse))
+		HTTP(func() {
+			GET("/books/{isbn}/pages/{pageId}/keywords")
+			Response(StatusOK)
+			Response(StatusNotFound)
+		})
+	})
+
 	Files("/openapi.json", "./gen/http/openapi.json")
 })

@@ -22,13 +22,13 @@ import (
 //
 //	command (subcommand1|subcommand2|...)
 func UsageCommands() string {
-	return `epub-index-creator (list-books|find-book|create-book|update-book|delete-book|list-pages|find-page|create-page|update-page|delete-page)
+	return `epub-index-creator (list-books|find-book|create-book|update-book|delete-book|list-pages|find-page|create-page|update-page|delete-page|list-keywords-in-page)
 `
 }
 
 // UsageExamples produces an example of a valid invocation of the CLI tool.
 func UsageExamples() string {
-	return os.Args[0] + ` epub-index-creator list-books --limit 79 --offset 6047331571442638131` + "\n" +
+	return os.Args[0] + ` epub-index-creator list-books --limit 32 --offset 907143555073089594` + "\n" +
 		""
 }
 
@@ -83,6 +83,10 @@ func ParseEndpoint(
 		epubIndexCreatorDeletePageFlags      = flag.NewFlagSet("delete-page", flag.ExitOnError)
 		epubIndexCreatorDeletePageIsbnFlag   = epubIndexCreatorDeletePageFlags.String("isbn", "REQUIRED", "")
 		epubIndexCreatorDeletePagePageIDFlag = epubIndexCreatorDeletePageFlags.String("page-id", "REQUIRED", "")
+
+		epubIndexCreatorListKeywordsInPageFlags      = flag.NewFlagSet("list-keywords-in-page", flag.ExitOnError)
+		epubIndexCreatorListKeywordsInPageIsbnFlag   = epubIndexCreatorListKeywordsInPageFlags.String("isbn", "REQUIRED", "")
+		epubIndexCreatorListKeywordsInPagePageIDFlag = epubIndexCreatorListKeywordsInPageFlags.String("page-id", "REQUIRED", "")
 	)
 	epubIndexCreatorFlags.Usage = epubIndexCreatorUsage
 	epubIndexCreatorListBooksFlags.Usage = epubIndexCreatorListBooksUsage
@@ -95,6 +99,7 @@ func ParseEndpoint(
 	epubIndexCreatorCreatePageFlags.Usage = epubIndexCreatorCreatePageUsage
 	epubIndexCreatorUpdatePageFlags.Usage = epubIndexCreatorUpdatePageUsage
 	epubIndexCreatorDeletePageFlags.Usage = epubIndexCreatorDeletePageUsage
+	epubIndexCreatorListKeywordsInPageFlags.Usage = epubIndexCreatorListKeywordsInPageUsage
 
 	if err := flag.CommandLine.Parse(os.Args[1:]); err != nil {
 		return nil, nil, err
@@ -160,6 +165,9 @@ func ParseEndpoint(
 			case "delete-page":
 				epf = epubIndexCreatorDeletePageFlags
 
+			case "list-keywords-in-page":
+				epf = epubIndexCreatorListKeywordsInPageFlags
+
 			}
 
 		}
@@ -215,6 +223,9 @@ func ParseEndpoint(
 			case "delete-page":
 				endpoint = c.DeletePage()
 				data, err = epubindexcreatorc.BuildDeletePagePayload(*epubIndexCreatorDeletePageIsbnFlag, *epubIndexCreatorDeletePagePageIDFlag)
+			case "list-keywords-in-page":
+				endpoint = c.ListKeywordsInPage()
+				data, err = epubindexcreatorc.BuildListKeywordsInPagePayload(*epubIndexCreatorListKeywordsInPageIsbnFlag, *epubIndexCreatorListKeywordsInPagePageIDFlag)
 			}
 		}
 	}
@@ -243,6 +254,7 @@ COMMAND:
     create-page: CreatePage implements CreatePage.
     update-page: UpdatePage implements UpdatePage.
     delete-page: DeletePage implements DeletePage.
+    list-keywords-in-page: ListKeywordsInPage implements ListKeywordsInPage.
 
 Additional help:
     %[1]s epub-index-creator COMMAND --help
@@ -256,7 +268,7 @@ ListBooks implements ListBooks.
     -offset INT: 
 
 Example:
-    %[1]s epub-index-creator list-books --limit 79 --offset 6047331571442638131
+    %[1]s epub-index-creator list-books --limit 32 --offset 907143555073089594
 `, os.Args[0])
 }
 
@@ -267,7 +279,7 @@ FindBook implements FindBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator find-book --isbn "0962203742472"
+    %[1]s epub-index-creator find-book --isbn "1135973318059"
 `, os.Args[0])
 }
 
@@ -280,10 +292,10 @@ CreateBook implements CreateBook.
 Example:
     %[1]s epub-index-creator create-book --body '{
       "author": "Nam quibusdam vero rem aliquam voluptatibus.",
-      "isbn": "2863647203269",
+      "isbn": "1554585076269",
       "language": "Eligendi ipsa porro.",
       "publisher": "Qui in omnis quaerat odit.",
-      "title": "Aliquam qui eligendi placeat."
+      "title": "Eligendi placeat."
    }'
 `, os.Args[0])
 }
@@ -301,7 +313,7 @@ Example:
       "language": "Repudiandae dolorem est eligendi sit velit.",
       "publisher": "Reiciendis est est ut nihil.",
       "title": "Repudiandae beatae et non consequatur dolore ad."
-   }' --isbn "2603567760659"
+   }' --isbn "5645897679908"
 `, os.Args[0])
 }
 
@@ -312,7 +324,7 @@ DeleteBook implements DeleteBook.
     -isbn STRING: 
 
 Example:
-    %[1]s epub-index-creator delete-book --isbn "2730224534962"
+    %[1]s epub-index-creator delete-book --isbn "1816204039546"
 `, os.Args[0])
 }
 
@@ -325,7 +337,7 @@ ListPages implements ListPages.
     -offset INT: 
 
 Example:
-    %[1]s epub-index-creator list-pages --isbn "5624906144709" --limit 72 --offset 296639033918209475
+    %[1]s epub-index-creator list-pages --isbn "7825822385138" --limit 72 --offset 296639033918209475
 `, os.Args[0])
 }
 
@@ -337,7 +349,7 @@ FindPage implements FindPage.
     -page-id INT: 
 
 Example:
-    %[1]s epub-index-creator find-page --isbn "1416679118421" --page-id 6033189840785181948
+    %[1]s epub-index-creator find-page --isbn "7612721239821" --page-id 6033189840785181948
 `, os.Args[0])
 }
 
@@ -359,7 +371,7 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "5033005110206" --page-id 6074730612648124555
+   }' --isbn "3961327538617" --page-id 6074730612648124555
 `, os.Args[0])
 }
 
@@ -381,7 +393,7 @@ Example:
          ],
          "title": "Introduction"
       }
-   }' --isbn "2990736362555" --page-id 1462980330098305913
+   }' --isbn "7181898111974" --page-id 1462980330098305913
 `, os.Args[0])
 }
 
@@ -394,5 +406,17 @@ DeletePage implements DeletePage.
 
 Example:
     %[1]s epub-index-creator delete-page --isbn "Nesciunt amet unde recusandae saepe velit." --page-id 8044889701868089044
+`, os.Args[0])
+}
+
+func epubIndexCreatorListKeywordsInPageUsage() {
+	fmt.Fprintf(os.Stderr, `%[1]s [flags] epub-index-creator list-keywords-in-page -isbn STRING -page-id INT
+
+ListKeywordsInPage implements ListKeywordsInPage.
+    -isbn STRING: 
+    -page-id INT: 
+
+Example:
+    %[1]s epub-index-creator list-keywords-in-page --isbn "2563681766707" --page-id 1462347514823464230
 `, os.Args[0])
 }

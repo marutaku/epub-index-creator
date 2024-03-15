@@ -15,32 +15,34 @@ import (
 
 // Client is the "epub_index_creator" service client.
 type Client struct {
-	ListBooksEndpoint  goa.Endpoint
-	FindBookEndpoint   goa.Endpoint
-	CreateBookEndpoint goa.Endpoint
-	UpdateBookEndpoint goa.Endpoint
-	DeleteBookEndpoint goa.Endpoint
-	ListPagesEndpoint  goa.Endpoint
-	FindPageEndpoint   goa.Endpoint
-	CreatePageEndpoint goa.Endpoint
-	UpdatePageEndpoint goa.Endpoint
-	DeletePageEndpoint goa.Endpoint
+	ListBooksEndpoint          goa.Endpoint
+	FindBookEndpoint           goa.Endpoint
+	CreateBookEndpoint         goa.Endpoint
+	UpdateBookEndpoint         goa.Endpoint
+	DeleteBookEndpoint         goa.Endpoint
+	ListPagesEndpoint          goa.Endpoint
+	FindPageEndpoint           goa.Endpoint
+	CreatePageEndpoint         goa.Endpoint
+	UpdatePageEndpoint         goa.Endpoint
+	DeletePageEndpoint         goa.Endpoint
+	ListKeywordsInPageEndpoint goa.Endpoint
 }
 
 // NewClient initializes a "epub_index_creator" service client given the
 // endpoints.
-func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, listPages, findPage, createPage, updatePage, deletePage goa.Endpoint) *Client {
+func NewClient(listBooks, findBook, createBook, updateBook, deleteBook, listPages, findPage, createPage, updatePage, deletePage, listKeywordsInPage goa.Endpoint) *Client {
 	return &Client{
-		ListBooksEndpoint:  listBooks,
-		FindBookEndpoint:   findBook,
-		CreateBookEndpoint: createBook,
-		UpdateBookEndpoint: updateBook,
-		DeleteBookEndpoint: deleteBook,
-		ListPagesEndpoint:  listPages,
-		FindPageEndpoint:   findPage,
-		CreatePageEndpoint: createPage,
-		UpdatePageEndpoint: updatePage,
-		DeletePageEndpoint: deletePage,
+		ListBooksEndpoint:          listBooks,
+		FindBookEndpoint:           findBook,
+		CreateBookEndpoint:         createBook,
+		UpdateBookEndpoint:         updateBook,
+		DeleteBookEndpoint:         deleteBook,
+		ListPagesEndpoint:          listPages,
+		FindPageEndpoint:           findPage,
+		CreatePageEndpoint:         createPage,
+		UpdatePageEndpoint:         updatePage,
+		DeletePageEndpoint:         deletePage,
+		ListKeywordsInPageEndpoint: listKeywordsInPage,
 	}
 }
 
@@ -140,4 +142,15 @@ func (c *Client) UpdatePage(ctx context.Context, p *UpdatePagePayload) (res *Pag
 func (c *Client) DeletePage(ctx context.Context, p *DeletePagePayload) (err error) {
 	_, err = c.DeletePageEndpoint(ctx, p)
 	return
+}
+
+// ListKeywordsInPage calls the "ListKeywordsInPage" endpoint of the
+// "epub_index_creator" service.
+func (c *Client) ListKeywordsInPage(ctx context.Context, p *ListKeywordsInPagePayload) (res []*KeywordResponse, err error) {
+	var ires any
+	ires, err = c.ListKeywordsInPageEndpoint(ctx, p)
+	if err != nil {
+		return
+	}
+	return ires.([]*KeywordResponse), nil
 }

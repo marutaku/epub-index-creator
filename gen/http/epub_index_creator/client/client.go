@@ -57,6 +57,10 @@ type Client struct {
 	// endpoint.
 	DeletePageDoer goahttp.Doer
 
+	// ListKeywordsInPage Doer is the HTTP client used to make requests to the
+	// ListKeywordsInPage endpoint.
+	ListKeywordsInPageDoer goahttp.Doer
+
 	// RestoreResponseBody controls whether the response bodies are reset after
 	// decoding so they can be read again.
 	RestoreResponseBody bool
@@ -78,21 +82,22 @@ func NewClient(
 	restoreBody bool,
 ) *Client {
 	return &Client{
-		ListBooksDoer:       doer,
-		FindBookDoer:        doer,
-		CreateBookDoer:      doer,
-		UpdateBookDoer:      doer,
-		DeleteBookDoer:      doer,
-		ListPagesDoer:       doer,
-		FindPageDoer:        doer,
-		CreatePageDoer:      doer,
-		UpdatePageDoer:      doer,
-		DeletePageDoer:      doer,
-		RestoreResponseBody: restoreBody,
-		scheme:              scheme,
-		host:                host,
-		decoder:             dec,
-		encoder:             enc,
+		ListBooksDoer:          doer,
+		FindBookDoer:           doer,
+		CreateBookDoer:         doer,
+		UpdateBookDoer:         doer,
+		DeleteBookDoer:         doer,
+		ListPagesDoer:          doer,
+		FindPageDoer:           doer,
+		CreatePageDoer:         doer,
+		UpdatePageDoer:         doer,
+		DeletePageDoer:         doer,
+		ListKeywordsInPageDoer: doer,
+		RestoreResponseBody:    restoreBody,
+		scheme:                 scheme,
+		host:                   host,
+		decoder:                dec,
+		encoder:                enc,
 	}
 }
 
@@ -311,6 +316,25 @@ func (c *Client) DeletePage() goa.Endpoint {
 		resp, err := c.DeletePageDoer.Do(req)
 		if err != nil {
 			return nil, goahttp.ErrRequestError("epub_index_creator", "DeletePage", err)
+		}
+		return decodeResponse(resp)
+	}
+}
+
+// ListKeywordsInPage returns an endpoint that makes HTTP requests to the
+// epub_index_creator service ListKeywordsInPage server.
+func (c *Client) ListKeywordsInPage() goa.Endpoint {
+	var (
+		decodeResponse = DecodeListKeywordsInPageResponse(c.decoder, c.RestoreResponseBody)
+	)
+	return func(ctx context.Context, v any) (any, error) {
+		req, err := c.BuildListKeywordsInPageRequest(ctx, v)
+		if err != nil {
+			return nil, err
+		}
+		resp, err := c.ListKeywordsInPageDoer.Do(req)
+		if err != nil {
+			return nil, goahttp.ErrRequestError("epub_index_creator", "ListKeywordsInPage", err)
 		}
 		return decodeResponse(resp)
 	}

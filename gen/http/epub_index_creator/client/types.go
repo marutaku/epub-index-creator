@@ -141,6 +141,10 @@ type UpdatePageOKResponseBody struct {
 	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
 }
 
+// ListKeywordsInPageResponseBody is the type of the "epub_index_creator"
+// service "ListKeywordsInPage" endpoint HTTP response body.
+type ListKeywordsInPageResponseBody []*KeywordResponseResponse
+
 // BookResponseResponse is used to define fields on response body types.
 type BookResponseResponse struct {
 	Isbn *string `form:"isbn,omitempty" json:"isbn,omitempty" xml:"isbn,omitempty"`
@@ -261,6 +265,14 @@ type UpdatePageNotFoundResponseBody struct {
 	Title *string `form:"title,omitempty" json:"title,omitempty" xml:"title,omitempty"`
 	// Keywords of the page
 	Keywords []string `form:"keywords,omitempty" json:"keywords,omitempty" xml:"keywords,omitempty"`
+}
+
+// KeywordResponseResponse is used to define fields on response body types.
+type KeywordResponseResponse struct {
+	// ID of the keyword
+	ID *int `form:"id,omitempty" json:"id,omitempty" xml:"id,omitempty"`
+	// Keyword of the page
+	Keyword *string `form:"keyword,omitempty" json:"keyword,omitempty" xml:"keyword,omitempty"`
 }
 
 // NewCreateBookRequestBody builds the HTTP request body from the payload of
@@ -424,6 +436,17 @@ func NewUpdatePagePageResponseOK(body *UpdatePageOKResponseBody) *epubindexcreat
 	v.Keywords = make([]string, len(body.Keywords))
 	for i, val := range body.Keywords {
 		v.Keywords[i] = val
+	}
+
+	return v
+}
+
+// NewListKeywordsInPageKeywordResponseOK builds a "epub_index_creator" service
+// "ListKeywordsInPage" endpoint result from a HTTP "OK" response.
+func NewListKeywordsInPageKeywordResponseOK(body []*KeywordResponseResponse) []*epubindexcreator.KeywordResponse {
+	v := make([]*epubindexcreator.KeywordResponse, len(body))
+	for i, val := range body {
+		v[i] = unmarshalKeywordResponseResponseToEpubindexcreatorKeywordResponse(val)
 	}
 
 	return v
@@ -783,6 +806,18 @@ func ValidateUpdatePageNotFoundResponseBody(body *UpdatePageNotFoundResponseBody
 	}
 	if body.Keywords == nil {
 		err = goa.MergeErrors(err, goa.MissingFieldError("keywords", "body"))
+	}
+	return
+}
+
+// ValidateKeywordResponseResponse runs the validations defined on
+// KeywordResponseResponse
+func ValidateKeywordResponseResponse(body *KeywordResponseResponse) (err error) {
+	if body.ID == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("id", "body"))
+	}
+	if body.Keyword == nil {
+		err = goa.MergeErrors(err, goa.MissingFieldError("keyword", "body"))
 	}
 	return
 }

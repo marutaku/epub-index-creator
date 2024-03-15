@@ -29,6 +29,7 @@ type Server struct {
 	CreatePage         http.Handler
 	UpdatePage         http.Handler
 	DeletePage         http.Handler
+	ListKeywordsInPage http.Handler
 	GenHTTPOpenapiJSON http.Handler
 }
 
@@ -73,6 +74,7 @@ func New(
 			{"CreatePage", "POST", "/books/{isbn}/pages/{pageId}"},
 			{"UpdatePage", "PUT", "/books/{isbn}/pages/{pageId}"},
 			{"DeletePage", "DELETE", "/books/{isbn}/pages/{pageId}/"},
+			{"ListKeywordsInPage", "GET", "/books/{isbn}/pages/{pageId}/keywords"},
 			{"./gen/http/openapi.json", "GET", "/openapi.json"},
 		},
 		ListBooks:          NewListBooksHandler(e.ListBooks, mux, decoder, encoder, errhandler, formatter),
@@ -85,6 +87,7 @@ func New(
 		CreatePage:         NewCreatePageHandler(e.CreatePage, mux, decoder, encoder, errhandler, formatter),
 		UpdatePage:         NewUpdatePageHandler(e.UpdatePage, mux, decoder, encoder, errhandler, formatter),
 		DeletePage:         NewDeletePageHandler(e.DeletePage, mux, decoder, encoder, errhandler, formatter),
+		ListKeywordsInPage: NewListKeywordsInPageHandler(e.ListKeywordsInPage, mux, decoder, encoder, errhandler, formatter),
 		GenHTTPOpenapiJSON: http.FileServer(fileSystemGenHTTPOpenapiJSON),
 	}
 }
@@ -104,6 +107,7 @@ func (s *Server) Use(m func(http.Handler) http.Handler) {
 	s.CreatePage = m(s.CreatePage)
 	s.UpdatePage = m(s.UpdatePage)
 	s.DeletePage = m(s.DeletePage)
+	s.ListKeywordsInPage = m(s.ListKeywordsInPage)
 }
 
 // MethodNames returns the methods served.
@@ -121,6 +125,7 @@ func Mount(mux goahttp.Muxer, h *Server) {
 	MountCreatePageHandler(mux, h.CreatePage)
 	MountUpdatePageHandler(mux, h.UpdatePage)
 	MountDeletePageHandler(mux, h.DeletePage)
+	MountListKeywordsInPageHandler(mux, h.ListKeywordsInPage)
 	MountGenHTTPOpenapiJSON(mux, goahttp.Replace("", "/./gen/http/openapi.json", h.GenHTTPOpenapiJSON))
 }
 
@@ -618,6 +623,58 @@ func NewDeletePageHandler(
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
 		ctx = context.WithValue(ctx, goa.MethodKey, "DeletePage")
+		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
+		payload, err := decodeRequest(r)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		res, err := endpoint(ctx, payload)
+		if err != nil {
+			if err := encodeError(ctx, w, err); err != nil {
+				errhandler(ctx, w, err)
+			}
+			return
+		}
+		if err := encodeResponse(ctx, w, res); err != nil {
+			errhandler(ctx, w, err)
+		}
+	})
+}
+
+// MountListKeywordsInPageHandler configures the mux to serve the
+// "epub_index_creator" service "ListKeywordsInPage" endpoint.
+func MountListKeywordsInPageHandler(mux goahttp.Muxer, h http.Handler) {
+	f, ok := h.(http.HandlerFunc)
+	if !ok {
+		f = func(w http.ResponseWriter, r *http.Request) {
+			h.ServeHTTP(w, r)
+		}
+	}
+	mux.Handle("GET", "/books/{isbn}/pages/{pageId}/keywords", f)
+}
+
+// NewListKeywordsInPageHandler creates a HTTP handler which loads the HTTP
+// request and calls the "epub_index_creator" service "ListKeywordsInPage"
+// endpoint.
+func NewListKeywordsInPageHandler(
+	endpoint goa.Endpoint,
+	mux goahttp.Muxer,
+	decoder func(*http.Request) goahttp.Decoder,
+	encoder func(context.Context, http.ResponseWriter) goahttp.Encoder,
+	errhandler func(context.Context, http.ResponseWriter, error),
+	formatter func(ctx context.Context, err error) goahttp.Statuser,
+) http.Handler {
+	var (
+		decodeRequest  = DecodeListKeywordsInPageRequest(mux, decoder)
+		encodeResponse = EncodeListKeywordsInPageResponse(encoder)
+		encodeError    = goahttp.ErrorEncoder(encoder, formatter)
+	)
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		ctx := context.WithValue(r.Context(), goahttp.AcceptTypeKey, r.Header.Get("Accept"))
+		ctx = context.WithValue(ctx, goa.MethodKey, "ListKeywordsInPage")
 		ctx = context.WithValue(ctx, goa.ServiceKey, "epub_index_creator")
 		payload, err := decodeRequest(r)
 		if err != nil {

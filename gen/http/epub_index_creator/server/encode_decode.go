@@ -487,6 +487,48 @@ func DecodeDeletePageRequest(mux goahttp.Muxer, decoder func(*http.Request) goah
 	}
 }
 
+// EncodeListKeywordsInPageResponse returns an encoder for responses returned
+// by the epub_index_creator ListKeywordsInPage endpoint.
+func EncodeListKeywordsInPageResponse(encoder func(context.Context, http.ResponseWriter) goahttp.Encoder) func(context.Context, http.ResponseWriter, any) error {
+	return func(ctx context.Context, w http.ResponseWriter, v any) error {
+		res, _ := v.([]*epubindexcreator.KeywordResponse)
+		enc := encoder(ctx, w)
+		body := NewListKeywordsInPageResponseBody(res)
+		w.WriteHeader(http.StatusOK)
+		return enc.Encode(body)
+	}
+}
+
+// DecodeListKeywordsInPageRequest returns a decoder for requests sent to the
+// epub_index_creator ListKeywordsInPage endpoint.
+func DecodeListKeywordsInPageRequest(mux goahttp.Muxer, decoder func(*http.Request) goahttp.Decoder) func(*http.Request) (any, error) {
+	return func(r *http.Request) (any, error) {
+		var (
+			isbn   string
+			pageID int
+			err    error
+
+			params = mux.Vars(r)
+		)
+		isbn = params["isbn"]
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		{
+			pageIDRaw := params["pageId"]
+			v, err2 := strconv.ParseInt(pageIDRaw, 10, strconv.IntSize)
+			if err2 != nil {
+				err = goa.MergeErrors(err, goa.InvalidFieldTypeError("pageId", pageIDRaw, "integer"))
+			}
+			pageID = int(v)
+		}
+		if err != nil {
+			return nil, err
+		}
+		payload := NewListKeywordsInPagePayload(isbn, pageID)
+
+		return payload, nil
+	}
+}
+
 // marshalEpubindexcreatorBookResponseToBookResponseResponse builds a value of
 // type *BookResponseResponse from a value of type
 // *epubindexcreator.BookResponse.
@@ -562,6 +604,18 @@ func unmarshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(v 
 		for i, val := range v.Keywords {
 			res.Keywords[i] = val
 		}
+	}
+
+	return res
+}
+
+// marshalEpubindexcreatorKeywordResponseToKeywordResponseResponse builds a
+// value of type *KeywordResponseResponse from a value of type
+// *epubindexcreator.KeywordResponse.
+func marshalEpubindexcreatorKeywordResponseToKeywordResponseResponse(v *epubindexcreator.KeywordResponse) *KeywordResponseResponse {
+	res := &KeywordResponseResponse{
+		ID:      v.ID,
+		Keyword: v.Keyword,
 	}
 
 	return res

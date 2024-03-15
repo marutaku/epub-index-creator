@@ -141,6 +141,10 @@ type UpdatePageOKResponseBody struct {
 	Keywords []string `form:"keywords" json:"keywords" xml:"keywords"`
 }
 
+// ListKeywordsInPageResponseBody is the type of the "epub_index_creator"
+// service "ListKeywordsInPage" endpoint HTTP response body.
+type ListKeywordsInPageResponseBody []*KeywordResponseResponse
+
 // BookResponseResponse is used to define fields on response body types.
 type BookResponseResponse struct {
 	Isbn string `form:"isbn" json:"isbn" xml:"isbn"`
@@ -174,6 +178,14 @@ type PageResponseResponseBody struct {
 	Title string `form:"title" json:"title" xml:"title"`
 	// Keywords of the page
 	Keywords []string `form:"keywords" json:"keywords" xml:"keywords"`
+}
+
+// KeywordResponseResponse is used to define fields on response body types.
+type KeywordResponseResponse struct {
+	// ID of the keyword
+	ID int `form:"id" json:"id" xml:"id"`
+	// Keyword of the page
+	Keyword string `form:"keyword" json:"keyword" xml:"keyword"`
 }
 
 // CreatePageRequestRequestBody is used to define fields on request body types.
@@ -321,6 +333,17 @@ func NewUpdatePageOKResponseBody(res *epubindexcreator.PageResponse) *UpdatePage
 	return body
 }
 
+// NewListKeywordsInPageResponseBody builds the HTTP response body from the
+// result of the "ListKeywordsInPage" endpoint of the "epub_index_creator"
+// service.
+func NewListKeywordsInPageResponseBody(res []*epubindexcreator.KeywordResponse) ListKeywordsInPageResponseBody {
+	body := make([]*KeywordResponseResponse, len(res))
+	for i, val := range res {
+		body[i] = marshalEpubindexcreatorKeywordResponseToKeywordResponseResponse(val)
+	}
+	return body
+}
+
 // NewListBooksPayload builds a epub_index_creator service ListBooks endpoint
 // payload.
 func NewListBooksPayload(limit int, offset int) *epubindexcreator.ListBooksPayload {
@@ -425,6 +448,16 @@ func NewUpdatePagePayload(body *UpdatePageRequestBody, isbn string, pageID int) 
 func NewDeletePagePayload(isbn string, pageID int) *epubindexcreator.DeletePagePayload {
 	v := &epubindexcreator.DeletePagePayload{}
 	v.Isbn = isbn
+	v.PageID = pageID
+
+	return v
+}
+
+// NewListKeywordsInPagePayload builds a epub_index_creator service
+// ListKeywordsInPage endpoint payload.
+func NewListKeywordsInPagePayload(isbn string, pageID int) *epubindexcreator.ListKeywordsInPagePayload {
+	v := &epubindexcreator.ListKeywordsInPagePayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
 	v.PageID = pageID
 
 	return v

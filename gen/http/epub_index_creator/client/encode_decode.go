@@ -740,6 +740,80 @@ func DecodeDeletePageResponse(decoder func(*http.Response) goahttp.Decoder, rest
 	}
 }
 
+// BuildListKeywordsInPageRequest instantiates a HTTP request object with
+// method and path set to call the "epub_index_creator" service
+// "ListKeywordsInPage" endpoint
+func (c *Client) BuildListKeywordsInPageRequest(ctx context.Context, v any) (*http.Request, error) {
+	var (
+		isbn   string
+		pageID int
+	)
+	{
+		p, ok := v.(*epubindexcreator.ListKeywordsInPagePayload)
+		if !ok {
+			return nil, goahttp.ErrInvalidType("epub_index_creator", "ListKeywordsInPage", "*epubindexcreator.ListKeywordsInPagePayload", v)
+		}
+		isbn = string(p.Isbn)
+		pageID = p.PageID
+	}
+	u := &url.URL{Scheme: c.scheme, Host: c.host, Path: ListKeywordsInPageEpubIndexCreatorPath(isbn, pageID)}
+	req, err := http.NewRequest("GET", u.String(), nil)
+	if err != nil {
+		return nil, goahttp.ErrInvalidURL("epub_index_creator", "ListKeywordsInPage", u.String(), err)
+	}
+	if ctx != nil {
+		req = req.WithContext(ctx)
+	}
+
+	return req, nil
+}
+
+// DecodeListKeywordsInPageResponse returns a decoder for responses returned by
+// the epub_index_creator ListKeywordsInPage endpoint. restoreBody controls
+// whether the response body should be restored after having been read.
+func DecodeListKeywordsInPageResponse(decoder func(*http.Response) goahttp.Decoder, restoreBody bool) func(*http.Response) (any, error) {
+	return func(resp *http.Response) (any, error) {
+		if restoreBody {
+			b, err := io.ReadAll(resp.Body)
+			if err != nil {
+				return nil, err
+			}
+			resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			defer func() {
+				resp.Body = io.NopCloser(bytes.NewBuffer(b))
+			}()
+		} else {
+			defer resp.Body.Close()
+		}
+		switch resp.StatusCode {
+		case http.StatusOK:
+			var (
+				body ListKeywordsInPageResponseBody
+				err  error
+			)
+			err = decoder(resp).Decode(&body)
+			if err != nil {
+				return nil, goahttp.ErrDecodingError("epub_index_creator", "ListKeywordsInPage", err)
+			}
+			for _, e := range body {
+				if e != nil {
+					if err2 := ValidateKeywordResponseResponse(e); err2 != nil {
+						err = goa.MergeErrors(err, err2)
+					}
+				}
+			}
+			if err != nil {
+				return nil, goahttp.ErrValidationError("epub_index_creator", "ListKeywordsInPage", err)
+			}
+			res := NewListKeywordsInPageKeywordResponseOK(body)
+			return res, nil
+		default:
+			body, _ := io.ReadAll(resp.Body)
+			return nil, goahttp.ErrInvalidResponse("epub_index_creator", "ListKeywordsInPage", resp.StatusCode, string(body))
+		}
+	}
+}
+
 // unmarshalBookResponseResponseToEpubindexcreatorBookResponse builds a value
 // of type *epubindexcreator.BookResponse from a value of type
 // *BookResponseResponse.
@@ -820,6 +894,18 @@ func marshalCreatePageRequestRequestBodyToEpubindexcreatorCreatePageRequest(v *C
 		for i, val := range v.Keywords {
 			res.Keywords[i] = val
 		}
+	}
+
+	return res
+}
+
+// unmarshalKeywordResponseResponseToEpubindexcreatorKeywordResponse builds a
+// value of type *epubindexcreator.KeywordResponse from a value of type
+// *KeywordResponseResponse.
+func unmarshalKeywordResponseResponseToEpubindexcreatorKeywordResponse(v *KeywordResponseResponse) *epubindexcreator.KeywordResponse {
+	res := &epubindexcreator.KeywordResponse{
+		ID:      *v.ID,
+		Keyword: *v.Keyword,
 	}
 
 	return res

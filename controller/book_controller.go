@@ -12,14 +12,15 @@ import (
 // epub_index_creator service example implementation.
 // The example methods log the requests and return zero values.
 type epubIndexCreatorsrvc struct {
-	logger      *log.Logger
-	bookUsecase usecase.BookUsecaseInterface
-	pageUsecase usecase.PageUsecaseInterface
+	logger         *log.Logger
+	bookUsecase    usecase.BookUsecaseInterface
+	pageUsecase    usecase.PageUsecaseInterface
+	keywordUsecase usecase.KeywordUsecaseInterface
 }
 
 // NewEpubIndexCreator returns the epub_index_creator service implementation.
 func NewEpubIndexCreator(logger *log.Logger) epubIndexCreator.Service {
-	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase(), pageUsecase: usecase.NewPageUsecase()}
+	return &epubIndexCreatorsrvc{logger: logger, bookUsecase: usecase.NewBookUsecase(), pageUsecase: usecase.NewPageUsecase(), keywordUsecase: usecase.NewKeywordUsecase()}
 }
 
 // List implements List.
@@ -122,6 +123,16 @@ func (s *epubIndexCreatorsrvc) DeletePage(ctx context.Context, p *epubIndexCreat
 	err = s.pageUsecase.DeletePage(ctx, p.PageID)
 	if err != nil {
 		return err
+	}
+	return
+}
+
+func (s *epubIndexCreatorsrvc) ListKeywordsInPage(ctx context.Context, p *epubIndexCreator.ListKeywordsInPagePayload) (res []*epubIndexCreator.KeywordResponse, err error) {
+	res = []*epubIndexCreator.KeywordResponse{}
+	s.logger.Print("epubIndexCreator.ListKeywords")
+	keywords, err := s.keywordUsecase.ListKeywordsByPageID(ctx, p.PageID)
+	for _, keyword := range keywords {
+		res = append(res, presenter.ConvertKeywordToResponse(keyword))
 	}
 	return
 }

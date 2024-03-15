@@ -90,7 +90,7 @@ func BuildCreateBookPayload(epubIndexCreatorCreateBookBody string) (*epubindexcr
 	{
 		err = json.Unmarshal([]byte(epubIndexCreatorCreateBookBody), &body)
 		if err != nil {
-			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Nam quibusdam vero rem aliquam voluptatibus.\",\n      \"isbn\": \"2863647203269\",\n      \"language\": \"Eligendi ipsa porro.\",\n      \"publisher\": \"Qui in omnis quaerat odit.\",\n      \"title\": \"Aliquam qui eligendi placeat.\"\n   }'")
+			return nil, fmt.Errorf("invalid JSON for body, \nerror: %s, \nexample of valid JSON:\n%s", err, "'{\n      \"author\": \"Nam quibusdam vero rem aliquam voluptatibus.\",\n      \"isbn\": \"1554585076269\",\n      \"language\": \"Eligendi ipsa porro.\",\n      \"publisher\": \"Qui in omnis quaerat odit.\",\n      \"title\": \"Eligendi placeat.\"\n   }'")
 		}
 		err = goa.MergeErrors(err, goa.ValidatePattern("body.isbn", body.Isbn, "^[0-9]{13}$"))
 		if err != nil {
@@ -348,6 +348,34 @@ func BuildDeletePagePayload(epubIndexCreatorDeletePageIsbn string, epubIndexCrea
 	}
 	v := &epubindexcreator.DeletePagePayload{}
 	v.Isbn = isbn
+	v.PageID = pageID
+
+	return v, nil
+}
+
+// BuildListKeywordsInPagePayload builds the payload for the epub_index_creator
+// ListKeywordsInPage endpoint from CLI flags.
+func BuildListKeywordsInPagePayload(epubIndexCreatorListKeywordsInPageIsbn string, epubIndexCreatorListKeywordsInPagePageID string) (*epubindexcreator.ListKeywordsInPagePayload, error) {
+	var err error
+	var isbn string
+	{
+		isbn = epubIndexCreatorListKeywordsInPageIsbn
+		err = goa.MergeErrors(err, goa.ValidatePattern("isbn", isbn, "^[0-9]{13}$"))
+		if err != nil {
+			return nil, err
+		}
+	}
+	var pageID int
+	{
+		var v int64
+		v, err = strconv.ParseInt(epubIndexCreatorListKeywordsInPagePageID, 10, strconv.IntSize)
+		pageID = int(v)
+		if err != nil {
+			return nil, fmt.Errorf("invalid value for pageID, must be INT")
+		}
+	}
+	v := &epubindexcreator.ListKeywordsInPagePayload{}
+	v.Isbn = epubindexcreator.ISBN(isbn)
 	v.PageID = pageID
 
 	return v, nil

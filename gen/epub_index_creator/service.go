@@ -33,6 +33,8 @@ type Service interface {
 	UpdatePage(context.Context, *UpdatePagePayload) (res *PageResponse, err error)
 	// DeletePage implements DeletePage.
 	DeletePage(context.Context, *DeletePagePayload) (err error)
+	// ListKeywordsInPage implements ListKeywordsInPage.
+	ListKeywordsInPage(context.Context, *ListKeywordsInPagePayload) (res []*KeywordResponse, err error)
 }
 
 // APIName is the name of the API as defined in the design.
@@ -49,7 +51,7 @@ const ServiceName = "epub_index_creator"
 // MethodNames lists the service method names as defined in the design. These
 // are the same values that are set in the endpoint request contexts under the
 // MethodKey key.
-var MethodNames = [10]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "ListPages", "FindPage", "CreatePage", "UpdatePage", "DeletePage"}
+var MethodNames = [11]string{"ListBooks", "FindBook", "CreateBook", "UpdateBook", "DeleteBook", "ListPages", "FindPage", "CreatePage", "UpdatePage", "DeletePage", "ListKeywordsInPage"}
 
 // BookRequest is the payload type of the epub_index_creator service CreateBook
 // method.
@@ -126,6 +128,13 @@ type FindPagePayload struct {
 // ISBN of the book
 type ISBN string
 
+type KeywordResponse struct {
+	// ID of the keyword
+	ID int
+	// Keyword of the page
+	Keyword string
+}
+
 // ListBooksPayload is the payload type of the epub_index_creator service
 // ListBooks method.
 type ListBooksPayload struct {
@@ -133,6 +142,13 @@ type ListBooksPayload struct {
 	Limit int
 	// Field to paginate books
 	Offset int
+}
+
+// ListKeywordsInPagePayload is the payload type of the epub_index_creator
+// service ListKeywordsInPage method.
+type ListKeywordsInPagePayload struct {
+	Isbn   ISBN
+	PageID int
 }
 
 // ListPagesPayload is the payload type of the epub_index_creator service

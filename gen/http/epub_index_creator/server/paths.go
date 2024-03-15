@@ -60,3 +60,8 @@ func UpdatePageEpubIndexCreatorPath(isbn string, pageID int) string {
 func DeletePageEpubIndexCreatorPath(isbn string, pageID int) string {
 	return fmt.Sprintf("/books/%v/pages/%v/", isbn, pageID)
 }
+
+// ListKeywordsInPageEpubIndexCreatorPath returns the URL path to the epub_index_creator service ListKeywordsInPage HTTP endpoint.
+func ListKeywordsInPageEpubIndexCreatorPath(isbn string, pageID int) string {
+	return fmt.Sprintf("/books/%v/pages/%v/keywords", isbn, pageID)
+}

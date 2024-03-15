@@ -15,32 +15,34 @@ import (
 
 // Endpoints wraps the "epub_index_creator" service endpoints.
 type Endpoints struct {
-	ListBooks  goa.Endpoint
-	FindBook   goa.Endpoint
-	CreateBook goa.Endpoint
-	UpdateBook goa.Endpoint
-	DeleteBook goa.Endpoint
-	ListPages  goa.Endpoint
-	FindPage   goa.Endpoint
-	CreatePage goa.Endpoint
-	UpdatePage goa.Endpoint
-	DeletePage goa.Endpoint
+	ListBooks          goa.Endpoint
+	FindBook           goa.Endpoint
+	CreateBook         goa.Endpoint
+	UpdateBook         goa.Endpoint
+	DeleteBook         goa.Endpoint
+	ListPages          goa.Endpoint
+	FindPage           goa.Endpoint
+	CreatePage         goa.Endpoint
+	UpdatePage         goa.Endpoint
+	DeletePage         goa.Endpoint
+	ListKeywordsInPage goa.Endpoint
 }
 
 // NewEndpoints wraps the methods of the "epub_index_creator" service with
 // endpoints.
 func NewEndpoints(s Service) *Endpoints {
 	return &Endpoints{
-		ListBooks:  NewListBooksEndpoint(s),
-		FindBook:   NewFindBookEndpoint(s),
-		CreateBook: NewCreateBookEndpoint(s),
-		UpdateBook: NewUpdateBookEndpoint(s),
-		DeleteBook: NewDeleteBookEndpoint(s),
-		ListPages:  NewListPagesEndpoint(s),
-		FindPage:   NewFindPageEndpoint(s),
-		CreatePage: NewCreatePageEndpoint(s),
-		UpdatePage: NewUpdatePageEndpoint(s),
-		DeletePage: NewDeletePageEndpoint(s),
+		ListBooks:          NewListBooksEndpoint(s),
+		FindBook:           NewFindBookEndpoint(s),
+		CreateBook:         NewCreateBookEndpoint(s),
+		UpdateBook:         NewUpdateBookEndpoint(s),
+		DeleteBook:         NewDeleteBookEndpoint(s),
+		ListPages:          NewListPagesEndpoint(s),
+		FindPage:           NewFindPageEndpoint(s),
+		CreatePage:         NewCreatePageEndpoint(s),
+		UpdatePage:         NewUpdatePageEndpoint(s),
+		DeletePage:         NewDeletePageEndpoint(s),
+		ListKeywordsInPage: NewListKeywordsInPageEndpoint(s),
 	}
 }
 
@@ -57,6 +59,7 @@ func (e *Endpoints) Use(m func(goa.Endpoint) goa.Endpoint) {
 	e.CreatePage = m(e.CreatePage)
 	e.UpdatePage = m(e.UpdatePage)
 	e.DeletePage = m(e.DeletePage)
+	e.ListKeywordsInPage = m(e.ListKeywordsInPage)
 }
 
 // NewListBooksEndpoint returns an endpoint function that calls the method
@@ -146,5 +149,14 @@ func NewDeletePageEndpoint(s Service) goa.Endpoint {
 	return func(ctx context.Context, req any) (any, error) {
 		p := req.(*DeletePagePayload)
 		return nil, s.DeletePage(ctx, p)
+	}
+}
+
+// NewListKeywordsInPageEndpoint returns an endpoint function that calls the
+// method "ListKeywordsInPage" of service "epub_index_creator".
+func NewListKeywordsInPageEndpoint(s Service) goa.Endpoint {
+	return func(ctx context.Context, req any) (any, error) {
+		p := req.(*ListKeywordsInPagePayload)
+		return s.ListKeywordsInPage(ctx, p)
 	}
 }
